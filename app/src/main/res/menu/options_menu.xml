@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--  Example: https://stablekernel.com/using-custom-views-as-menu-items/ -->
+
+    <!-- Show an indicator for delete all.
+         Note: This is the only one actually selectable. -->
+    <item android:id="@+id/id_menu_item_settings"
+        android:title="Settings"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_settings_24px" />
+
+    <item android:id="@+id/id_menu_item_delete_all"
+        android:title="Delete All"
+        android:visible="true"
+        android:icon="@drawable/ic_delete_24px"
+        app:showAsAction="ifRoom"/>
+
+<!--    &lt;!&ndash; Show an indicator that Notification is set. &ndash;&gt;-->
+<!--    <item android:id="@+id/id_mnu_notifications"-->
+<!--        android:title="@string/lbl_notifications"-->
+<!--        android:visible="false"-->
+<!--        app:actionLayout="@layout/notifications"-->
+<!--        app:showAsAction="ifRoom"/>-->
+
+<!--    &lt;!&ndash; Show an indicator that Multi Select is set. &ndash;&gt;-->
+<!--    <item android:id="@+id/id_mnu_multi_select"-->
+<!--        android:title="@string/lbl_multi_select"-->
+<!--        android:visible="false"-->
+<!--        app:actionLayout="@layout/multi_select"-->
+<!--        app:showAsAction="ifRoom"/>-->
+
+<!--    &lt;!&ndash; Show a refresh interval indicator. &ndash;&gt;-->
+<!--    <item android:id="@+id/id_mnu_refresh_interval"-->
+<!--        android:title="@string/lbl_refresh"-->
+<!--        android:visible="false"-->
+<!--        app:actionLayout="@layout/refresh"-->
+<!--        app:showAsAction="ifRoom" />-->
+
+</menu>

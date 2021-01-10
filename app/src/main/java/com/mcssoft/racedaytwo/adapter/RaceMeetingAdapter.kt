@@ -6,11 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mcssoft.racedaytwo.adapter.RaceMeetingHeaderViewHolder
-import com.mcssoft.racedaytwo.interfaces.IViewHolder
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
+import com.mcssoft.racedaytwo.interfaces.IViewHolder
 import com.mcssoft.racedaytwo.utiliy.Constants.VIEW_TYPE_DETAIL
 import com.mcssoft.racedaytwo.utiliy.Constants.VIEW_TYPE_HEADER
 import javax.inject.Inject

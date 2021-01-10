@@ -2,8 +2,6 @@ package com.mcssoft.racedaytwo.repository
 
 import android.app.Application
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
@@ -49,10 +47,10 @@ class RaceDayRepository @Inject constructor(context: Context) {
     fun insertMeeting(meeting: RaceMeetingDBEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             raceDetailsDAO.insertMeeting(meeting)
-//            .also {
-//                // TBA - refresh cache.
-//                raceDayCache = raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
-//            }
+            .also {
+                // TBA - refresh cache.
+                raceDayCache = raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
+            }
         }
     }
 
@@ -62,16 +60,9 @@ class RaceDayRepository @Inject constructor(context: Context) {
             raceDayCache = null
         }
     }
-
-//    fun haveCache(): Boolean {
-//        return raceDayCache != null
-//    }
-
     //<editor-fold default state="collapsed" desc="Region: XXX">
     //</editor-fold>
-
 }
-
 /*
 FYI
 https://vladsonkin.com/android-coroutine-scopes-how-to-handle-a-coroutine/?utm_source=feedly&utm_medium=rss&utm_campaign=android-coroutine-scopes-how-to-handle-a-coroutine

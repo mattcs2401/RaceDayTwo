@@ -11,7 +11,7 @@ import java.io.File
 import javax.inject.Inject
 
 
-class RetrofitService @Inject constructor(private val context: Context) {
+class RetrofitService @Inject constructor(context: Context) {
 
     // TBA as to actually required.
     private val cache = Cache(File(context.cacheDir, "name"), 1024 * 1024)

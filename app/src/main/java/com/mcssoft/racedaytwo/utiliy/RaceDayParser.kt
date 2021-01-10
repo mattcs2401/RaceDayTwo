@@ -1,11 +1,8 @@
 package com.mcssoft.racedaytwo.utiliy
 
-import android.content.Context
 import android.util.Log
-import okio.Okio
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
-import java.io.File
 import java.io.InputStream
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory

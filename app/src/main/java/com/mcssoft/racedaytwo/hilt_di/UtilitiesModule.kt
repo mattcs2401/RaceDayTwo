@@ -16,6 +16,6 @@ object UtilitiesModule {
     @Singleton
     @Provides
     fun provideRaceDayUtilities(@ApplicationContext context: Context): RaceDayUtilities {
-        return RaceDayUtilities(context)
+        return RaceDayUtilities()
     }
 }

@@ -31,7 +31,7 @@ class RaceDayWorker(private val context: Context, params: WorkerParameters) : Co
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
-            raceDayUtilities = RaceDayUtilities(context)
+            raceDayUtilities = RaceDayUtilities()
             retrofitSvc = RetrofitService(context)
 
             val retroSvc = retrofitSvc.createService(IFileDownload::class.java)

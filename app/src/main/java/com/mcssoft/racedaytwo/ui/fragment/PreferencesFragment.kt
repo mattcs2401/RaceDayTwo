@@ -17,18 +17,13 @@ import javax.inject.Inject
 class PreferencesFragment : PreferenceFragmentCompat(),
     Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
-    @Inject
-    lateinit var raceDayPreferences: RaceDayPreferences
+    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // Only because context is used numerous times.
         val context = requireContext()
-
         // The main preference screen (all preference widgets are a child of / added to, this).
         screen = preferenceManager.createPreferenceScreen(context)
-
-        setUseFile()
-
         preferenceScreen = screen
     }
 
@@ -36,10 +31,9 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         super.onViewCreated(view, savedInstanceState)
         Log.d("TAG", "PreferencesFragment.onViewCreated")
         // Set toolbar title.
-        requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.title = "Preferences"
-
+        requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.title =
+                resources.getString(R.string.pref_fragment_name)
         initialise()
-
     }
 
     override fun onStop() {
@@ -50,11 +44,11 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
     //<editor-fold default state="collapsed" desc="Region: Listeners">
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-        when(preference.key) {
-            "key_file_use" -> {
-                raceDayPreferences.setFileUse(newValue as Boolean)
-            }
-        }
+//        when(preference.key) {
+//            "key_file_use" -> {
+//                raceDayPreferences.setFileUse(newValue as Boolean)
+//            }
+//        }
         return true
     }
 
@@ -64,27 +58,27 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     }
     //</editor-fold>
 
-    //<editor-fold default state="collapsed" desc="Region: Utility">
+//    //<editor-fold default state="collapsed" desc="Region: Utility">
     private fun initialise() {
-        if(spFileUse.isChecked)
-            raceDayPreferences.setFileUse(true)
-        else
-            raceDayPreferences.setFileUse(false)
-
-//        raceDayPreferences.setDefaultRaceCodes()
+//        if(spFileUse.isChecked)
+//            raceDayPreferences.setFileUse(true)
+//        else
+//            raceDayPreferences.setFileUse(false)
+//
+////        raceDayPreferences.setDefaultRaceCodes()
     }
-
-    // Switch preference as whether to re-use existing download file data.
-    private fun setUseFile() {
-        spFileUse = SwitchPreferenceCompat(context).apply {
-            key="key_file_use"
-            title="Use saved file."
-            setDefaultValue(true)
-            summary="Reload application data using saved file."
-        }
-        screen.addPreference(spFileUse)
-    }
-    //</editor-fold>
+//
+//    // Switch preference as whether to re-use existing download file data.
+//    private fun setUseFile() {
+//        spFileUse = SwitchPreferenceCompat(context).apply {
+//            key="key_file_use"
+//            title="Use saved file."
+//            setDefaultValue(true)
+//            summary="Reload application data using saved file."
+//        }
+//        screen.addPreference(spFileUse)
+//    }
+//    //</editor-fold>
 
     private lateinit var screen: PreferenceScreen
 

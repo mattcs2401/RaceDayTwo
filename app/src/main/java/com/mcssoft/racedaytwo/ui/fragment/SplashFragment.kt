@@ -84,6 +84,7 @@ class SplashFragment : Fragment() {
                 // TBA
             }
             PARSE_RESULT_SUCCESS -> {
+                raceDayRepository.createOrRefreshCache()
                 navigateToMain()
             }
             RESPONSE_RESULT_FAILURE -> {

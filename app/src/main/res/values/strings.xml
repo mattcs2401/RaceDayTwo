@@ -1,19 +1,20 @@
 <resources>
+    <!-- TBA - this will change. -->
     <string name="app_name">RaceDay Two</string>
 
-    <!-- tatts.com base url. -->
+    <!-- Fragment titles. -->
+    <string name="main_fragment_name">Race Day</string>
+    <string name="pref_fragment_name">Preferences</string>
+
+    <!-- Base url. -->
     <string name="base_url">http://tatts.com/pagedata/racing/</string>
     <!-- Main page file name.-->
     <string name="main_page">RaceDay.xml</string>
-
-    <!-- Action name spaces. -->
 
     <!-- Notification. -->
     <string name="init_cache">Initialing the cache.</string>
 
     <!-- Keys. -->
-    <string name="key_file_path">KEY_FILE_PATH</string>
-    <string name="key_file_name">KEY_FILE_NAME</string>
 
     <!-- Splash message. -->
     <string name="splash_message">Downloading and processing. Please wait.</string>
@@ -21,9 +22,6 @@
     <!-- Delete All dialog. -->
 
     <!-- Button labels. -->
-
-    <!-- Error -->
-    <string name="no_storage">Fatal error: No primary storage exists.</string>
 
     <!-- Delete All dialog. -->
     <string name="title_delete_all">Delete Everything</string>

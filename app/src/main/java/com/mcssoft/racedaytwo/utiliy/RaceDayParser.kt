@@ -12,19 +12,25 @@ import javax.xml.xpath.XPathFactory
 
 /**
  * Parse the xml within the downloaded RaceDay.xml file.
- * @param context: Only for system resources.
  */
-class RaceDayParser(private val context: Context) {
+class RaceDayParser {
 
     private var inStream: InputStream? = null
 
+//    /**
+//     * Set the input stream value used by the XPath InputSource.
+//     * @param file: A File object (containing relevant path info) to construct the input stream.
+//     */
+//    fun setInputStream(file: File) {
+//        val bufferedSource = Okio.buffer(Okio.source(file))
+//        inStream = bufferedSource.inputStream()
+//    }
+
     /**
      * Set the input stream value used by the XPath InputSource.
-     * @param file: A File object (containing relevant path info) to construct the input stream.
-     */
-    fun setInputStream(file: File) {
-        val bufferedSource = Okio.buffer(Okio.source(file))
-        inStream = bufferedSource.inputStream()
+     * @param stream: The input stream to use.
+     */    fun setInputStream(stream: InputStream) {
+        inStream = stream
     }
 
     /**
@@ -32,7 +38,7 @@ class RaceDayParser(private val context: Context) {
      * @return A List<Map<LocalName, NodeValue>>.
      */
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
-        Log.e("TAG", "[RaceDayParser.parseForMeeting]")
+//        Log.d("TAG", "[RaceDayParser.parseForMeeting]")
         val expr = "/RaceDay/Meeting"
         return parse(expr)     // only one Meeting is expected.
     }
@@ -83,4 +89,5 @@ class RaceDayParser(private val context: Context) {
             return lMap
         }
     }
+
 }

@@ -13,7 +13,7 @@ interface IFileDownload {
      * dynamic Url functionality of retrofit (i.e. no end point in the @GET). The ResponseBody holds
      * the payload.
      */
-    @Streaming
+//    @Streaming
     @GET
     fun downloadFile(@Url fileUrl: String): Call<ResponseBody?>?
 //    suspend fun downloadFile(@Url fileUrl: String): ResponseBody?  // TBA

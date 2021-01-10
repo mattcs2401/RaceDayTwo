@@ -149,7 +149,7 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
     private fun setViewModel() {
 //        mainViewModel.meetings?.observe(viewLifecycleOwner) { mtgs ->
 //            raceAdapter.submitList(mtgs)
-//    }
+//        }
     }
 
     private fun setRecyclerView() {

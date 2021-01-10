@@ -2,6 +2,7 @@ package com.mcssoft.racedaytwo.repository
 
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
@@ -34,7 +35,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
         }
     }
 
-//    fun getRaceDayCache(): LiveData<List<RaceMeeting>>? = raceDayCache
+    fun getRaceDayCache() = raceDayCache
 
     /**
      * Insert a RaceDetails (entity) meeting.

@@ -87,6 +87,7 @@ dependencies {
     // Retrofit.
     def retrofit_ver = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.11.0"
 
     // Preferences (mainly for PreferencesFragment).
     def pref_ver = "1.1.1"

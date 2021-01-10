@@ -2,7 +2,7 @@
 buildscript {
     ext.kotlin_ver = '1.4.21'
     ext.hilt_ver = '2.29.1-alpha'
-    ext.build_ver = '7.0.0-alpha03'
+    ext.build_ver = '7.0.0-alpha04'
 
     repositories {
         google()

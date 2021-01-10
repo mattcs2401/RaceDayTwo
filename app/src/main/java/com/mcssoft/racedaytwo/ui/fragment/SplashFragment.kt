@@ -10,31 +10,27 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.events.EventResultMessage
-import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
-import com.mcssoft.racedaytwo.utiliy.Constants.DOWNLOAD_RESULT_FAILURE
-import com.mcssoft.racedaytwo.utiliy.Constants.DOWNLOAD_RESULT_SUCCESS
+import com.mcssoft.racedaytwo.utiliy.Constants.RESPONSE_RESULT_FAILURE
+import com.mcssoft.racedaytwo.utiliy.Constants.RESPONSE_RESULT_SUCCESS
 import com.mcssoft.racedaytwo.utiliy.Constants.PARSE_RESULT_FAILURE
 import com.mcssoft.racedaytwo.utiliy.Constants.PARSE_RESULT_SUCCESS
 import com.mcssoft.racedaytwo.utiliy.RaceDayUtilities
-import com.mcssoft.racedaytwo.worker.RaceDayDownloadWorker
-import com.mcssoft.racedaytwo.worker.RaceDayParseWorker
+import com.mcssoft.racedaytwo.utiliy.RaceDayWorker
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
-    @Inject lateinit var raceDayPreferences: RaceDayPreferences
+//    @Inject lateinit var raceDayPreferences: RaceDayPreferences
     @Inject lateinit var raceDayRepository: RaceDayRepository
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
@@ -71,28 +67,10 @@ class SplashFragment : Fragment() {
      * Perform some preferences and file system checks and decide on the "start" type.
      */
     private fun initialise() {
-        val path = raceDayUtilities.getPrimaryStoragePath()
+        // TODO - add a preference to delete everything and start again.
+        // For the time being we'll do that.
+        cleanStart()
 
-        if(path != "") {
-            if(raceDayPreferences.getUseFile()) {
-
-                if(raceDayUtilities.fileExists(File(path)) && raceDayUtilities.isFileToday(File(path))) {
-
-                    // Use the information previously derived from the file.
-                    reStart()
-
-                } else {
-                    // Either the file doesn't exist, or the file exists, but is not today.
-                    cleanStart()
-                }
-            } else {
-                // The use file preference is not set.
-                cleanStart()
-            }
-        } else {
-            binding.idTvProgress.text = requireContext().getString(R.string.no_storage)
-            /* TODO - Maybe some sort of dialog ?*/
-        }
     }
 
     /**
@@ -102,23 +80,21 @@ class SplashFragment : Fragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: EventResultMessage) {
         when(event.result) {
-            DOWNLOAD_RESULT_SUCCESS -> {
-                // File download was successful, now parse the Xml content.
-                runParserWorker()
-            }
-            DOWNLOAD_RESULT_FAILURE -> {
-                // TODO - some sort of dialog ? with a retry option ?
-                Toast.makeText(requireContext(), "Unable to download file.", Toast.LENGTH_SHORT).show()
-                Log.e("TAG", "Unable to download file. Error: ${event.message}")
+            RESPONSE_RESULT_SUCCESS -> {
+                // TBA
             }
             PARSE_RESULT_SUCCESS -> {
-                reStart()
+                navigateToMain()
+            }
+            RESPONSE_RESULT_FAILURE -> {
+                // TODO - some sort of dialog ? with a retry option ?
+                Toast.makeText(requireContext(), "Response result failure.", Toast.LENGTH_SHORT).show()
+                Log.e("TAG", "Response result failure. Error: ${event.message}")
             }
             PARSE_RESULT_FAILURE -> {
                 // TODO - some sort of dialog ? with a retry option ?
-                Toast.makeText(requireContext(), "Unable to parse the downloaded file.", Toast.LENGTH_SHORT).show()
-                Log.e("TAG", "Unable to parse the downloaded file. Error: ${event.message}")
-                // TBA
+                Toast.makeText(requireContext(), "Unable to parse the RESPONSE.", Toast.LENGTH_SHORT).show()
+                Log.e("TAG", "Unable to parse the response. Error: ${event.message}")
             }
         }
     }
@@ -128,11 +104,9 @@ class SplashFragment : Fragment() {
      */
     private fun reStart() {
         Log.d("TAG", "SplashFragment: Restart")
-
         // Create repository cache.
         binding.idTvProgress.text = requireContext().getString(R.string.init_cache)
         raceDayRepository.createOrRefreshCache()
-
         // Navigate to MainFragment.
         navigateToMain()
     }
@@ -141,42 +115,15 @@ class SplashFragment : Fragment() {
      * Perform a "clean" start (basically delete everything and recreate).
      */
     private fun cleanStart() {
-        Log.d("TAG", "SplashFragment: Default start")
-
-        // Delete whatever file is there.
-        val path = raceDayUtilities.getPrimaryStoragePath()
-        raceDayUtilities.deleteFromStorage(File(path))
-
-        // Clear cache and underlying data. Is recreated on successful download processing.
+        Log.d("TAG", "SplashFragment: Clean start")
+        // Clear cache and underlying data.
         raceDayRepository.clearCache()
-
-        // Download the base file. If the download is successful, then the Xml content will be parsed.
-        runDownloadWorker()
+        // Perform the network request, parse and write the response.
+        runRaceDayWorker()
     }
-
-    /**
-     * Enqueue the CoroutineWorker that performs the file download.
-     */
-    private fun runDownloadWorker() {
-        val raceDayDownloadWorker = OneTimeWorkRequestBuilder<RaceDayDownloadWorker>().build()
-        WorkManager.getInstance(requireContext()).enqueue(raceDayDownloadWorker)
-    }
-
-    /**
-     * Enqueue the CoroutineWorker that performs the file xml parse.
-     */
-    private fun runParserWorker() {
-        val keyPath = requireContext().getString(R.string.key_file_path)
-        val filePath = raceDayUtilities.getPrimaryStoragePath()
-        val keyName = requireContext().getString(R.string.key_file_name)
-        val fileName = requireContext().getString(R.string.main_page)
-
-        val workData = workDataOf(keyPath to filePath, keyName to fileName)
-
-        val raceDayParseWorker = OneTimeWorkRequestBuilder<RaceDayParseWorker>()
-                .setInputData(workData)
-                .build()
-        WorkManager.getInstance(requireContext()).enqueue(raceDayParseWorker)
+    private fun runRaceDayWorker() {
+        val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>().build()
+        WorkManager.getInstance(requireContext()).enqueue(raceDayWorker)
     }
 
     /**

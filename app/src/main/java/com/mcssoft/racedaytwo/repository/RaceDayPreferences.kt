@@ -22,6 +22,20 @@ class RaceDayPreferences @Inject constructor (context: Context) {
             apply()
         }
     }
+
+    fun setDefaultMeetingType(value: Boolean) {
+        with(preferences.edit()) {
+            putBoolean("key_default_meeting_type", value)
+            apply()
+        }
+    }
+
+    fun setDeleteAll(value: Boolean) {
+        with(preferences.edit()) {
+            putBoolean("key_delete_all", value)
+            apply()
+        }
+    }
     //</editor-fold>
 
 //    //</editor-fold>

@@ -25,6 +25,8 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         // The main preference screen (all preference widgets are a child of / added to, this).
         screen = preferenceManager.createPreferenceScreen(context)
         setUseCache()
+        setDefaultMeetingType()
+        setDeleteAll()
         preferenceScreen = screen
     }
 
@@ -45,11 +47,17 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
     //<editor-fold default state="collapsed" desc="Region: Listeners">
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-//        when(preference.key) {
-//            "key_file_use" -> {
-//                raceDayPreferences.setFileUse(newValue as Boolean)
-//            }
-//        }
+        when(preference.key) {
+            "key_cache_use" -> {
+                raceDayPreferences.setCacheUse(newValue as Boolean)
+            }
+            "key_delete_all" -> {
+                raceDayPreferences.setDeleteAll(newValue as Boolean)
+            }
+            "key_default_meeting_type" -> {
+                raceDayPreferences.setDefaultMeetingType(newValue as Boolean)
+            }
+        }
         return true
     }
 
@@ -66,10 +74,20 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         else
             raceDayPreferences.setCacheUse(false)
 
-//        raceDayPreferences.setDefaultRaceCodes()
+        if(spDefaultMeetingType.isChecked)
+            raceDayPreferences.setDefaultMeetingType(true)
+        else
+            raceDayPreferences.setDefaultMeetingType(false)
+
+        if(spDeleteAll.isChecked)
+            raceDayPreferences.setDeleteAll(true)
+        else
+            raceDayPreferences.setDeleteAll(false)
     }
 
-    // Switch preference as whether to re-use existing download file data.
+    /**
+     * Switch preference as whether to re-use existing download file data.
+     */
     private fun setUseCache() {
         spCacheUse = SwitchPreferenceCompat(context).apply {
             key="key_cache_use"
@@ -79,9 +97,38 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         }
         screen.addPreference(spCacheUse)
     }
+
+    /**
+     * Switch preference to provide a Delete All option on the main toolbar.
+     */
+    private fun setDeleteAll() {
+        spDeleteAll = SwitchPreferenceCompat(context).apply {
+            key="key_delete_all"
+            title="Delete All."
+            setDefaultValue(false)
+            summary="Enable a Delete All menu option on the main toolbar."
+        }
+        screen.addPreference(spDeleteAll)
+    }
+
+    /**
+     * Switch preference to provide setting a default meeting type to act as an initial filter.
+     */
+    private fun setDefaultMeetingType() {
+        // TODO - this enables a group - TBA.
+        spDefaultMeetingType = SwitchPreferenceCompat(context).apply {
+            key="key_default_meeting_type"
+            title="Default Meeting Type."
+            setDefaultValue(false)
+            summary="Enable an initial filter for the default meeting type."
+        }
+        screen.addPreference(spDefaultMeetingType)
+    }
     //</editor-fold>
 
     private lateinit var screen: PreferenceScreen
 
     private lateinit var spCacheUse: SwitchPreferenceCompat
+    private lateinit var spDeleteAll: SwitchPreferenceCompat
+    private lateinit var spDefaultMeetingType: SwitchPreferenceCompat
 }

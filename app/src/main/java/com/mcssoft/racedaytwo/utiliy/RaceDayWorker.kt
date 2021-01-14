@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
 import com.mcssoft.racedaytwo.events.EventResultMessage
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
@@ -22,20 +23,20 @@ import java.lang.Exception
  * Utility class to do the "heavy lifting" in initialising the application's cache.
  * Note: 'cache' also means writing separate database entries.
  */
-class RaceDayWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+class RaceDayWorker(private val context: Context, private val params: WorkerParameters) : CoroutineWorker(context, params) {
 
-    lateinit var raceDayUtilities: RaceDayUtilities
     lateinit var raceDayRepository: RaceDayRepository
     lateinit var retrofitSvc: RetrofitService
     lateinit var raceDayParser: RaceDayParser
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
-            raceDayUtilities = RaceDayUtilities()
             retrofitSvc = RetrofitService(context)
 
             val retroSvc = retrofitSvc.createService(IFileDownload::class.java)
-            val result = retroSvc.downloadFile(raceDayUtilities.createRaceDayUrl(context))
+            val fromUrl = params.inputData
+                    .getString(context.resources.getString(R.string.key_url))
+            val result = fromUrl?.let { retroSvc.downloadFile(it) }
 
             var success = false   // response success flag.
 

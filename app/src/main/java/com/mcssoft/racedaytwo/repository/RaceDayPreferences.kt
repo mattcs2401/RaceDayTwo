@@ -12,40 +12,18 @@ class RaceDayPreferences @Inject constructor (context: Context) {
 * But because commit() is synchronous, you should avoid calling it from your main thread because
 * it could pause your UI rendering."
 */
-
-//    private val completableJob = Job()
-//    private val coroutineScope = CoroutineScope(Dispatchers.IO + completableJob)
-
     private val preferences =
             context.getSharedPreferences("raceday_preferences", Context.MODE_PRIVATE)
 
     //<editor-fold default state="collapsed" desc="Region: User selectable preferences">
-    fun setFileUse(value: Boolean) {
+    fun setCacheUse(value: Boolean) {
         with(preferences.edit()) {
-            putBoolean("key_file_use", value)
+            putBoolean("key_cache_use", value)
             apply()
         }
     }
-
-    fun getUseFile(): Boolean {
-        return preferences.getBoolean("key_file_use", false)
-    }
     //</editor-fold>
 
-//    //<editor-fold default state="collapsed" desc="Region: Application preferences">
-//    fun setFileId(value: Long) {
-//        with(preferences.edit()) {
-//            putLong("key_file_id", value)
-//            apply()
-//        }
-//    }
-//
-//    fun setFileDate(value: String) {
-//        with(preferences.edit()) {
-//            putString("key_file_date", value)
-//            apply()
-//        }
-//    }
 //    //</editor-fold>
 
 }

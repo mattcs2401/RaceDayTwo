@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.events.EventResultMessage
@@ -123,7 +124,12 @@ class SplashFragment : Fragment() {
         runRaceDayWorker()
     }
     private fun runRaceDayWorker() {
-        val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>().build()
+        val url = raceDayUtilities.createRaceDayUrl(requireContext())
+        val key_url = requireContext().getString(R.string.key_url)
+        val workData = workDataOf(key_url to url)
+        val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>()
+                .setInputData(workData)
+                .build()
         WorkManager.getInstance(requireContext()).enqueue(raceDayWorker)
     }
 

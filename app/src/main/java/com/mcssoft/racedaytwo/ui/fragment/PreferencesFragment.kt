@@ -24,6 +24,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         val context = requireContext()
         // The main preference screen (all preference widgets are a child of / added to, this).
         screen = preferenceManager.createPreferenceScreen(context)
+        setUseCache()
         preferenceScreen = screen
     }
 
@@ -60,27 +61,27 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
 //    //<editor-fold default state="collapsed" desc="Region: Utility">
     private fun initialise() {
-//        if(spFileUse.isChecked)
-//            raceDayPreferences.setFileUse(true)
-//        else
-//            raceDayPreferences.setFileUse(false)
-//
-////        raceDayPreferences.setDefaultRaceCodes()
+        if(spCacheUse.isChecked)
+            raceDayPreferences.setCacheUse(true)
+        else
+            raceDayPreferences.setCacheUse(false)
+
+//        raceDayPreferences.setDefaultRaceCodes()
     }
-//
-//    // Switch preference as whether to re-use existing download file data.
-//    private fun setUseFile() {
-//        spFileUse = SwitchPreferenceCompat(context).apply {
-//            key="key_file_use"
-//            title="Use saved file."
-//            setDefaultValue(true)
-//            summary="Reload application data using saved file."
-//        }
-//        screen.addPreference(spFileUse)
-//    }
-//    //</editor-fold>
+
+    // Switch preference as whether to re-use existing download file data.
+    private fun setUseCache() {
+        spCacheUse = SwitchPreferenceCompat(context).apply {
+            key="key_cache_use"
+            title="Use cache."
+            setDefaultValue(true)
+            summary="Reload application data from cache."
+        }
+        screen.addPreference(spCacheUse)
+    }
+    //</editor-fold>
 
     private lateinit var screen: PreferenceScreen
 
-    private lateinit var spFileUse: SwitchPreferenceCompat
+    private lateinit var spCacheUse: SwitchPreferenceCompat
 }

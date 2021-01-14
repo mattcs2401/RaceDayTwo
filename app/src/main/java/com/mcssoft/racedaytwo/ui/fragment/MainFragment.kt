@@ -111,6 +111,11 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Interface-IDeleteAll">
+    /**
+     * A menu option to delete everything and basically re-start.
+     * TBA - a preference to control this ?
+     *
+     */
     override fun deleteAll(deleteAll: Boolean) {
         when(deleteAll) {
             true -> {
@@ -125,41 +130,45 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
     //<editor-fold default state="collapsed" desc="Region: Utility">
     private fun initialise() {
         setUIComponents()
-        setRecyclerView()
         setViewModel()
     }
 
-    private fun setViewModel() {
-        mainViewModel.setMeetings()
-        mainViewModel.meetings.observe(viewLifecycleOwner) { mtgs ->
-            raceAdapter.submitList(mtgs)
-            raceAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun setRecyclerView() {
-        // There will only be the number of meetings as parsed from the download file.
-        binding?.idRecyclerView?.setHasFixedSize(true)
-        // Add dividers between row items.
-        val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        binding?.idRecyclerView?.addItemDecoration(decoration)
-        // Set the recycler view adapter.
-        binding?.idRecyclerView?.adapter = raceAdapter
-        // Hide the progress bar when the layout is complete.
-        binding?.idRecyclerView?.layoutManager = object : LinearLayoutManager(requireActivity(), VERTICAL, false) {
-            override fun onLayoutCompleted(state: RecyclerView.State?) {
-                super.onLayoutCompleted(state)
-                binding?.idProgressBar2?.visibility = View.GONE
-            }
-        }
-    }
-
+    /**
+     * Set fragment title, toggle buttons and recyclerview.
+     */
     private fun setUIComponents() {
         // Set the title in the toolbar.
         requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.title =
                 resources.getString(R.string.main_fragment_name)
         // Set the toggle group listener.
         binding?.idToggleGroup?.addOnButtonCheckedListener(this)
+        // Set the recyclerview.
+        binding?.idRecyclerView?.apply {
+            // There will only be the number of meetings as parsed from the network download.
+            setHasFixedSize(true)
+            // Add dividers between row items.
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+            // Set the recycler view adapter.
+            adapter = raceAdapter
+            // Hide the progress bar when the layout is complete.
+            layoutManager = object : LinearLayoutManager(requireActivity(), VERTICAL, false) {
+                override fun onLayoutCompleted(state: RecyclerView.State?) {
+                    super.onLayoutCompleted(state)
+                    binding?.idProgressBar2?.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    /**
+     * Set the viewmodel and apply listing to the adapter.
+     */
+    private fun setViewModel() {
+        mainViewModel.setMeetings()
+        mainViewModel.meetings.observe(viewLifecycleOwner) { mtgs ->
+            raceAdapter.submitList(mtgs)
+            raceAdapter.notifyDataSetChanged()
+        }
     }
     //</editor-fold>
 

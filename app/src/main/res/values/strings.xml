@@ -10,6 +10,8 @@
     <string name="base_url">http://tatts.com/pagedata/racing/</string>
     <!-- Main page file name.-->
     <string name="main_page">RaceDay.xml</string>
+    <!-- Generic "key". -->
+    <string name="key_url">key_url</string>
 
     <!-- Notification. -->
     <string name="init_cache">Initialing the cache.</string>
@@ -30,4 +32,5 @@
     <!-- Button labels. -->
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Cancel</string>
+
 </resources>

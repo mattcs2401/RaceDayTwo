@@ -15,6 +15,7 @@ import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
 import com.mcssoft.racedaytwo.interfaces.IDeleteAll
+import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.ui.dialog.DeleteAllDialog
 import com.mcssoft.racedaytwo.utiliy.RaceDayBackPressCB
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
@@ -26,6 +27,7 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
 
     @Inject lateinit var mainViewModel: RaceDayViewModel
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
+    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +40,9 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
         Log.d("TAG","MainFragment.onViewCreated")
         binding = MainFragmentBinding.bind(view)
         setHasOptionsMenu(true)
+        if(!raceDayPreferences.getDeleteAll()) {
+
+        }
         // Setup the UI and related components.
         initialise()
     }
@@ -74,6 +79,9 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
         super.onCreateOptionsMenu(menu, inflater)
         Log.d("TAG","MainFragment.onCreateOptionsMenu")
         inflater.inflate(R.menu.options_menu, menu)
+        deleteMenuItem = menu.findItem(R.id.id_menu_item_delete_all)
+        // TBA
+        setDeleteMenuItem()
     }
     //</editor-fold>
 
@@ -170,10 +178,26 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
             raceAdapter.notifyDataSetChanged()
         }
     }
+
+    /**
+     * ToolBar: Delete (all) option.
+     */
+    private fun setDeleteMenuItem() {
+        // Only set if the Preference is enabled to start with.
+        if(raceDayPreferences.getDeleteAll()) {
+            // The Delete all preference is enabled.
+            deleteMenuItem.isVisible = true
+        } else {
+            if (deleteMenuItem.isVisible) {
+                deleteMenuItem.isVisible = false
+            }
+        }
+    }
     //</editor-fold>
 
     // For UI components.
     private var binding : MainFragmentBinding? = null
+    private lateinit var deleteMenuItem: MenuItem
 
     // Callback to block the user from pressing back (otherwise will reload the SplashFragment).
     private lateinit var raceDayBackPressCallback : RaceDayBackPressCB

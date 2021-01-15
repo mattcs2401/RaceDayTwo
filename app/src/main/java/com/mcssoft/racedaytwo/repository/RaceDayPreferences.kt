@@ -23,6 +23,10 @@ class RaceDayPreferences @Inject constructor (context: Context) {
         }
     }
 
+    fun getCacheUse(): Boolean {
+        return preferences.getBoolean("key_cache_use", false)
+    }
+
     fun setDefaultMeetingType(value: Boolean) {
         with(preferences.edit()) {
             putBoolean("key_default_meeting_type", value)
@@ -35,6 +39,10 @@ class RaceDayPreferences @Inject constructor (context: Context) {
             putBoolean("key_delete_all", value)
             apply()
         }
+    }
+
+    fun getDeleteAll(): Boolean {
+        return preferences.getBoolean("key_delete_all", false)
     }
     //</editor-fold>
 

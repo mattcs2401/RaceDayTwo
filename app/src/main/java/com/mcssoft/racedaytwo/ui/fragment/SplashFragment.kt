@@ -14,6 +14,7 @@ import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.events.EventResultMessage
+import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
 import com.mcssoft.racedaytwo.utiliy.Constants.RESPONSE_RESULT_FAILURE
 import com.mcssoft.racedaytwo.utiliy.Constants.RESPONSE_RESULT_SUCCESS
@@ -31,7 +32,7 @@ import javax.inject.Inject
 class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
-//    @Inject lateinit var raceDayPreferences: RaceDayPreferences
+    @Inject lateinit var raceDayPreferences: RaceDayPreferences
     @Inject lateinit var raceDayRepository: RaceDayRepository
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
@@ -68,10 +69,11 @@ class SplashFragment : Fragment() {
      * Perform some preferences and file system checks and decide on the "start" type.
      */
     private fun initialise() {
-        // TODO - add a preference to delete everything and start again.
-        // For the time being we'll do that.
-        cleanStart()
-
+        if(raceDayPreferences.getCacheUse()) {
+            reStart()
+        } else {
+            cleanStart()
+        }
     }
 
     /**
@@ -85,7 +87,7 @@ class SplashFragment : Fragment() {
                 // TBA
             }
             PARSE_RESULT_SUCCESS -> {
-                raceDayRepository.createOrRefreshCache()
+                raceDayRepository.createCache()
                 navigateToMain()
             }
             RESPONSE_RESULT_FAILURE -> {
@@ -108,7 +110,7 @@ class SplashFragment : Fragment() {
         Log.d("TAG", "SplashFragment: Restart")
         // Create repository cache.
         binding.idTvProgress.text = requireContext().getString(R.string.init_cache)
-        raceDayRepository.createOrRefreshCache()
+        raceDayRepository.createCache()
         // Navigate to MainFragment.
         navigateToMain()
     }

@@ -27,15 +27,15 @@ class RaceDayRepository @Inject constructor(context: Context) {
     /**
      * Create the cache that will be used by the ViewModel.
      */
-    fun createOrRefreshCache() {
+    fun createCache() {
         coroutineScope.launch {
             raceDayCache = raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
         }
     }
 
-    fun getRaceDayCache(): List<RaceMeetingCacheEntity>? {
+    fun getCache(): List<RaceMeetingCacheEntity>? {
         if(raceDayCache == null) {
-            createOrRefreshCache()
+            createCache()
         }
         return raceDayCache
     }
@@ -60,6 +60,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
             raceDayCache = null
         }
     }
+
     //<editor-fold default state="collapsed" desc="Region: XXX">
     //</editor-fold>
 }

@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceScreen
-import androidx.preference.SwitchPreferenceCompat
+import androidx.preference.*
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +13,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PreferencesFragment : PreferenceFragmentCompat(),
     Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
-
+    /*
+     Examples:
+     https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
+     https://blog.mindorks.com/implementing-android-jetpack-preferences
+     */
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -74,10 +75,10 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         else
             raceDayPreferences.setCacheUse(false)
 
-        if(spDefaultMeetingType.isChecked)
-            raceDayPreferences.setDefaultMeetingType(true)
-        else
-            raceDayPreferences.setDefaultMeetingType(false)
+//        if(msDefaultMeetingType.isChecked)
+//            raceDayPreferences.setDefaultMeetingType(true)
+//        else
+//            raceDayPreferences.setDefaultMeetingType(false)
 
         if(spDeleteAll.isChecked)
             raceDayPreferences.setDeleteAll(true)
@@ -115,14 +116,14 @@ class PreferencesFragment : PreferenceFragmentCompat(),
      * Switch preference to provide setting a default meeting type to act as an initial filter.
      */
     private fun setDefaultMeetingType() {
-        // TODO - this enables a group - TBA.
-        spDefaultMeetingType = SwitchPreferenceCompat(context).apply {
-            key="key_default_meeting_type"
-            title="Default Meeting Type."
-            setDefaultValue(false)
-            summary="Enable an initial filter for the default meeting type."
+        msDefaultMeetingType = MultiSelectListPreference(context).apply {
+            key = "multi_select_list"
+            title = "Default Meeting Type"
+            summary = "Select the default meeting type/s to display."
+            entries = arrayOf("Racing", "Trotting", "Greyhound")
+            entryValues = arrayOf("R", "T", "G")
         }
-        screen.addPreference(spDefaultMeetingType)
+        screen.addPreference(msDefaultMeetingType)
     }
     //</editor-fold>
 
@@ -130,5 +131,5 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 
     private lateinit var spCacheUse: SwitchPreferenceCompat
     private lateinit var spDeleteAll: SwitchPreferenceCompat
-    private lateinit var spDefaultMeetingType: SwitchPreferenceCompat
+    private lateinit var msDefaultMeetingType: MultiSelectListPreference
 }

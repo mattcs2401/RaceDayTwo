@@ -17,7 +17,7 @@ class RaceDayViewModel @ViewModelInject constructor(private var repository: Race
         get() = _meetings
 
     fun setMeetings() {
-        _meetings.value = repository.getRaceDayCache()
+        _meetings.value = repository.getCache()
     }
 
     fun clearCache() = repository.clearCache()

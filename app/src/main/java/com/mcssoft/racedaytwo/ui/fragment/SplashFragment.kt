@@ -9,23 +9,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.google.android.material.snackbar.Snackbar
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
-import com.mcssoft.racedaytwo.events.EventResultMessage
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
-import com.mcssoft.racedaytwo.repository.RaceDayRepository
-import com.mcssoft.racedaytwo.utiliy.Constants.RESPONSE_RESULT_FAILURE
-import com.mcssoft.racedaytwo.utiliy.Constants.RESPONSE_RESULT_SUCCESS
-import com.mcssoft.racedaytwo.utiliy.Constants.PARSE_RESULT_FAILURE
-import com.mcssoft.racedaytwo.utiliy.Constants.PARSE_RESULT_SUCCESS
+import com.mcssoft.racedaytwo.repository.RaceDayRepository2
 import com.mcssoft.racedaytwo.utiliy.RaceDayUtilities
 import com.mcssoft.racedaytwo.utiliy.RaceDayWorker
 import dagger.hilt.android.AndroidEntryPoint
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,7 +27,8 @@ class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
-    @Inject lateinit var raceDayRepository: RaceDayRepository
+//    @Inject lateinit var raceDayRepository: RaceDayRepository
+    @Inject lateinit var raceDayRepository2: RaceDayRepository2
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +45,6 @@ class SplashFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d("TAG", "SplashFragment.onStart")
-        // App internal comms.
-        EventBus.getDefault().register(this)
         // Kick it all off.
         initialise()
     }
@@ -59,8 +52,6 @@ class SplashFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.d("TAG", "SplashFragment.onStop")
-
-        EventBus.getDefault().unregister(this)
     }
     //</editor-fold>
 
@@ -77,40 +68,13 @@ class SplashFragment : Fragment() {
     }
 
     /**
-     * Act as a communication hub for the results of file download and parsing the xml.
-     * @param event: An object that represents the result of an event.
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessageEvent(event: EventResultMessage) {
-        when(event.result) {
-            RESPONSE_RESULT_SUCCESS -> {
-                // TBA
-            }
-            PARSE_RESULT_SUCCESS -> {
-                raceDayRepository.createCache()
-                navigateToMain()
-            }
-            RESPONSE_RESULT_FAILURE -> {
-                // TODO - some sort of dialog ? with a retry option ?
-                Toast.makeText(requireContext(), "Response result failure.", Toast.LENGTH_SHORT).show()
-                Log.e("TAG", "Response result failure. Error: ${event.message}")
-            }
-            PARSE_RESULT_FAILURE -> {
-                // TODO - some sort of dialog ? with a retry option ?
-                Toast.makeText(requireContext(), "Unable to parse the RESPONSE.", Toast.LENGTH_SHORT).show()
-                Log.e("TAG", "Unable to parse the response. Error: ${event.message}")
-            }
-        }
-    }
-
-    /**
      * Perform a re-start (just recreate the cache).
      */
     private fun reStart() {
         Log.d("TAG", "SplashFragment: Restart")
         // Create repository cache.
         binding.idTvProgress.text = requireContext().getString(R.string.init_cache)
-        raceDayRepository.createCache()
+        raceDayRepository2.fetchRaceDayList()
         // Navigate to MainFragment.
         navigateToMain()
     }
@@ -121,10 +85,11 @@ class SplashFragment : Fragment() {
     private fun cleanStart() {
         Log.d("TAG", "SplashFragment: Clean start")
         // Clear cache and underlying data.
-        raceDayRepository.clearCache()
+        raceDayRepository2.clearCache()
         // Perform the network request, parse and write the response.
         runRaceDayWorker()
     }
+
     private fun runRaceDayWorker() {
         val url = raceDayUtilities.createRaceDayUrl(requireContext())
         val key_url = requireContext().getString(R.string.key_url)
@@ -132,7 +97,24 @@ class SplashFragment : Fragment() {
         val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>()
                 .setInputData(workData)
                 .build()
-        WorkManager.getInstance(requireContext()).enqueue(raceDayWorker)
+
+        val workManager = WorkManager.getInstance(requireContext())
+        workManager.enqueue(raceDayWorker)
+        // Observe.
+        workManager.getWorkInfoByIdLiveData(raceDayWorker.id).observe(viewLifecycleOwner) { workInfo ->
+//            val data = workInfo.outputData
+            when(workInfo.state) {
+                WorkInfo.State.SUCCEEDED -> {
+                    navigateToMain()
+                }
+                WorkInfo.State.FAILED -> {
+                    Log.d("TAG", "WorkInfo.State.Failed")
+                    workInfo.outputData.getString("key_result_failure")?.let { Log.d("TAG", it) }
+                    workInfo.outputData.getString("key_msg")?.let { Log.d("TAG", it) }
+                }
+                else -> {}
+            }
+        }
     }
 
     /**

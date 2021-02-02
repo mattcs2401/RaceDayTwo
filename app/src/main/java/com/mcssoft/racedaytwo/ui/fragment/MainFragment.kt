@@ -19,13 +19,15 @@ import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.ui.dialog.DeleteAllDialog
 import com.mcssoft.racedaytwo.utiliy.RaceDayBackPressCB
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
+import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel2
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonCheckedListener {
 
-    @Inject lateinit var mainViewModel: RaceDayViewModel
+//    @Inject lateinit var mainViewModel: RaceDayViewModel
+    @Inject lateinit var mainViewModel: RaceDayViewModel2
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
@@ -40,9 +42,6 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
         Log.d("TAG","MainFragment.onViewCreated")
         binding = MainFragmentBinding.bind(view)
         setHasOptionsMenu(true)
-        if(!raceDayPreferences.getDeleteAll()) {
-
-        }
         // Setup the UI and related components.
         initialise()
     }
@@ -125,13 +124,13 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
      *
      */
     override fun deleteAll(deleteAll: Boolean) {
-        when(deleteAll) {
-            true -> {
-                mainViewModel.clearCache()
-                Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
-                    .navigate(R.id.action_mainFragment_to_splashFragment)
-            }
-        }
+//        when(deleteAll) {
+//            true -> {
+//                mainViewModel.clearCache()
+//                Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
+//                    .navigate(R.id.action_mainFragment_to_splashFragment)
+//            }
+//        }
     }
     //</editor-fold>
 
@@ -173,7 +172,7 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
      */
     private fun setViewModel() {
         mainViewModel.setMeetings()
-        mainViewModel.meetings.observe(viewLifecycleOwner) { mtgs ->
+        mainViewModel.raceDayCacheLiveData?.observe(viewLifecycleOwner) { mtgs ->
             raceAdapter.submitList(mtgs)
             raceAdapter.notifyDataSetChanged()
         }

@@ -8,7 +8,6 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-
     defaultConfig {
         applicationId "com.mcssoft.racedaytwo"
         minSdkVersion 27                    // Notes: OPPO API ver.
@@ -67,18 +66,19 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_ver"
 
     // Navigation
-    def nav_ver = '2.3.2'
+    def nav_ver = '2.3.3'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_ver"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_ver"
 
     // Room database.
-    def room_ver = '2.3.0-alpha04'
+    def room_ver = '2.3.0-beta01'
     implementation "androidx.room:room-runtime:$room_ver"
     implementation "androidx.room:room-ktx:$room_ver"
     kapt "androidx.room:room-compiler:$room_ver"
 
     // Hilt.
     def hilt_ver = "2.29.1-alpha"
+    // TBA usage "2.31-alpha" - replaces ApplicationComponent with SingletonComponent.
     implementation "com.google.dagger:hilt-android:$hilt_ver"
     implementation "com.google.dagger:hilt-core:$hilt_ver"
     kapt "com.google.dagger:hilt-compiler:$hilt_ver"
@@ -88,10 +88,13 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_models_ver"
     kapt "androidx.hilt:hilt-compiler:$hilt_models_ver"
 
-    // Retrofit.
+    /* Retrofit. */
     def retrofit_ver = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.11.0"
+    def okhttp_ver = "4.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
+//    // Retrofit response handler library - https://github.com/skydoves/Sandwich
+//    implementation "com.github.skydoves:sandwich:1.0.9"
 
     // Preferences (mainly for PreferencesFragment).
     def pref_ver = "1.1.1"
@@ -105,8 +108,8 @@ dependencies {
     def work_ver = "2.4.0"
     implementation "androidx.work:work-runtime-ktx:$work_ver"
 
-    // Event Bus (for communication back to Fragment or lifecycle components).
-    def eventbus_ver = "3.2.0"
-    implementation "org.greenrobot:eventbus:$eventbus_ver"
-    kapt "org.greenrobot:eventbus-annotation-processor:$eventbus_ver"
+//    // Event Bus (for communication back to Fragment or lifecycle components).
+//    def eventbus_ver = "3.2.0"
+//    implementation "org.greenrobot:eventbus:$eventbus_ver"
+//    kapt "org.greenrobot:eventbus-annotation-processor:$eventbus_ver"
 }

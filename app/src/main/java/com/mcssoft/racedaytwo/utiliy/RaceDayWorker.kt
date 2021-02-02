@@ -4,86 +4,69 @@ import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
-import com.mcssoft.racedaytwo.events.EventResultMessage
-import com.mcssoft.racedaytwo.repository.RaceDayRepository
+import com.mcssoft.racedaytwo.repository.RaceDayRepository2
 import com.mcssoft.racedaytwo.retrofit.IFileDownload
 import com.mcssoft.racedaytwo.retrofit.RetrofitService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
-import org.greenrobot.eventbus.EventBus
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.Exception
+import retrofit2.awaitResponse
 
 /**
  * Utility class to do the "heavy lifting" in initialising the application's cache.
  * Note: 'cache' also means writing separate database entries.
  */
 class RaceDayWorker(private val context: Context, private val params: WorkerParameters) : CoroutineWorker(context, params) {
-
-    lateinit var raceDayRepository: RaceDayRepository
-    lateinit var retrofitSvc: RetrofitService
-    lateinit var raceDayParser: RaceDayParser
-
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        val doWorkMsg: String
         return@withContext try {
-            retrofitSvc = RetrofitService(context)
-
-            val retroSvc = retrofitSvc.createService(IFileDownload::class.java)
+            val retroSvc = RetrofitService(context).createService(IFileDownload::class.java)
             val fromUrl = params.inputData
                     .getString(context.resources.getString(R.string.key_url))
-            val result = fromUrl?.let { retroSvc.downloadFile(it) }
 
-            var success = false   // response success flag.
+            val downloadFile = fromUrl?.let { retroSvc.downloadFile(it) }
+            val downloadFileResponse = downloadFile?.awaitResponse()
 
-            result?.enqueue(object : Callback<ResponseBody?> {
-                override fun onResponse(call: Call<ResponseBody?>?, response: Response<ResponseBody?>) {
-                    success = response.isSuccessful
-                    if (success) {
-                        Log.d("TAG", "Retrofit: Response successful.")
-                        // Establish the cache.
-                        response.body()?.let {
-                            cacheResponse(it)
-                            EventBus.getDefault().post(EventResultMessage(Constants.RESPONSE_RESULT_SUCCESS))
-                        }
-                    }
-                }
-                override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
-                    Log.e("TAG", "Retrofit onFailure: Error - " + throwable.message)
-                    EventBus.getDefault().post(EventResultMessage(Constants.RESPONSE_RESULT_FAILURE, "Retrofit response not successful."))
-                }
-            })
-            // Notify the caller.
-            if(success) {
+            val success = downloadFileResponse?.isSuccessful!!
+            doWorkMsg = if(success) {
+                downloadFileResponse.body()?.let { cacheResponse(it) }!!
+            } else {
+                "Download response not successful."
+            }
+
+            if(success && (doWorkMsg == "")) {
                 Result.success()
             } else {
-                Result.failure()
+                // Something happened, either the download response was not successful, or the cache
+                // write had an issue.
+                val res = workDataOf("key_result_failure" to "Result failure.", "key_msg" to doWorkMsg)
+                Log.d("TAG", "workMsg: $doWorkMsg")
+                Result.failure(res)
             }
         } catch (ex: Exception) {
             Log.e("TAG", "General exception: ${ex.message}")
-            // Notify the caller.
-            EventBus.getDefault().post(EventResultMessage(Constants.RESPONSE_RESULT_FAILURE, ex.message!!))
-            Result.failure()
+            val res = workDataOf("key_result_failure" to "General exception: ${ex.message}")
+            Result.failure(res)
         }
     }
 
     /**
      * Parse the response xml into meeting objects and write to database and create cache.
      */
-    private fun cacheResponse(body: ResponseBody) {
+    private fun cacheResponse(body: ResponseBody): String {
+        var errMsg = ""
         try {
             val stream = body.byteStream()
             // Initialise parser.
-            raceDayParser = RaceDayParser()
+            val raceDayParser = RaceDayParser()
             raceDayParser.setInputStream(stream)
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()
             // Instantiate repository (for database access).
-            raceDayRepository = RaceDayRepository(context)
+            val raceDayRepository = RaceDayRepository2(context)
 
             // Write the new details.
             for (item in meetingsListing) {
@@ -101,12 +84,13 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
                 // Insert an object into the cache and the database.
                 raceDayRepository.insertMeeting(meeting)
             }
-            EventBus.getDefault().post(EventResultMessage(Constants.PARSE_RESULT_SUCCESS))
         } catch (ex: Exception) {
             Log.e("TAG", "Exception in cacheResponse() method" + ex.message)
-            EventBus.getDefault().post(EventResultMessage(Constants.PARSE_RESULT_FAILURE, ex.message!!))
+            errMsg = "Exception in cacheResponse() method" + ex.message
         } finally {
             body.close()
         }
+        return errMsg
     }
+
 }

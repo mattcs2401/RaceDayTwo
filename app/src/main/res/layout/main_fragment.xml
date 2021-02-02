@@ -67,7 +67,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context="com.mcssoft.raceday.ui.activity.MainActivity"
         tools:listitem="@layout/list_item_meeting_header">
-
     </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

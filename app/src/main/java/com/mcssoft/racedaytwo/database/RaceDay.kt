@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
 
-
 @Database(entities = [RaceMeetingDBEntity::class],
     version = 1, exportSchema = false)
 abstract class RaceDay : RoomDatabase() {
@@ -18,7 +17,7 @@ abstract class RaceDay : RoomDatabase() {
         private var instance: RaceDay? = null
 
         fun getDatabase(context: Application): RaceDay {
-            //https://proandroiddev.com/sqlite-triggers-android-room-2e7120bb3e3a
+            // https://proandroiddev.com/sqlite-triggers-android-room-2e7120bb3e3a
             return instance ?: Room
                 .databaseBuilder(context.applicationContext,
                     RaceDay::class.java, "race_day.db")

@@ -2,7 +2,6 @@ package com.mcssoft.racedaytwo
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import org.greenrobot.eventbus.EventBus
 
 @HiltAndroidApp
 class RaceDayApp : Application() {
@@ -10,7 +9,7 @@ class RaceDayApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // https://greenrobot.org/eventbus/documentation/subscriber-index/
-        EventBus.builder().addIndex(MyEventBusIndex()).installDefaultEventBus()
+//        // https://greenrobot.org/eventbus/documentation/subscriber-index/
+//        EventBus.builder().addIndex(MyEventBusIndex()).installDefaultEventBus()
     }
 }

@@ -17,5 +17,4 @@ interface IRaceDayDAO {
 
     @Query("select * from race_day_details")
     fun getMeetings(): List<RaceMeetingDBEntity>
-
 }

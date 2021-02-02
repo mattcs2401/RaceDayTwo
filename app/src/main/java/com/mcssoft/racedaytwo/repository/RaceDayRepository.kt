@@ -9,10 +9,14 @@ import com.mcssoft.racedaytwo.entity.mapper.RaceDayMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RaceDayRepository @Inject constructor(context: Context) {
+// Example - https://www.youtube.com/watch?v=CIvjwIfOG5A&ab_channel=teachmesome
+
+    private lateinit var raceDayMapper: RaceDayMapper
 
     private val completableJob = Job()
     private val coroutineScope =
@@ -22,21 +26,19 @@ class RaceDayRepository @Inject constructor(context: Context) {
 
     private var raceDayCache: List<RaceMeetingCacheEntity>? = null
 
-    private var raceDayMapper = RaceDayMapper()
-
     /**
      * Create the cache that will be used by the ViewModel.
      */
     fun createCache() {
+        // Only create the mapper when we need it.
+        raceDayMapper = RaceDayMapper()
         coroutineScope.launch {
             raceDayCache = raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
         }
     }
 
     fun getCache(): List<RaceMeetingCacheEntity>? {
-        if(raceDayCache == null) {
-            createCache()
-        }
+        if (raceDayCache == null) { createCache() }
         return raceDayCache
     }
 

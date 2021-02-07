@@ -5,18 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.google.android.material.snackbar.Snackbar
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
-import com.mcssoft.racedaytwo.repository.RaceDayRepository2
+import com.mcssoft.racedaytwo.repository.RaceDayRepository
 import com.mcssoft.racedaytwo.utiliy.RaceDayUtilities
 import com.mcssoft.racedaytwo.utiliy.RaceDayWorker
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +25,7 @@ class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
-//    @Inject lateinit var raceDayRepository: RaceDayRepository
-    @Inject lateinit var raceDayRepository2: RaceDayRepository2
+    @Inject lateinit var raceDayRepository: RaceDayRepository
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -61,8 +58,15 @@ class SplashFragment : Fragment() {
      */
     private fun initialise() {
         if(raceDayPreferences.getCacheUse()) {
-            reStart()
+            if (dateCheck()) {
+                // Date is today's date.
+                reStart()
+            } else {
+                // Date isn't today's date.
+                cleanStart()
+            }
         } else {
+            // Preference is not set.
             cleanStart()
         }
     }
@@ -74,7 +78,8 @@ class SplashFragment : Fragment() {
         Log.d("TAG", "SplashFragment: Restart")
         // Create repository cache.
         binding.idTvProgress.text = requireContext().getString(R.string.init_cache)
-        raceDayRepository2.fetchRaceDayList()
+        // create cache if doesn't already exist (and get).
+        raceDayRepository.fetchRaceDayList()
         // Navigate to MainFragment.
         navigateToMain()
     }
@@ -85,12 +90,13 @@ class SplashFragment : Fragment() {
     private fun cleanStart() {
         Log.d("TAG", "SplashFragment: Clean start")
         // Clear cache and underlying data.
-        raceDayRepository2.clearCache()
+        raceDayRepository.clearCache()
         // Perform the network request, parse and write the response.
         runRaceDayWorker()
     }
 
     private fun runRaceDayWorker() {
+        Log.d("TAG", "SplashFragment.runRaceDayWorker")
         val url = raceDayUtilities.createRaceDayUrl(requireContext())
         val key_url = requireContext().getString(R.string.key_url)
         val workData = workDataOf(key_url to url)
@@ -105,6 +111,7 @@ class SplashFragment : Fragment() {
 //            val data = workInfo.outputData
             when(workInfo.state) {
                 WorkInfo.State.SUCCEEDED -> {
+//                    raceDayRepository.fetchRaceDayList()
                     navigateToMain()
                 }
                 WorkInfo.State.FAILED -> {
@@ -112,7 +119,9 @@ class SplashFragment : Fragment() {
                     workInfo.outputData.getString("key_result_failure")?.let { Log.d("TAG", it) }
                     workInfo.outputData.getString("key_msg")?.let { Log.d("TAG", it) }
                 }
-                else -> {}
+                else -> {
+                    // TBA.
+                }
             }
         }
     }
@@ -124,6 +133,11 @@ class SplashFragment : Fragment() {
         // Navigate to MainFragment.
         Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
             .navigate(R.id.action_splashFragment_to_mainFragment)
+    }
+
+    private fun dateCheck(): Boolean {
+        // TBA
+        return true
     }
     //</editor-fold>
 

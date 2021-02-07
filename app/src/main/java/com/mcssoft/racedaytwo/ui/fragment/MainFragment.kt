@@ -19,15 +19,15 @@ import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.ui.dialog.DeleteAllDialog
 import com.mcssoft.racedaytwo.utiliy.RaceDayBackPressCB
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
-import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel2
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonCheckedListener {
-
-//    @Inject lateinit var mainViewModel: RaceDayViewModel
-    @Inject lateinit var mainViewModel: RaceDayViewModel2
+/* Some initial display info here.
+https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-first-load
+ */
+    @Inject lateinit var mainViewModel: RaceDayViewModel
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
@@ -136,14 +136,6 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
 
     //<editor-fold default state="collapsed" desc="Region: Utility">
     private fun initialise() {
-        setUIComponents()
-        setViewModel()
-    }
-
-    /**
-     * Set fragment title, toggle buttons and recyclerview.
-     */
-    private fun setUIComponents() {
         // Set the title in the toolbar.
         requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.title =
                 resources.getString(R.string.main_fragment_name)
@@ -151,9 +143,9 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
         binding?.idToggleGroup?.addOnButtonCheckedListener(this)
         // Set the recyclerview.
         binding?.idRecyclerView?.apply {
-            // There will only be the number of meetings as parsed from the network download.
-            setHasFixedSize(true)
-            // Add dividers between row items.
+            /* Note: if setHasFixedSize(true), cause initial display issue where nothing displays
+               but backing data is there. */
+            // Add dividers between row items - TBA anything else.
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             // Set the recycler view adapter.
             adapter = raceAdapter
@@ -165,18 +157,13 @@ class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonC
                 }
             }
         }
-    }
-
-    /**
-     * Set the viewmodel and apply listing to the adapter.
-     */
-    private fun setViewModel() {
-        mainViewModel.setMeetings()
-        mainViewModel.raceDayCacheLiveData?.observe(viewLifecycleOwner) { mtgs ->
-            raceAdapter.submitList(mtgs)
-            raceAdapter.notifyDataSetChanged()
+        // Set observe.
+        mainViewModel.raceDayCacheLiveData.observe(viewLifecycleOwner) { meetings ->
+            raceAdapter.submitList(meetings)
+//            raceAdapter.notifyDataSetChanged()
         }
     }
+
 
     /**
      * ToolBar: Delete (all) option.

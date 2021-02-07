@@ -2,6 +2,7 @@ package com.mcssoft.racedaytwo.repository
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.WorkerThread
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
@@ -10,37 +11,27 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RaceDayRepository @Inject constructor(context: Context) {
-// Example - https://www.youtube.com/watch?v=CIvjwIfOG5A&ab_channel=teachmesome
 
-    private lateinit var raceDayMapper: RaceDayMapper
+    private var lRaceDay: List<RaceMeetingCacheEntity>? = null
 
     private val completableJob = Job()
-    private val coroutineScope =
-        CoroutineScope(Dispatchers.IO + completableJob)
+    private lateinit var raceDayMapper: RaceDayMapper
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + completableJob)
     private val raceDetailsDAO = RaceDay.getDatabase(context.applicationContext as Application)
-        .raceDayDetailsDao()
+            .raceDayDetailsDao()
 
-    private var raceDayCache: List<RaceMeetingCacheEntity>? = null
-
-    /**
-     * Create the cache that will be used by the ViewModel.
-     */
-    fun createCache() {
-        // Only create the mapper when we need it.
-        raceDayMapper = RaceDayMapper()
-        coroutineScope.launch {
-            raceDayCache = raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
+    @WorkerThread
+    fun fetchRaceDayList() = flow {
+        if (lRaceDay == null || lRaceDay!!.isEmpty()) {
+            createCache()
         }
-    }
-
-    fun getCache(): List<RaceMeetingCacheEntity>? {
-        if (raceDayCache == null) { createCache() }
-        return raceDayCache
-    }
+        emit(lRaceDay)
+    }.flowOn(Dispatchers.IO)
 
     /**
      * Insert a RaceDetails (entity) meeting.
@@ -49,32 +40,18 @@ class RaceDayRepository @Inject constructor(context: Context) {
     fun insertMeeting(meeting: RaceMeetingDBEntity) {
         coroutineScope.launch(Dispatchers.IO) {
             raceDetailsDAO.insertMeeting(meeting)
-            .also {
-                // TBA - refresh cache.
-                raceDayCache = raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
-            }
         }
+    }
+
+    fun createCache(): List<RaceMeetingCacheEntity> {
+        raceDayMapper = RaceDayMapper()
+        lRaceDay =  raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
+        return lRaceDay as List<RaceMeetingCacheEntity>
     }
 
     fun clearCache() {
         coroutineScope.launch(Dispatchers.IO) {
             raceDetailsDAO.deleteAll()
-            raceDayCache = null
         }
     }
-
-    //<editor-fold default state="collapsed" desc="Region: XXX">
-    //</editor-fold>
 }
-/*
-FYI
-https://vladsonkin.com/android-coroutine-scopes-how-to-handle-a-coroutine/?utm_source=feedly&utm_medium=rss&utm_campaign=android-coroutine-scopes-how-to-handle-a-coroutine
- */
-/*
-    val errorHandler = CoroutineExceptionHandler { _, exception ->
-      AlertDialog.Builder(this).setTitle("Error")
-              .setMessage(exception.message)
-              .setPositiveButton(android.R.string.ok) { _, _ -> }
-              .setIcon(android.R.drawable.ic_dialog_alert).show()
-    }
- */

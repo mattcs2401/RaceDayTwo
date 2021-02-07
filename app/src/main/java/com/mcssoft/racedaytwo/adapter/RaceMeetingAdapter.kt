@@ -82,7 +82,8 @@ private class RaceMeetingDiffCallback : DiffUtil.ItemCallback<RaceMeetingCacheEn
     }
 
     override fun areContentsTheSame(oldItem: RaceMeetingCacheEntity, newItem: RaceMeetingCacheEntity): Boolean {
-        return oldItem == newItem
+        return oldItem.mtgId == newItem.mtgId
+        // TODO - add the rest of the comparison elements.
     }
 }
 /*

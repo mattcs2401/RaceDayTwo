@@ -7,7 +7,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
-import com.mcssoft.racedaytwo.repository.RaceDayRepository2
+import com.mcssoft.racedaytwo.repository.RaceDayRepository
 import com.mcssoft.racedaytwo.retrofit.IFileDownload
 import com.mcssoft.racedaytwo.retrofit.RetrofitService
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +16,7 @@ import okhttp3.ResponseBody
 import retrofit2.awaitResponse
 
 /**
- * Utility class to do the "heavy lifting" in initialising the application's cache.
- * Note: 'cache' also means writing separate database entries.
+ * Utility class to do the "heavy lifting" in initialising the application's database entries.
  */
 class RaceDayWorker(private val context: Context, private val params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -32,7 +31,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
 
             val success = downloadFileResponse?.isSuccessful!!
             doWorkMsg = if(success) {
-                downloadFileResponse.body()?.let { cacheResponse(it) }!!
+                downloadFileResponse.body()?.let { writeResponse(it) }!!
             } else {
                 "Download response not successful."
             }
@@ -54,9 +53,9 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
     }
 
     /**
-     * Parse the response xml into meeting objects and write to database and create cache.
+     * Parse the response xml into meeting objects and write to database.
      */
-    private fun cacheResponse(body: ResponseBody): String {
+    private fun writeResponse(body: ResponseBody): String {
         var errMsg = ""
         try {
             val stream = body.byteStream()
@@ -66,7 +65,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()
             // Instantiate repository (for database access).
-            val raceDayRepository = RaceDayRepository2(context)
+            val raceDayRepository = RaceDayRepository(context)
 
             // Write the new details.
             for (item in meetingsListing) {

@@ -45,16 +45,6 @@ class RaceDayPreferences @Inject constructor (context: Context) {
         return preferences.getBoolean("key_delete_all", false)
     }
 
-    /**
-     * A "non viewable" preference. Save a copy of today's date.
-     */
-    fun setDate(date: String) {
-        with(preferences.edit()) {
-            putString("key_date", date)
-            apply()
-        }
-
-    }
     //</editor-fold>
 
 //    //</editor-fold>

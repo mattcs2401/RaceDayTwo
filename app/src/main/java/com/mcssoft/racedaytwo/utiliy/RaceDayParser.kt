@@ -83,8 +83,8 @@ class RaceDayParser {
             Log.e("TAG", "[RaceDayParser.parse] Exception: ${ex.message}")
         } finally {
             inStream?.close()
-            return lMap
         }
+        return lMap
     }
 
 }

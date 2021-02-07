@@ -45,26 +45,6 @@ class RaceDayUtilities @Inject constructor() {
         }
     }
 
-    /**
-     * Compare the Day & Month of the given time value to today's Day & Month.
-     * @param timeVal: The time value to compare against.
-     * @return True if the Day & Month of the given time value is equal today's Day & Month value.
-     */
-    fun compareDateToToday(timeVal: Long): Boolean {
-        val calendarToday = Calendar.getInstance(Locale.getDefault())
-        val dayToday = calendarToday.get(Calendar.DAY_OF_MONTH).toString()
-        val monthToday = ((calendarToday.get(Calendar.MONTH)) + 1).toString()  // Note (1) below.
-
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.timeInMillis = timeVal
-        val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
-        val month = ((calendar.get(Calendar.MONTH)) + 1).toString()  // Note (1) below.
-
-        if((day == dayToday) && (month == monthToday)) {
-            return true
-        }
-        return false
-    }
     //</editor-fold>
 }
 /*

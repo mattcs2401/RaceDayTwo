@@ -6,13 +6,11 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
-import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
-import com.mcssoft.racedaytwo.repository.RaceDayRepository
+import com.mcssoft.racedaytwo.repository.RepositoryHelper
 import com.mcssoft.racedaytwo.retrofit.IFileDownload
 import com.mcssoft.racedaytwo.retrofit.RetrofitService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
 import retrofit2.awaitResponse
 
 /**
@@ -31,7 +29,8 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
 
             val success = downloadFileResponse?.isSuccessful!!
             doWorkMsg = if(success) {
-                downloadFileResponse.body()?.let { writeResponse(it) }!!
+                val repoHelper = RepositoryHelper(context)
+                downloadFileResponse.body()?.let { repoHelper.writeNetworkResponse(it) }!!
             } else {
                 "Download response not successful."
             }
@@ -51,45 +50,4 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             Result.failure(res)
         }
     }
-
-    /**
-     * Parse the response xml into meeting objects and write to database.
-     */
-    private fun writeResponse(body: ResponseBody): String {
-        var errMsg = ""
-        try {
-            val stream = body.byteStream()
-            // Initialise parser.
-            val raceDayParser = RaceDayParser()
-            raceDayParser.setInputStream(stream)
-            // Get the list of meetings.
-            val meetingsListing = raceDayParser.parseForMeeting()
-            // Instantiate repository (for database access).
-            val raceDayRepository = RaceDayRepository(context)
-
-            // Write the new details.
-            for (item in meetingsListing) {
-                val meeting = RaceMeetingDBEntity()
-                meeting.mtgId = item["MtgId"]!!
-                meeting.weatherChanged = item["WeatherChanged"]!!
-                meeting.meetingCode = item["MeetingCode"]!!
-                meeting.venueName = item["VenueName"]!!
-                meeting.hiRaceNo = item["HiRaceNo"]!!
-                meeting.meetingType = item["MeetingType"]!!
-                meeting.trackChanged = item["TrackChanged"]!!
-                meeting.nextRaceNo = item["NextRaceNo"].toString()   // may not exist.
-                meeting.sortOrder = item["SortOrder"]!!
-                meeting.abandoned = item["Abandoned"]!!
-                // Insert an object into the cache and the database.
-                raceDayRepository.insertMeeting(meeting)
-            }
-        } catch (ex: Exception) {
-            Log.e("TAG", "Exception in cacheResponse() method" + ex.message)
-            errMsg = "Exception in cacheResponse() method" + ex.message
-        } finally {
-            body.close()
-        }
-        return errMsg
-    }
-
 }

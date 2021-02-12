@@ -33,15 +33,15 @@ class RaceDayRepository @Inject constructor(context: Context) {
         emit(lRaceDay)
     }.flowOn(Dispatchers.IO)
 
-    /**
-     * Insert a RaceDetails (entity) meeting.
-     * @param meeting: The meeting to insert.
-     */
-    fun insertMeeting(meeting: RaceMeetingDBEntity) {
-        coroutineScope.launch(Dispatchers.IO) {
-            raceDetailsDAO.insertMeeting(meeting)
-        }
-    }
+//    /**
+//     * Insert a RaceDetails (entity) meeting.
+//     * @param meeting: The meeting to insert.
+//     */
+//    fun insertMeeting(meeting: RaceMeetingDBEntity) {
+//        coroutineScope.launch(Dispatchers.IO) {
+//            raceDetailsDAO.insertMeeting(meeting)
+//        }
+//    }
 
     fun createCache(): List<RaceMeetingCacheEntity> {
         raceDayMapper = RaceDayMapper()

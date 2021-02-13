@@ -11,11 +11,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-object DownloadModule {
+object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRaceDayUtilities(@ApplicationContext context: Context): RetrofitService {
+    fun provideRetrofitService(@ApplicationContext context: Context): RetrofitService {
         return RetrofitService(context)
     }
 }

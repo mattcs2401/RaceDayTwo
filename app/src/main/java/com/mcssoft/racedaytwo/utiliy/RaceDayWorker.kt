@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
 /**
- * Utility class to do the "heavy lifting" in initialising the application's database entries.
+ * Utility class to do the initialisation of the application's database entries.
  */
 class RaceDayWorker(private val context: Context, private val params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -29,8 +29,8 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
 
             val success = downloadFileResponse?.isSuccessful!!
             doWorkMsg = if(success) {
-                val repoHelper = RepositoryHelper(context)
-                downloadFileResponse.body()?.let { repoHelper.writeNetworkResponse(it) }!!
+                val repositoryHelper = RepositoryHelper(context)
+                downloadFileResponse.body()?.let { repositoryHelper.writeNetworkResponse(it) }!!
             } else {
                 "Download response not successful."
             }

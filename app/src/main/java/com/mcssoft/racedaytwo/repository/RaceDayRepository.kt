@@ -16,16 +16,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RaceDayRepository @Inject constructor(context: Context) {
-
+    // The local cache.
     private var lRaceDay: List<RaceMeetingCacheEntity>? = null
-
-    private val completableJob = Job()
-    private lateinit var raceDayMapper: RaceDayMapper
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + completableJob)
+    // Coroutine scope.
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    // Database access.
     private val raceDetailsDAO = RaceDay.getDatabase(context.applicationContext as Application)
             .raceDayDetailsDao()
 
-    @WorkerThread
+    // Fetch the current contents of the cache.
     fun fetchRaceDayList() = flow {
         if (lRaceDay == null || lRaceDay!!.isEmpty()) {
             createCache()
@@ -33,25 +32,19 @@ class RaceDayRepository @Inject constructor(context: Context) {
         emit(lRaceDay)
     }.flowOn(Dispatchers.IO)
 
-//    /**
-//     * Insert a RaceDetails (entity) meeting.
-//     * @param meeting: The meeting to insert.
-//     */
-//    fun insertMeeting(meeting: RaceMeetingDBEntity) {
-//        coroutineScope.launch(Dispatchers.IO) {
-//            raceDetailsDAO.insertMeeting(meeting)
-//        }
-//    }
-
-    fun createCache(): List<RaceMeetingCacheEntity> {
-        raceDayMapper = RaceDayMapper()
-        lRaceDay =  raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
-        return lRaceDay as List<RaceMeetingCacheEntity>
-    }
-
+    // Delete all from the local cache, and database (ready to re-create).
     fun clearCache() {
+        lRaceDay = null
         coroutineScope.launch(Dispatchers.IO) {
             raceDetailsDAO.deleteAll()
         }
     }
+
+    // Create the local cache.
+    // Note: Meeting entities must already exist in the database.
+    private fun createCache(): List<RaceMeetingCacheEntity> {
+        lRaceDay =  RaceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
+        return lRaceDay as List<RaceMeetingCacheEntity>
+    }
+
 }

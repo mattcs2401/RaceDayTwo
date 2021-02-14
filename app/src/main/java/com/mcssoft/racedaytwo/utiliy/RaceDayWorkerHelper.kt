@@ -1,11 +1,10 @@
-package com.mcssoft.racedaytwo.repository
+package com.mcssoft.racedaytwo.utiliy
 
 import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
-import com.mcssoft.racedaytwo.utiliy.RaceDayParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +15,7 @@ import javax.inject.Inject
  * A utility class to do the 'heavy lifting' of parsing the network response xml into
  * RaceMeetingDBEntity objects and write the details to the database.
  */
-class RepositoryHelper @Inject constructor(context: Context) {
+class RaceDayWorkerHelper @Inject constructor(context: Context) {
 
     private val raceMeetingDao = RaceDay.getDatabase(context.applicationContext as Application)
             .raceDayDetailsDao()

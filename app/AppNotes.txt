@@ -8,8 +8,8 @@ TO DO:
 ------
 In no particular order.
 
-(1) The repository does both the database and the network service.
-    - Change needed to accommodate for retrofit (ref Android std architecture).
+(1) The repository does both the database and the network service  (ref Android std architecture).
+    - The database (via DAO) and network service (via ?) are repository dependencies.
 
 (2) Filter the listing showing in the main recyclerview.
     - When app starts, use preference value if set.

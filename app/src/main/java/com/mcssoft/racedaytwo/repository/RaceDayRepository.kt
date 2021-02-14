@@ -43,7 +43,8 @@ class RaceDayRepository @Inject constructor(context: Context) {
     // Create the local cache.
     // Note: Meeting entities must already exist in the database.
     private fun createCache(): List<RaceMeetingCacheEntity> {
-        lRaceDay =  RaceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
+        val raceDayMapper = RaceDayMapper()
+        lRaceDay =  raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
         return lRaceDay as List<RaceMeetingCacheEntity>
     }
 

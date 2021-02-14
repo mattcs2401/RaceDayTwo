@@ -6,7 +6,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
-import com.mcssoft.racedaytwo.repository.RepositoryHelper
 import com.mcssoft.racedaytwo.retrofit.IFileDownload
 import com.mcssoft.racedaytwo.retrofit.RetrofitService
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +15,9 @@ import retrofit2.awaitResponse
 /**
  * Utility class to do the initialisation of the application's database entries.
  */
-class RaceDayWorker(private val context: Context, private val params: WorkerParameters) : CoroutineWorker(context, params) {
+class RaceDayWorker(private val context: Context, private val params: WorkerParameters)
+    : CoroutineWorker(context, params) {
+
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val doWorkMsg: String
         return@withContext try {
@@ -29,8 +30,8 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
 
             val success = downloadFileResponse?.isSuccessful!!
             doWorkMsg = if(success) {
-                val repositoryHelper = RepositoryHelper(context)
-                downloadFileResponse.body()?.let { repositoryHelper.writeNetworkResponse(it) }!!
+                val workerHelper = RaceDayWorkerHelper(context)
+                downloadFileResponse.body()?.let { workerHelper.writeNetworkResponse(it) }!!
             } else {
                 "Download response not successful."
             }
@@ -38,8 +39,8 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             if(success && (doWorkMsg == "")) {
                 Result.success()
             } else {
-                // Something happened, either the download response was not successful, or the cache
-                // write had an issue.
+                // Something happened, either the download response was not successful, or the
+                // database write had an issue.
                 val res = workDataOf("key_result_failure" to "Result failure.", "key_msg" to doWorkMsg)
                 Log.d("TAG", "workMsg: $doWorkMsg")
                 Result.failure(res)

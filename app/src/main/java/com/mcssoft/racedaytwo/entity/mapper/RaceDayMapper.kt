@@ -8,7 +8,8 @@ import javax.inject.Inject
   Utility class to map between the network entity model RaceMeetingDBEntity, and the domain model
   RaceMeetingCacheEntity.
  */
-object RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity> {
+class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity> {
+/* Thought about making this a singleton but sure there would be any real benefit. */
 
     /**
      * Map from the network entity model to the domain model.
@@ -17,7 +18,6 @@ object RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity
      */
     override fun mapFromEntity(entity: RaceMeetingDBEntity): RaceMeetingCacheEntity {
         val raceMeetingCacheEntity = RaceMeetingCacheEntity()
-
         raceMeetingCacheEntity.id = entity.id
         raceMeetingCacheEntity.mtgId = entity.mtgId
         raceMeetingCacheEntity.weatherChanged = entity.weatherChanged
@@ -30,7 +30,6 @@ object RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity
         raceMeetingCacheEntity.sortOrder = entity.sortOrder
         raceMeetingCacheEntity.abandoned = entity.abandoned
         raceMeetingCacheEntity.meta = false                // specific to the domain model.
-
         return raceMeetingCacheEntity
     }
 
@@ -41,7 +40,6 @@ object RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity
      */
     override fun mapToEntity(domain: RaceMeetingCacheEntity): RaceMeetingDBEntity {
         val raceMeetingDBEntity = RaceMeetingDBEntity()
-
         raceMeetingDBEntity.id = domain.id
         raceMeetingDBEntity.mtgId = domain.mtgId
         raceMeetingDBEntity.weatherChanged = domain.weatherChanged
@@ -53,7 +51,6 @@ object RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity
         raceMeetingDBEntity.nextRaceNo = domain.nextRaceNo
         raceMeetingDBEntity.sortOrder = domain.sortOrder
         raceMeetingDBEntity.abandoned = domain.abandoned
-
         return raceMeetingDBEntity
     }
 

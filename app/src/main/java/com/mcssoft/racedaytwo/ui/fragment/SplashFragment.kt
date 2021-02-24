@@ -79,7 +79,7 @@ class SplashFragment : Fragment() {
         // Create repository cache.
         binding.idTvProgress.text = requireContext().getString(R.string.init_cache)
         // create cache if doesn't already exist (and get).
-        raceDayRepository.fetchRaceDayList()
+        raceDayRepository.fetchFromCache()
         // Navigate to MainFragment.
         navigateToMain()
     }

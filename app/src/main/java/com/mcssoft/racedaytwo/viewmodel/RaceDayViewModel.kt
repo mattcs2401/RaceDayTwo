@@ -6,7 +6,7 @@ import com.mcssoft.racedaytwo.repository.RaceDayRepository
 class RaceDayViewModel @ViewModelInject constructor(repository: RaceDayRepository)
     : BaseViewModel()  {
 
-    var raceDayCacheLiveData = repository.fetchRaceDayList().asLiveDataViewModelScope()
+    var raceDayCacheLiveData = repository.fetchFromCache().asLiveDataViewModelScope()
 
 }
 

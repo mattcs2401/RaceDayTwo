@@ -25,7 +25,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
             .raceDayDetailsDao()
 
     // Fetch the current contents of the cache.
-    fun fetchRaceDayList() = flow {
+    fun fetchFromCache() = flow {
         if (lRaceDay == null || lRaceDay!!.isEmpty()) {
             createCache()
         }

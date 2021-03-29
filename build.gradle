@@ -2,11 +2,11 @@
 buildscript {
     ext.kotlin_ver = '1.4.30'
     ext.hilt_ver = '2.31.2-alpha'
-    ext.build_ver = '7.0.0-alpha08'
+    ext.build_ver = '7.0.0-alpha12'
 
     repositories {
         google()
-        maven { url "http://jcenter.bintray.com"}
+        mavenCentral() // { url "http://jcenter.bintray.com"}
     }
 
     dependencies {
@@ -22,7 +22,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        maven { url "http://jcenter.bintray.com/" }
+        mavenCentral() // { url "http://jcenter.bintray.com/" }
     }
 }
 

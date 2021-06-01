@@ -15,7 +15,7 @@ import javax.inject.Inject
  * A utility class to do the 'heavy lifting' of parsing the network response xml into
  * RaceMeetingDBEntity objects and write the details to the database.
  */
-class RaceDayWorkerHelper @Inject constructor(context: Context) {
+class RaceDayWorkerHelper @Inject constructor(private val context: Context) {
 
     private val raceMeetingDao = RaceDay.getDatabase(context.applicationContext as Application)
             .raceDayDetailsDao()
@@ -27,13 +27,13 @@ class RaceDayWorkerHelper @Inject constructor(context: Context) {
         var errMsg = ""
         try {
             // Initialise parser.
-            val raceDayParser = RaceDayParser()
+            val raceDayParser = RaceDayParser(context)
             raceDayParser.setInputStream(body.byteStream())
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()
 
             // TODO - a meetings listing size of 0 is a good indicator of a parse(ing) issue.
-            // Log.d("TAG", "meetings listing size: " + meetingsListing.size)
+            Log.d("TAG", "meetings listing size: " + meetingsListing.size)
 
             // Write the new details.
             for (item in meetingsListing) {

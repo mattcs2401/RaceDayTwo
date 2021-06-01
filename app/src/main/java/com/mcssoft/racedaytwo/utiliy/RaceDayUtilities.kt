@@ -24,8 +24,7 @@ class RaceDayUtilities @Inject constructor() {
     fun createRaceDayUrl(context: Context): String {
         val baseUrl = context.resources.getString(R.string.base_url)
 //        val datePart = getDateToday(DateFormat.SLASH)
-//        val mainPage = context.resources.getString(R.string.main_page)
-        val mainPage = "racing.xml"
+        val mainPage = context.resources.getString(R.string.main_page)
 //        return "$baseUrl$datePart$mainPage"
         return "$baseUrl$mainPage"
     }

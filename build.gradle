@@ -1,12 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_ver = '1.4.32'
-    ext.hilt_ver = '2.31.2-alpha'
-    ext.build_ver = '7.0.0-alpha14'
+    ext.kotlin_ver = '1.5.10'
+    ext.hilt_ver = '2.36'//5.1'
+    ext.build_ver = '7.1.0-alpha01'
 
     repositories {
         google()
-        mavenCentral() // { url "http://jcenter.bintray.com"}
+        mavenCentral()
     }
 
     dependencies {
@@ -22,7 +22,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral() // { url "http://jcenter.bintray.com/" }
+        mavenCentral()
     }
 }
 

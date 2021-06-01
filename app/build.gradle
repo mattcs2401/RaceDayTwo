@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -78,8 +78,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_ver"
 
     // Hilt.
-    def hilt_ver = "2.31.2-alpha"
-    // TBA usage "2.31-alpha" - replaces ApplicationComponent with SingletonComponent.
+    def hilt_ver = "2.36"//5.1"
     implementation "com.google.dagger:hilt-android:$hilt_ver"
     implementation "com.google.dagger:hilt-core:$hilt_ver"
     kapt "com.google.dagger:hilt-compiler:$hilt_ver"

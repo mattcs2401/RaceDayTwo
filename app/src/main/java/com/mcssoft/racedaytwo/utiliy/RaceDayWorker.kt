@@ -37,11 +37,12 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             }
 
             if(success && (doWorkMsg == "")) {
+                Log.d("TAG", "doWork() - Result success :)")
                 Result.success()
             } else {
                 // Something happened, either the download response was not successful, or the
                 // database write had an issue.
-                val res = workDataOf("key_result_failure" to "Result failure.", "key_msg" to doWorkMsg)
+                val res = workDataOf("key_result_failure" to "doWork() - Result failure :(", "key_msg" to doWorkMsg)
                 Log.d("TAG", "workMsg: $doWorkMsg")
                 Result.failure(res)
             }

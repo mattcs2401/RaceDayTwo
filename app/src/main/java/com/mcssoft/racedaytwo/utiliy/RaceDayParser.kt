@@ -31,8 +31,8 @@ class RaceDayParser() {
      * @return A List<Map<LocalName, NodeValue>>.
      */
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
-        val expr = "/RaceDay/Meeting"
-        return parse(expr)     // only one Meeting is expected.
+        val expr = "Racing/RaceDay/Meetings/Meeting"
+        return parse(expr)
     }
 
     /**
@@ -51,6 +51,7 @@ class RaceDayParser() {
      * @return: An Array of Map<String,String> (Node LocalName and NodeValue).
      */
     private fun parse(xpathExpr: String): ArrayList<MutableMap<String, String>> {
+        // TODO - a parse issue might not throw an exception, but lMap.size could be 0.
         val lMap = ArrayList<MutableMap<String, String>>()
 
         try {

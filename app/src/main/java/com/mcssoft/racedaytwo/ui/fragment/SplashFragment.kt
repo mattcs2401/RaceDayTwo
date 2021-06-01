@@ -57,18 +57,18 @@ class SplashFragment : Fragment() {
      * Perform some preferences and file system checks and decide on the "start" type.
      */
     private fun initialise() {
-        if(raceDayPreferences.getCacheUse()) {
-            if (dateCheck()) {
-                // Date is today's date.
-                reStart()
-            } else {
-                // Date isn't today's date.
-                cleanStart()
-            }
-        } else {
-            // Preference is not set.
+//        if(raceDayPreferences.getCacheUse()) {
+//            if (dateCheck()) {
+//                // Date is today's date.
+//                reStart()
+//            } else {
+//                // Date isn't today's date.
+//                cleanStart()
+//            }
+//        } else {
+//            // Preference is not set.
             cleanStart()
-        }
+//        }
     }
 
     /**

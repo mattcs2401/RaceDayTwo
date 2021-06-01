@@ -26,33 +26,30 @@ class RaceDayWorkerHelper @Inject constructor(context: Context) {
     fun writeNetworkResponse(body: ResponseBody): String {
         var errMsg = ""
         try {
-            val stream = body.byteStream()
             // Initialise parser.
             val raceDayParser = RaceDayParser()
-            raceDayParser.setInputStream(stream)
+            raceDayParser.setInputStream(body.byteStream())
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()
+
+            // TODO - a meetings listing size of 0 is a good indicator of a parse(ing) issue.
+            // Log.d("TAG", "meetings listing size: " + meetingsListing.size)
 
             // Write the new details.
             for (item in meetingsListing) {
                 // TODO - filter this in the parse for meeting type S.
                 val meeting = RaceMeetingDBEntity()
                 meeting.mtgId = item["MtgId"]!!
-                meeting.weatherChanged = item["WeatherChanged"]!!
                 meeting.meetingCode = item["MeetingCode"]!!
-                meeting.venueName = item["VenueName"]!!
-                meeting.hiRaceNo = item["HiRaceNo"]!!
                 meeting.meetingType = item["MeetingType"]!!
-                meeting.trackChanged = item["TrackChanged"]!!
-                meeting.nextRaceNo = item["NextRaceNo"].toString()   // may not exist.
-                meeting.sortOrder = item["SortOrder"]!!
+                meeting.meetingName = item["MeetingName"]!!
                 meeting.abandoned = item["Abandoned"]!!
                 // Insert meeting object into the the database.
                 insertMeeting(meeting)
             }
         } catch (ex: Exception) {
-            Log.e("TAG", "Exception in cacheResponse() method" + ex.message)
-            errMsg = "Exception in cacheResponse() method" + ex.message
+            Log.e("TAG", "Exception in writeNetworkResponse(): " + ex.message)
+            errMsg = "Exception in writeNetworkResponse(): " + ex.message
         } finally {
             body.close()
         }

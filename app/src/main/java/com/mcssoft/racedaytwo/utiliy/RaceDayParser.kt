@@ -10,7 +10,7 @@ import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 /**
- * Parse the xml within the downloaded RaceDay.xml file.
+ * A utility class to parse the xml within the downloaded racing.xml file.
  */
 class RaceDayParser(private val context: Context) {
     // The input stream. Basically the Xml based file contents that will be parsed.

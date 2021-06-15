@@ -22,10 +22,6 @@ import retrofit2.awaitResponse
 class RaceDayWorker(private val context: Context, private val params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
-    // Database access.
-    private val raceMeetingDao = RaceDay.getDatabase(context.applicationContext as Application)
-        .raceDayDetailsDao()
-
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val doWorkMsg: String
         return@withContext try {
@@ -70,6 +66,9 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
     private fun writeNetworkResponse(body: ResponseBody): String {
         var errMsg = ""
         try {
+            // Database access.
+            val raceMeetingDao = RaceDay.getDatabase(context.applicationContext as Application)
+                .raceDayDetailsDao()
             // Initialise parser.
             val raceDayParser = RaceDayParser()
             raceDayParser.setInputStream(body.byteStream())
@@ -93,7 +92,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
                 errMsg = "No Meeting listing. Probable parsing error."
             }
         } catch (ex: Exception) {
-            errMsg = "Exception in writeNetworkResponse(): " + ex.message
+            errMsg = "Exception in RaceDayWorker.writeNetworkResponse(): " + ex.message
             Log.e("TAG", errMsg)
         } finally {
             body.close()

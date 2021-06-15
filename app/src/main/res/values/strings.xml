@@ -13,6 +13,9 @@
     <!-- Generic "key". -->
     <string name="key_url">key_url</string>
 
+    <!-- XPath parse paths. -->
+    <string name="meeting_parse_path">/RaceDay/Meeting</string>
+
     <!-- Notification. -->
     <string name="init_cache">Initialing the cache.</string>
 

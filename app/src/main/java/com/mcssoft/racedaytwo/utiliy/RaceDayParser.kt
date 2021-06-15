@@ -1,6 +1,8 @@
 package com.mcssoft.racedaytwo.utiliy
 
+import android.content.Context
 import android.util.Log
+import com.mcssoft.racedaytwo.R
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.InputStream
@@ -8,22 +10,23 @@ import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 /**
- * A utility class to parse the xml within the downloaded racing.xml file.
+ * A utility class to parse the xml within the downloaded RaceDay.xml file.
+ * @param context For access to string resources.
  */
-class RaceDayParser() {
+class RaceDayParser(private val context: Context) {
     // The input stream. Basically the Xml based file contents that will be parsed.
     private var inStream: InputStream? = null
 
     // Secondary constructor TBA.
-    constructor(iStream: InputStream) : this() {
-        inStream = iStream
+    constructor(context: Context, inStream: InputStream) : this(context) {
+        this.inStream = inStream
     }
 
     /**
      * Set the input stream value used by the XPath InputSource.
      * @param stream: The input stream to use.
-     */    fun setInputStream(stream: InputStream) {
-        inStream = stream
+     */    fun setInputStream(inStream: InputStream) {
+        this.inStream = inStream
     }
 
     /**
@@ -31,7 +34,7 @@ class RaceDayParser() {
      * @return A List<Map<LocalName, NodeValue>>.
      */
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
-        val expr = "/RaceDay/Meeting"
+        val expr = context.resources.getString(R.string.meeting_parse_path)
         return parse(expr)
     }
 
@@ -46,21 +49,22 @@ class RaceDayParser() {
     }
 
     /**
-     * Generic parse method. Will parse the given XPath expression into an ArrayList of Map.
+     * Generic method to parse using the given XPath expression.
      * @param xpathExpr: The XPath expression to parse on.
      * @return: An Array of Map<String,String> (Node LocalName and NodeValue).
+     * @note: Will throw an exception if the given path cannot be evaluated, or on any other
+     *        exception.
      */
     private fun parse(xpathExpr: String): ArrayList<MutableMap<String, String>> {
-        // TODO - a parse issue might not throw an exception, but lMap.size could be 0.
         val lMap = ArrayList<MutableMap<String, String>>()
 
         try {
             val xpath = XPathFactory.newInstance().newXPath()
             val lNodes = xpath.evaluate(xpathExpr, InputSource(inStream), XPathConstants.NODESET) as NodeList
-            val mapGet = mutableMapOf<String, String>()
+            val len = lNodes.length
 
-            if (lNodes.length > 0) {
-                val len = lNodes.length
+            if (len > 0) {
+                val mapGet = mutableMapOf<String, String>()
                 for (ndx in 0..len) {
                     val node = lNodes.item(ndx)
                     if (node != null) {
@@ -74,6 +78,8 @@ class RaceDayParser() {
                         mapGet.clear()
                     }
                 }
+            } else {
+                throw Exception("Could not evaluate XPath expression: ${xpathExpr}")
             }
         } catch(ex: Exception) {
             Log.e("TAG", "[RaceDayParser.parse] Exception: ${ex.message}")

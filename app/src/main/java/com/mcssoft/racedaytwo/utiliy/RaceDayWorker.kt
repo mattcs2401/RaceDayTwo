@@ -70,7 +70,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             val raceMeetingDao = RaceDay.getDatabase(context.applicationContext as Application)
                 .raceDayDetailsDao()
             // Initialise parser.
-            val raceDayParser = RaceDayParser()
+            val raceDayParser = RaceDayParser(context)
             raceDayParser.setInputStream(body.byteStream())
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()

@@ -1,8 +1,6 @@
 package com.mcssoft.racedaytwo.utiliy
 
-import android.content.Context
 import android.util.Log
-import com.mcssoft.racedaytwo.R
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.InputStream
@@ -12,20 +10,20 @@ import javax.xml.xpath.XPathFactory
 /**
  * A utility class to parse the xml within the downloaded racing.xml file.
  */
-class RaceDayParser(private val context: Context) {
+class RaceDayParser() {
     // The input stream. Basically the Xml based file contents that will be parsed.
     private var inStream: InputStream? = null
 
-    // Secondary constructor (TBA).
-    constructor(iStream: InputStream, context: Context) : this(context) {
+    // Secondary constructor TBA.
+    constructor(iStream: InputStream) : this() {
         inStream = iStream
     }
 
     /**
      * Set the input stream value used by the XPath InputSource.
-     * @param iStream: The input stream to use.
-     */    fun setInputStream(iStream: InputStream) {
-        inStream = iStream
+     * @param stream: The input stream to use.
+     */    fun setInputStream(stream: InputStream) {
+        inStream = stream
     }
 
     /**
@@ -33,20 +31,19 @@ class RaceDayParser(private val context: Context) {
      * @return A List<Map<LocalName, NodeValue>>.
      */
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
-        val path = context.resources.getString(R.string.xpath_for_meeting)
-        return parse(path)
+        val expr = "Racing/RaceDay/Meetings/Meeting"
+        return parse(expr)
     }
 
-    /** This is TBA due to 2021 changes in xml file format, i.e. no longer accurate. **/
-//    /**
-//     * Parse for a specific <Race></Race> with a <Meeting></Meeting>.
-//     * @param meetingCode: The Meeting code, e.g. BR.
-//     * @return A Map<LocalName, NodeValue>.
-//     */
-//    fun parseForMeeting(meetingCode: String): MutableMap<String,String> {
-//        val expr = "/RaceDay/Meeting[@MeetingCode='$meetingCode']"
-//        return parse(expr)[0]     // only one Meeting is expected.
-//    }
+    /**
+     * Parse for a specific <Race></Race> with a <Meeting></Meeting>.
+     * @param meetingCode: The Meeting code, e.g. BR.
+     * @return A Map<LocalName, NodeValue>.
+     */
+    fun parseForMeeting(meetingCode: String): MutableMap<String,String> {
+        val expr = "/RaceDay/Meeting[@MeetingCode='$meetingCode']"
+        return parse(expr)[0]     // only one Meeting is expected.
+    }
 
     /**
      * Generic parse method. Will parse the given XPath expression into an ArrayList of Map.

@@ -7,14 +7,11 @@
     <string name="pref_fragment_name">Preferences</string>
 
     <!-- Base url. -->
-    <string name="base_url">https://tatts.com/pagedata/racing/</string>
+    <string name="base_url">http://tatts.com/pagedata/racing/</string>
     <!-- Main page file name.-->
-    <string name="main_page">racing.xml</string>
+    <string name="main_page">RaceDay.xml</string>
     <!-- Generic "key". -->
     <string name="key_url">key_url</string>
-
-    <!-- XPath. -->
-    <string name="xpath_for_meeting">Racing/RaceDay/Meetings/Meeting</string>
 
     <!-- Notification. -->
     <string name="init_cache">Initialing the cache.</string>

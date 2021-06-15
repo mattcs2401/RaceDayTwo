@@ -71,7 +71,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
         var errMsg = ""
         try {
             // Initialise parser.
-            val raceDayParser = RaceDayParser(context)
+            val raceDayParser = RaceDayParser()
             raceDayParser.setInputStream(body.byteStream())
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()
@@ -84,7 +84,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
                     meeting.mtgId = item["MtgId"]!!
                     meeting.meetingCode = item["MeetingCode"]!!
                     meeting.meetingType = item["MeetingType"]!!
-                    meeting.meetingName = item["MeetingName"]!!
+                    meeting.venueName = item["VenueName"]!!
                     meeting.abandoned = item["Abandoned"]!!
                     // Insert meeting object into the the database.
                     raceMeetingDao.insertMeeting(meeting)

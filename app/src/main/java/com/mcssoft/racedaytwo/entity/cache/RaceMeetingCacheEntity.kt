@@ -9,7 +9,7 @@ class RaceMeetingCacheEntity {
     var mtgId: String = ""
     var meetingCode: String = ""
     var meetingType: String = ""
-    var meetingName: String = ""
+    var venueName: String = ""
     var abandoned: String = ""
 
     // Adapter flag, if true, signifies an adapter view type change.

@@ -31,7 +31,7 @@ class RaceDayParser() {
      * @return A List<Map<LocalName, NodeValue>>.
      */
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
-        val expr = "Racing/RaceDay/Meetings/Meeting"
+        val expr = "/RaceDay/Meeting"
         return parse(expr)
     }
 

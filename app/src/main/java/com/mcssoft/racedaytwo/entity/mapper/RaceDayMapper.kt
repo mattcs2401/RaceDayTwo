@@ -21,7 +21,7 @@ class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity>
         raceMeetingCacheEntity.id = entity.id
         raceMeetingCacheEntity.mtgId = entity.mtgId
         raceMeetingCacheEntity.meetingCode = entity.meetingCode
-        raceMeetingCacheEntity.meetingName = entity.meetingName
+        raceMeetingCacheEntity.venueName = entity.venueName
         raceMeetingCacheEntity.meetingType = entity.meetingType
         raceMeetingCacheEntity.abandoned = entity.abandoned
         raceMeetingCacheEntity.meta = false                // specific to the domain model.
@@ -38,7 +38,7 @@ class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity>
         raceMeetingDBEntity.id = domain.id
         raceMeetingDBEntity.mtgId = domain.mtgId
         raceMeetingDBEntity.meetingCode = domain.meetingCode
-        raceMeetingDBEntity.meetingName = domain.meetingName
+        raceMeetingDBEntity.venueName = domain.venueName
         raceMeetingDBEntity.meetingType = domain.meetingType
         raceMeetingDBEntity.abandoned = domain.abandoned
         return raceMeetingDBEntity

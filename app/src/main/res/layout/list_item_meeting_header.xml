@@ -47,7 +47,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@{meeting.meetingName}"
+                android:text="@{meeting.venueName}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/id_tv_meeting_code"
                 app:layout_constraintTop_toTopOf="parent" />

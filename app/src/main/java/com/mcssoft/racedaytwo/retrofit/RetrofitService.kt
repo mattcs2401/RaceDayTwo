@@ -11,12 +11,12 @@ import java.io.File
 import javax.inject.Inject
 
 
-class RetrofitService @Inject constructor(context: Context) {
+class RetrofitService @Inject constructor(private val context: Context) {
 
     // TBA as to actually required.
     private val cache = Cache(File(context.cacheDir, "name"), 1024 * 1024)
 
-    // TBA (more for testing ATT).
+    // TODO - use the Retrofit logging interceptor functionality ?
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor { message ->
             Log.d("TAG", "http logger: $message")
@@ -30,11 +30,9 @@ class RetrofitService @Inject constructor(context: Context) {
         .cache(cache)
         .build()
 
-    private val baseUrl = context.getString(R.string.base_url)
-
     fun <S> createService(serviceClass: Class<S>): S {
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(context.getString(R.string.base_url))
             .client(client)
             .build()
         return retrofit.create(serviceClass)

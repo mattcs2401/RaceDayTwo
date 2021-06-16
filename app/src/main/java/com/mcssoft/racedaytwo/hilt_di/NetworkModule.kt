@@ -13,9 +13,9 @@ import javax.inject.Singleton
 @InstallIn(ActivityComponent::class)
 object NetworkModule {
 
-    @Singleton
-    @Provides
-    fun provideRetrofitService(@ApplicationContext context: Context): RetrofitService {
-        return RetrofitService(context)
-    }
+//    @Singleton
+//    @Provides
+//    fun provideRetrofitService(@ApplicationContext context: Context): RetrofitService {
+//        return RetrofitService(context)
+//    }
 }

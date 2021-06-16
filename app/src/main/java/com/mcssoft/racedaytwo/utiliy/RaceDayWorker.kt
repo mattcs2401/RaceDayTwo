@@ -37,16 +37,16 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             doWorkMsg = if(success) {
                 downloadFileResponse.body()?.let { writeNetworkResponse(it) }!!
             } else {
-                "Download response not successful."
+                "Download response unsuccessful."
             }
 
             if(success && (doWorkMsg == "")) {
-                Log.d("TAG", "doWork() - Result success :)")
+                Log.d("TAG", "[RaceDayWorker.doWork] Result success :)")
                 Result.success()
             } else {
                 // Something happened, either the download response was not successful, or the
                 // database write had an issue.
-                val res = workDataOf("key_result_failure" to "doWork() - Result failure :(", "key_msg" to doWorkMsg)
+                val res = workDataOf("key_result_failure" to "[RaceDayWorker.doWork] Result failure :(", "key_msg" to doWorkMsg)
                 Log.d("TAG", "workMsg: $doWorkMsg")
                 Result.failure(res)
             }
@@ -89,10 +89,10 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
                     raceMeetingDao.insertMeeting(meeting)
                 }
             } else {
-                errMsg = "No Meeting listing. Probable parsing error."
+                throw Exception("No Meeting listing. Probable parsing error.")
             }
         } catch (ex: Exception) {
-            errMsg = "Exception in RaceDayWorker.writeNetworkResponse(): " + ex.message
+            errMsg = "[RaceDayWorker.writeNetworkResponse] Exception: " + ex.message
             Log.e("TAG", errMsg)
         } finally {
             body.close()

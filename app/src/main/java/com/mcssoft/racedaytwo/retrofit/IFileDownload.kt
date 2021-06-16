@@ -8,11 +8,9 @@ import retrofit2.http.Url
 interface IFileDownload {
 
     /**
-     * Download the file as a stream (so doesn't keep all in memory) to write to disk. This uses the
-     * dynamic Url functionality of retrofit (i.e. no end point in the @GET). The ResponseBody holds
-     * the payload.
+     * Download the file using the dynamic Url functionality of retrofit (i.e. no end point in the
+     * @GET). The ResponseBody holds the payload.
      */
-//    @Streaming
     @GET
     fun downloadFile(@Url fileUrl: String): Call<ResponseBody?>?
 }

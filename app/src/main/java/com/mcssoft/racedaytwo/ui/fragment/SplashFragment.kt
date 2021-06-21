@@ -1,5 +1,8 @@
 package com.mcssoft.racedaytwo.ui.fragment
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,10 +18,14 @@ import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
-import com.mcssoft.racedaytwo.utiliy.RaceDayUtilities
-import com.mcssoft.racedaytwo.utiliy.RaceDayWorker
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import javax.inject.Inject
+import android.content.Context
+
+import android.content.Intent
+import android.widget.Toast
+import com.mcssoft.racedaytwo.utiliy.*
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
@@ -26,29 +33,41 @@ class SplashFragment : Fragment() {
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
     @Inject lateinit var raceDayRepository: RaceDayRepository
+    @Inject lateinit var raceDownloadManager: RaceDownloadManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("TAG", "[SplashFragment.onCreate]")
+
+        downloadFilter = IntentFilter().apply {
+            addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        Log.d("TAG", "SplashFragment.onCreateView")
+        Log.d("TAG", "[SplashFragment.onCreateView]")
         return SplashFragmentBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("TAG", "MainFragment.onViewCreated")
+        Log.d("TAG", "[MainFragment.onViewCreated]")
         binding = SplashFragmentBinding.bind(view)
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d("TAG", "SplashFragment.onStart")
+        Log.d("TAG", "[SplashFragment.onStart]")
+        requireContext().registerReceiver(raceDownloadReceiver, downloadFilter)
         // Kick it all off.
         initialise()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("TAG", "SplashFragment.onStop")
+        Log.d("TAG", "[SplashFragment.onStop]")
+        requireContext().unregisterReceiver(raceDownloadReceiver)
     }
     //</editor-fold>
 
@@ -68,6 +87,7 @@ class SplashFragment : Fragment() {
 //        } else {
 //            // Preference is not set.
             cleanStart()
+
 //        }
     }
 
@@ -89,28 +109,66 @@ class SplashFragment : Fragment() {
      */
     private fun cleanStart() {
         Log.d("TAG", "SplashFragment: Clean start")
+        val path = raceDayUtilities.getPrimaryStoragePath()
+        // Delete whatever file is there.
+        raceDayUtilities.deleteFromStorage(File(path))
         // Clear cache and underlying data.
         raceDayRepository.clearCache()
-        // Perform the network request, parse and write the response.
-        runRaceDayWorker()
+        // Get the network (path) url.
+        val url = raceDayUtilities.createRaceDayUrl(requireContext())
+        // Download file to parse later.
+        raceDownloadManager.getPage(url, path, "RaceDay.xml")
     }
 
-    private fun runRaceDayWorker() {
-        Log.d("TAG", "SplashFragment.runRaceDayWorker")
-        val url = raceDayUtilities.createRaceDayUrl(requireContext())
-        val key_url = requireContext().getString(R.string.key_url)
-        val workData = workDataOf(key_url to url)
-        val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>()
-                .setInputData(workData)
-                .build()
+    // receiver for the DownloadManager broadcast.
+    var raceDownloadReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when(intent.action) {
+                DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
+                    Log.d("TAG","DownloadManager.ACTION_DOWNLOAD_COMPLETE")
 
+                    // Get the file id of the downloaded file.
+                    val fileId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,
+                        Constants.MINUS_ONE_L)
+
+                    if(fileId != Constants.MINUS_ONE_L) {
+                        // Download was successful (ATT testing ?).
+                        Toast.makeText(context, "Download successful. File id=$fileId", Toast.LENGTH_SHORT).show()
+                        // Parse the file data.
+                        parseFileData(context, fileId)
+                    } else {
+                        // TODO - some sort of retry strategy based on the DownloadManager COLUMN_REASON
+                        //  and COLUMN_STATUS codes.
+                        // Download was not successful.
+                        Toast.makeText(context, "Download not successful.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Hand off the file processing to a background (WorkManager) operation.
+     * @param context: Used for Resources and WorkManager instance.
+     * @param fileId: Id of the downloaded file.
+     */
+    private fun parseFileData(context: Context, fileId: Long) {
+        val workData = workDataOf(context.resources.getString(R.string.key_file_id) to fileId)
+        val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>()
+            .setInputData(workData).
+            build()
         val workManager = WorkManager.getInstance(requireContext())
         workManager.enqueue(raceDayWorker)
+
         // Observe.
         workManager.getWorkInfoByIdLiveData(raceDayWorker.id).observe(viewLifecycleOwner) { workInfo ->
-//            val data = workInfo.outputData
             when(workInfo.state) {
+                WorkInfo.State.ENQUEUED -> { /* TBA */ }
+                WorkInfo.State.RUNNING -> { /* TBA */ }
+                WorkInfo.State.BLOCKED -> { /* TBA */ }
+                WorkInfo.State.CANCELLED -> { /* TBA */ }
                 WorkInfo.State.SUCCEEDED -> {
+                    Log.d("TAG", "WorkInfo.State.Succeeded")
 //                    raceDayRepository.fetchRaceDayList()
                     navigateToMain()
                 }
@@ -118,9 +176,6 @@ class SplashFragment : Fragment() {
                     Log.d("TAG", "WorkInfo.State.Failed")
                     workInfo.outputData.getString("key_result_failure")?.let { Log.d("TAG", it) }
                     workInfo.outputData.getString("key_msg")?.let { Log.d("TAG", it) }
-                }
-                else -> {
-                    // TBA.
                 }
             }
         }
@@ -134,12 +189,8 @@ class SplashFragment : Fragment() {
         Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
             .navigate(R.id.action_splashFragment_to_mainFragment)
     }
-
-    private fun dateCheck(): Boolean {
-        // TBA
-        return true
-    }
     //</editor-fold>
 
     private lateinit var binding: SplashFragmentBinding
+    private lateinit var downloadFilter: IntentFilter
 }

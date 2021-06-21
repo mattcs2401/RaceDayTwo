@@ -22,11 +22,23 @@ class RaceDayParser(private val context: Context) {
         this.inStream = inStream
     }
 
+    constructor(context: Context, fileId: Long): this(context) {
+        inStream = RaceDownloadManager(context).getFile(fileId)
+    }
+
     /**
      * Set the input stream value used by the XPath InputSource.
-     * @param stream: The input stream to use.
+     * @param inStream: The input stream to use.
      */    fun setInputStream(inStream: InputStream) {
         this.inStream = inStream
+    }
+
+    /**
+     * Set the current input stream based upon a file id.
+     * @param fileId: The file id.
+     */
+    fun setInputStream(fileId: Long) {
+        inStream = RaceDownloadManager(context).getFile(fileId)
     }
 
     /**

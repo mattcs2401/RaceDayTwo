@@ -36,7 +36,7 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
      * @param dateFormat: DateFormat.SLASH, or DateFormat.DASH
      * @return The formatted string.
      */
-    fun getDateToday(dateFormat: DateFormat): String {
+    private fun getDateToday(dateFormat: DateFormat): String {
         val calendar = Calendar.getInstance(Locale.getDefault())
         val year = calendar.get(Calendar.YEAR).toString()
         val month = ((calendar.get(Calendar.MONTH)) + 1).toString()  // Note (1) below.
@@ -53,7 +53,7 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
      * @param timeVal: The time value to compare against.
      * @return True if the Day & Month of the given time value is equal today's Day & Month value.
      */
-    fun compareDateToToday(timeVal: Long): Boolean {
+    private fun compareDateToToday(timeVal: Long): Boolean {
         val calendarToday = Calendar.getInstance(Locale.getDefault())
         val dayToday = calendarToday.get(Calendar.DAY_OF_MONTH).toString()
         val monthToday = ((calendarToday.get(Calendar.MONTH)) + 1).toString()  // Note (1) below.
@@ -71,6 +71,18 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: File Utils">
+    /**
+     * Get the path from the primary storage.
+     * @return The path value (end point represents a directory), else a blank string "".
+     */
+    fun getPrimaryStoragePath(): String {
+        var path = Constants.NO_FILE_PATH
+        if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            path = ContextCompat.getExternalFilesDirs(context.applicationContext, null)[0].toString()
+        }
+        return path
+    }
+
     /**
      * Delete all the files from the storage.
      * @param file: A File object representing the directory.
@@ -98,23 +110,11 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
      * @param file: A file object pre-set with a path (the download directory).
      * @return True if files exist in the path.
      */
-    fun fileExists(file: File): Boolean {
+    private fun fileExists(file: File): Boolean {
         if (file.listFiles()!!.isNotEmpty()) {
             return true
         }
         return false
-    }
-
-    /**
-     * Get the path from the primary storage.
-     * @return The path value (end point represents a directory), else a blank string "".
-     */
-    fun getPrimaryStoragePath(): String {
-        var path = Constants.NO_FILE_PATH
-        if(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            path = ContextCompat.getExternalFilesDirs(context.applicationContext, null)[0].toString()
-        }
-        return path
     }
     //</editor-fold>
 }

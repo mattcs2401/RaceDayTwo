@@ -8,10 +8,9 @@
 
     <!-- Base url. -->
     <string name="base_url">https://tatts.com/pagedata/racing/</string>
+
     <!-- Main page file name.-->
     <string name="main_page">RaceDay.xml</string>
-    <!-- Generic "key". -->
-    <string name="key_url">key_url</string>
 
     <!-- XPath parse paths. -->
     <string name="meeting_parse_path">/RaceDay/Meeting</string>
@@ -19,22 +18,25 @@
     <!-- Notification. -->
     <string name="init_cache">Initialing the cache.</string>
 
-    <!-- Keys. -->
-
     <!-- Splash message. -->
     <string name="splash_message">Getting things ready.</string>
 
-    <!-- Delete All dialog. -->
-
     <!-- Button labels. -->
+    <string name="btn_lbl_R">R</string>
+    <string name="btn_lbl_T">T</string>
+    <string name="btn_lbl_G">G</string>
+    <string name="lbl_ok">OK</string>
+    <string name="lbl_cancel">Cancel</string>
+    <string name="lbl_settings">Settings</string>
+    <string name="lbl_delete_all">Delete All</string>
+
+    <!-- Keys. -->
+    <string name="key_file_id">key_file_id</string>
 
     <!-- Delete All dialog. -->
     <string name="title_delete_all">Delete Everything</string>
     <string name="message_delete_all">This action cannot be undone.</string>
 
-    <!-- Button labels. -->
-    <string name="lbl_ok">OK</string>
-    <string name="lbl_cancel">Cancel</string>
-    <string name="key_file_id">key_file_id</string>
-
+    <!-- General. -->
+    <string name="msg_tba">TBA - other view components.</string>
 </resources>

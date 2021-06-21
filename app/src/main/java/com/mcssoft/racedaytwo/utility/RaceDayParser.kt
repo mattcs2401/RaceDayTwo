@@ -91,7 +91,7 @@ class RaceDayParser(private val context: Context) {
                     }
                 }
             } else {
-                throw Exception("Could not evaluate XPath expression: ${xpathExpr}")
+                throw Exception("Could not evaluate XPath expression: $xpathExpr")
             }
         } catch(ex: Exception) {
             Log.e("TAG", "[RaceDayParser.parse] Exception: ${ex.message}")

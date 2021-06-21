@@ -153,7 +153,7 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
             layoutManager = object : LinearLayoutManager(requireActivity(), VERTICAL, false) {
                 override fun onLayoutCompleted(state: RecyclerView.State?) {
                     super.onLayoutCompleted(state)
-                    binding?.idProgressBar2?.visibility = View.GONE
+                    binding?.idProgressBar?.visibility = View.GONE
                 }
             }
         }

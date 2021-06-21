@@ -2,7 +2,6 @@ package com.mcssoft.racedaytwo.entity.mapper
 
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
-import javax.inject.Inject
 
 /*
   Utility class to map between the network entity model RaceMeetingDBEntity, and the domain model

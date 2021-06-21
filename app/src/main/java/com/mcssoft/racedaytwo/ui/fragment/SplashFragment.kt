@@ -120,7 +120,7 @@ class SplashFragment : Fragment() {
     }
 
     // receiver for the DownloadManager broadcast.
-    var raceDownloadReceiver = object : BroadcastReceiver() {
+    private var raceDownloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when(intent.action) {
                 DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {

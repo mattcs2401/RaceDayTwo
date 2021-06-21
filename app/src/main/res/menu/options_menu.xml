@@ -5,13 +5,13 @@
     <!--  Example: https://stablekernel.com/using-custom-views-as-menu-items/ -->
 
     <item android:id="@+id/id_menu_item_delete_all"
-        android:title="Delete All"
+        android:title="@string/lbl_delete_all"
         android:visible="true"
         android:icon="@drawable/ic_delete_24px"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/id_menu_item_settings"
-        android:title="Settings"
+        android:title="@string/lbl_settings"
         android:visible="true"
         app:showAsAction="always"
         android:icon="@drawable/ic_settings_24px" />

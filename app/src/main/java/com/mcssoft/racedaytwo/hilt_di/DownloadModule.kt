@@ -1,7 +1,7 @@
 package com.mcssoft.racedaytwo.hilt_di
 
 import android.content.Context
-import com.mcssoft.racedaytwo.utiliy.RaceDownloadManager
+import com.mcssoft.racedaytwo.utility.RaceDownloadManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -22,10 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
 import android.content.Context
-
 import android.content.Intent
 import android.widget.Toast
-import com.mcssoft.racedaytwo.utiliy.*
+import com.mcssoft.racedaytwo.utility.*
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {

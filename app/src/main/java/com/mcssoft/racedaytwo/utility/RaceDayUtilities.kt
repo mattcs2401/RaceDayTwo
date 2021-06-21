@@ -1,4 +1,4 @@
-package com.mcssoft.racedaytwo.utiliy
+package com.mcssoft.racedaytwo.utility
 
 import android.content.Context
 import android.os.Environment

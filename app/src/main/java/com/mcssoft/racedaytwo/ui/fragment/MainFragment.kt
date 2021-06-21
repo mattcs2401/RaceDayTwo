@@ -17,7 +17,7 @@ import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
 import com.mcssoft.racedaytwo.interfaces.IDeleteAll
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.ui.dialog.DeleteAllDialog
-import com.mcssoft.racedaytwo.utiliy.RaceDayBackPressCB
+import com.mcssoft.racedaytwo.utility.RaceDayBackPressCB
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

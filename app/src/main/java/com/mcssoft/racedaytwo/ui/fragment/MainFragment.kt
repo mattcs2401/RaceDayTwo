@@ -14,7 +14,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
-import com.mcssoft.racedaytwo.interfaces.IDeleteAll
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.utility.RaceDayBackPressCB
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
@@ -22,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment(), IDeleteAll, MaterialButtonToggleGroup.OnButtonCheckedListener {
+class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
 /* Some initial display info here.
 https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-first-load
  */
@@ -39,17 +38,14 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d("TAG","MainFragment.onViewCreated")
+        // set view binding.
         binding = MainFragmentBinding.bind(view)
+        // set options menu (on toolbar ATT).
         setHasOptionsMenu(true)
+        // initialise back press callback.
+        raceDayBackPressCallback = RaceDayBackPressCB(true )
         // Setup the UI and related components.
         initialise()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d("TAG","MainFragment.onActivityCreated")
-        // Init back press handler callback.
-        raceDayBackPressCallback = RaceDayBackPressCB(true )
     }
 
     override fun onStart() {
@@ -66,12 +62,6 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
         // Super.
         super.onStop()
     }
-
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        Log.d("TAG","MainFragment.onDestroyView")
-//        binding = null
-//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -112,23 +102,6 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
             }
             else -> { val bp = "bp"}
         }
-    }
-    //</editor-fold>
-
-    //<editor-fold default state="collapsed" desc="Region: Interface-IDeleteAll">
-    /**
-     * A menu option to delete everything and basically re-start.
-     * TBA - a preference to control this ?
-     *
-     */
-    override fun deleteAll(deleteAll: Boolean) {
-//        when(deleteAll) {
-//            true -> {
-//                mainViewModel.clearCache()
-//                Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
-//                    .navigate(R.id.action_mainFragment_to_splashFragment)
-//            }
-//        }
     }
     //</editor-fold>
 

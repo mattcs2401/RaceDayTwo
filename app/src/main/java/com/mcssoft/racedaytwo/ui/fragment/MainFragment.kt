@@ -16,7 +16,6 @@ import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
 import com.mcssoft.racedaytwo.interfaces.IDeleteAll
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
-import com.mcssoft.racedaytwo.ui.dialog.DeleteAllDialog
 import com.mcssoft.racedaytwo.utility.RaceDayBackPressCB
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,19 +67,22 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
         super.onStop()
     }
 
-    override fun onDestroyView() {
-        Log.d("TAG","MainFragment.onDestroyView")
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        Log.d("TAG","MainFragment.onDestroyView")
+//        binding = null
+//    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("TAG","MainFragment.onDestroy")
         binding = null
-        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         Log.d("TAG","MainFragment.onCreateOptionsMenu")
         inflater.inflate(R.menu.options_menu, menu)
-        deleteMenuItem = menu.findItem(R.id.id_menu_item_delete_all)
-        // TBA
-        setDeleteMenuItem()
     }
     //</editor-fold>
 
@@ -91,10 +93,6 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
                 // Navigate to MainFragment.
                 Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
                     .navigate(R.id.action_mainFragment_to_preferencesFragment)
-            }
-            R.id.id_menu_item_delete_all -> {
-                val dialog = DeleteAllDialog(this)
-                dialog.show(parentFragmentManager, "")
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -163,28 +161,10 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
 //            raceAdapter.notifyDataSetChanged()
         }
     }
-
-
-    /**
-     * ToolBar: Delete (all) option.
-     */
-    private fun setDeleteMenuItem() {
-        // Only set if the Preference is enabled to start with.
-        if(raceDayPreferences.getDeleteAll()) {
-            // The Delete all preference is enabled.
-            deleteMenuItem.isVisible = true
-        } else {
-            if (deleteMenuItem.isVisible) {
-                deleteMenuItem.isVisible = false
-            }
-        }
-    }
     //</editor-fold>
 
     // For UI components.
     private var binding : MainFragmentBinding? = null
-    private lateinit var deleteMenuItem: MenuItem
-
     // Callback to block the user from pressing back (otherwise will reload the SplashFragment).
     private lateinit var raceDayBackPressCallback : RaceDayBackPressCB
 }

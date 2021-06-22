@@ -83,6 +83,7 @@ dependencies {
     /* Preferences DataStore (backing data for preferences). */
     def ds_ver = "1.0.0-beta02"
     implementation "androidx.datastore:datastore-preferences:$ds_ver"
+    implementation "androidx.datastore:datastore-core:$ds_ver"
 
     /* WorkManager Worker (intensive background processing). */
     def work_ver = "2.6.0-beta01"

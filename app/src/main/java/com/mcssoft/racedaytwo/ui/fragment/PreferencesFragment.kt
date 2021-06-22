@@ -11,6 +11,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
+/**
+ * Class to implement a "front end" for the app preferences.
+ */
 class PreferencesFragment : PreferenceFragmentCompat(),
     Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
     /*
@@ -21,13 +24,10 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        // Only because context is used numerous times.
-        val context = requireContext()
         // The main preference screen (all preference widgets are a child of / added to, this).
         screen = preferenceManager.createPreferenceScreen(context)
         setUseCache()
         setDefaultMeetingType()
-        setDeleteAll()
         preferenceScreen = screen
     }
 
@@ -49,11 +49,8 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     //<editor-fold default state="collapsed" desc="Region: Listeners">
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
         when(preference.key) {
-            "key_cache_use" -> {
+            "key_use_cache" -> {
                 raceDayPreferences.setCacheUse(newValue as Boolean)
-            }
-            "key_delete_all" -> {
-                raceDayPreferences.setDeleteAll(newValue as Boolean)
             }
             "key_default_meeting_type" -> {
                 raceDayPreferences.setDefaultMeetingType(newValue as Boolean)
@@ -68,7 +65,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     }
     //</editor-fold>
 
-//    //<editor-fold default state="collapsed" desc="Region: Utility">
+    //<editor-fold default state="collapsed" desc="Region: Utility">
     private fun initialise() {
         if(spCacheUse.isChecked)
             raceDayPreferences.setCacheUse(true)
@@ -79,11 +76,6 @@ class PreferencesFragment : PreferenceFragmentCompat(),
 //            raceDayPreferences.setDefaultMeetingType(true)
 //        else
 //            raceDayPreferences.setDefaultMeetingType(false)
-
-        if(spDeleteAll.isChecked)
-            raceDayPreferences.setDeleteAll(true)
-        else
-            raceDayPreferences.setDeleteAll(false)
     }
 
     /**
@@ -97,19 +89,6 @@ class PreferencesFragment : PreferenceFragmentCompat(),
             summary="Reload application data from cache."
         }
         screen.addPreference(spCacheUse)
-    }
-
-    /**
-     * Switch preference to provide a Delete All option on the main toolbar.
-     */
-    private fun setDeleteAll() {
-        spDeleteAll = SwitchPreferenceCompat(context).apply {
-            key="key_delete_all"
-            title="Delete All."
-            setDefaultValue(false)
-            summary="Enable a Delete All menu option on the main toolbar."
-        }
-        screen.addPreference(spDeleteAll)
     }
 
     /**
@@ -130,6 +109,5 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     private lateinit var screen: PreferenceScreen
 
     private lateinit var spCacheUse: SwitchPreferenceCompat
-    private lateinit var spDeleteAll: SwitchPreferenceCompat
     private lateinit var msDefaultMeetingType: MultiSelectListPreference
 }

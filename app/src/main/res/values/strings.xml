@@ -31,7 +31,9 @@
     <string name="lbl_delete_all">Delete All</string>
 
     <!-- Keys. -->
-    <string name="key_file_id">key_file_id</string>
+    <string name="key_download_id">key_download_id</string>
+    <string name="key_use_cache">key_use_cache</string>
+    <string name="key_default_meeting_type">key_default_meeting_type</string>
 
     <!-- Delete All dialog. -->
     <string name="title_delete_all">Delete Everything</string>

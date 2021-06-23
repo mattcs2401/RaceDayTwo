@@ -37,7 +37,7 @@ class PreferencesFragment : PreferenceFragmentCompat(),
         // Set toolbar title.
         requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.title =
                 resources.getString(R.string.pref_fragment_name)
-        initialise()
+//        initialise()
     }
 
     override fun onStop() {
@@ -49,11 +49,11 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     //<editor-fold default state="collapsed" desc="Region: Listeners">
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
         when(preference.key) {
-            "key_use_cache" -> {
-                raceDayPreferences.setCacheUse(newValue as Boolean)
+            resources.getString(R.string.key_use_cache) -> {
+                raceDayPreferences.setUseCache(newValue as Boolean)
             }
-            "key_default_meeting_type" -> {
-                raceDayPreferences.setDefaultMeetingType(newValue as Boolean)
+            resources.getString(R.string.key_default_meeting_type) -> {
+                raceDayPreferences.setDefaultMeetingType(newValue as String)
             }
         }
         return true
@@ -66,28 +66,29 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Utility">
-    private fun initialise() {
-        if(spCacheUse.isChecked)
-            raceDayPreferences.setCacheUse(true)
-        else
-            raceDayPreferences.setCacheUse(false)
-
-//        if(msDefaultMeetingType.isChecked)
-//            raceDayPreferences.setDefaultMeetingType(true)
+//    private fun initialise() {
+//        if(spCacheUse.isChecked)
+//            raceDayPreferences.setCacheUse(true)
 //        else
-//            raceDayPreferences.setDefaultMeetingType(false)
-    }
+//            raceDayPreferences.setCacheUse(false)
+//
+////        if(msDefaultMeetingType. isChecked)
+////            raceDayPreferences.setDefaultMeetingType(true)
+////        else
+////            raceDayPreferences.setDefaultMeetingType(false)
+//    }
 
     /**
      * Switch preference as whether to re-use existing download file data.
      */
     private fun setUseCache() {
         spCacheUse = SwitchPreferenceCompat(context).apply {
-            key="key_cache_use"
-            title="Use cache."
-            setDefaultValue(true)
-            summary="Reload application data from cache."
+            key = resources.getString(R.string.key_use_cache)
+            title = "Use cache."
+            summary = "Reload application data from cache."
         }
+        spCacheUse.setDefaultValue(true)
+        spCacheUse.onPreferenceChangeListener = this
         screen.addPreference(spCacheUse)
     }
 
@@ -96,12 +97,14 @@ class PreferencesFragment : PreferenceFragmentCompat(),
      */
     private fun setDefaultMeetingType() {
         msDefaultMeetingType = MultiSelectListPreference(context).apply {
-            key = "multi_select_list"
+            key = resources.getString(R.string.key_default_meeting_type)
             title = "Default Meeting Type"
             summary = "Select the default meeting type/s to display."
             entries = arrayOf("Racing", "Trotting", "Greyhound")
             entryValues = arrayOf("R", "T", "G")
         }
+        msDefaultMeetingType.setDefaultValue(setOf("R"))
+        msDefaultMeetingType.onPreferenceChangeListener = this
         screen.addPreference(msDefaultMeetingType)
     }
     //</editor-fold>

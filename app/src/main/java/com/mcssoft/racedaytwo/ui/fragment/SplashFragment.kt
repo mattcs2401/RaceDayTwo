@@ -42,6 +42,12 @@ class SplashFragment : Fragment() {
         downloadFilter = IntentFilter().apply {
             addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         }
+
+        // Defaults TBA (mainly for app 1st run).
+        raceDayPreferences.apply {
+            setUseCache(true)
+            setDefaultMeetingType("R")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -75,19 +81,18 @@ class SplashFragment : Fragment() {
      * Perform some preferences and file system checks and decide on the "start" type.
      */
     private fun initialise() {
-//        if(raceDayPreferences.getCacheUse()) {
-//            if (dateCheck()) {
-//                // Date is today's date.
-//                reStart()
-//            } else {
-//                // Date isn't today's date.
-//                cleanStart()
-//            }
-//        } else {
-//            // Preference is not set.
+        if(raceDayPreferences.getUseCache()) {
+            if (raceDayUtilities.dateCheck()) {
+                // Date is today's date.
+                reStart()
+            } else {
+                // Date isn't today's date, or date check failed as no file found.
+                cleanStart()
+            }
+        } else {
+            // Preference is not set.
             cleanStart()
-
-//        }
+        }
     }
 
     /**
@@ -96,7 +101,7 @@ class SplashFragment : Fragment() {
     private fun reStart() {
         Log.d("TAG", "SplashFragment: Restart")
         // Create repository cache.
-        binding.idTvProgress.text = requireContext().getString(R.string.init_cache)
+        binding.idTvProgress.text = resources.getString(R.string.init_cache)
         // create cache if doesn't already exist (and get).
         raceDayRepository.fetchFromCache()
         // Navigate to MainFragment.
@@ -104,7 +109,7 @@ class SplashFragment : Fragment() {
     }
 
     /**
-     * Perform a "clean" start (basically delete everything and recreate).
+     * Perform a "clean" start (basically delete everything, re-download and recreate).
      */
     private fun cleanStart() {
         Log.d("TAG", "SplashFragment: Clean start")
@@ -133,6 +138,8 @@ class SplashFragment : Fragment() {
                     if(fileId != Constants.MINUS_ONE_L) {
                         // Download was successful (ATT testing ?).
                         Toast.makeText(context, "Download successful. File id=$fileId", Toast.LENGTH_SHORT).show()
+                        // Save file id to preferences as metadata.
+                        raceDayPreferences.setDownloadId(fileId)
                         // Parse the file data.
                         parseFileData(context, fileId)
                     } else {
@@ -147,12 +154,12 @@ class SplashFragment : Fragment() {
     }
 
     /**
-     * Hand off the file processing to a background (WorkManager) operation.
+     * Hand off to WorkManager to parse the downloaded file.
      * @param context: Used for Resources and WorkManager instance.
      * @param fileId: Id of the downloaded file.
      */
     private fun parseFileData(context: Context, fileId: Long) {
-        val workData = workDataOf(context.resources.getString(R.string.key_file_id) to fileId)
+        val workData = workDataOf(context.resources.getString(R.string.key_download_id) to fileId)
         val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>()
             .setInputData(workData).
             build()
@@ -162,13 +169,12 @@ class SplashFragment : Fragment() {
         // Observe.
         workManager.getWorkInfoByIdLiveData(raceDayWorker.id).observe(viewLifecycleOwner) { workInfo ->
             when(workInfo.state) {
-                WorkInfo.State.ENQUEUED -> { /* TBA */ }
-                WorkInfo.State.RUNNING -> { /* TBA */ }
-                WorkInfo.State.BLOCKED -> { /* TBA */ }
-                WorkInfo.State.CANCELLED -> { /* TBA */ }
+                WorkInfo.State.ENQUEUED -> { Log.d("TAG", "WorkInfo.State.Enqueued") }
+                WorkInfo.State.RUNNING -> { Log.d("TAG", "WorkInfo.State.Running") }
+                WorkInfo.State.BLOCKED -> { Log.d("TAG", "WorkInfo.State.Blocked") }
+                WorkInfo.State.CANCELLED -> { Log.d("TAG", "WorkInfo.State.Cancelled") }
                 WorkInfo.State.SUCCEEDED -> {
                     Log.d("TAG", "WorkInfo.State.Succeeded")
-//                    raceDayRepository.fetchRaceDayList()
                     navigateToMain()
                 }
                 WorkInfo.State.FAILED -> {

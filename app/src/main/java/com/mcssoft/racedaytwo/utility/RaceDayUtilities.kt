@@ -89,20 +89,22 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
      */
     fun deleteFromStorage(file: File) {
         if(fileExists(file)) {
-            val listing = file.listFiles()
-            listing?.forEach { f ->
+            file.listFiles()?.forEach { f ->
                 f.delete()
             }
         }
     }
 
     /**
-     * Check if the downloaded file has today's date (day and month).
-     * @param file: The downloaded file.
-     * @return True if the file day/month detail is the same as today.
+     * Simple check to see if the existing file has the same date as today.
      */
-    fun isFileToday(file: File): Boolean {
-        return RaceDayUtilities(context).compareDateToToday(file.lastModified())
+    fun dateCheck(): Boolean {
+        val listing = File(getPrimaryStoragePath()).listFiles()
+        return if(listing != null && listing.isNotEmpty()) {
+            compareDateToToday(listing[0].lastModified())
+        } else {
+            false
+        }
     }
 
     /**
@@ -111,7 +113,8 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
      * @return True if files exist in the path.
      */
     private fun fileExists(file: File): Boolean {
-        if (file.listFiles()!!.isNotEmpty()) {
+        val listing = file.listFiles()
+        if (listing != null && listing.isNotEmpty()) {
             return true
         }
         return false

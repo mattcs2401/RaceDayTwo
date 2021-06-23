@@ -15,13 +15,12 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
-            val fileId = params.inputData.getLong(context.resources.getString(R.string.key_file_id), Constants.MINUS_ONE_L)
+            val downloadId = params.inputData.getLong(context.resources.getString(R.string.key_download_id), Constants.MINUS_ONE_L)
             // Database access.
             val raceMeetingDao = RaceDay.getDatabase(context.applicationContext as Application)
                 .raceDayDetailsDao()
             // Initialise parser.
-            val raceDayParser = RaceDayParser(context, fileId)
-//            raceDayParser.setInputStream(fileId)
+            val raceDayParser = RaceDayParser(context, downloadId)
             // Get the list of meetings.
             val meetingsListing = raceDayParser.parseForMeeting()
 

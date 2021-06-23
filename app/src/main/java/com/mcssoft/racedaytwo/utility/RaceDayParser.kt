@@ -17,28 +17,8 @@ class RaceDayParser(private val context: Context) {
     // The input stream. Basically the Xml based file contents that will be parsed.
     private var inStream: InputStream? = null
 
-    // Secondary constructor TBA.
-    constructor(context: Context, inStream: InputStream) : this(context) {
-        this.inStream = inStream
-    }
-
-    constructor(context: Context, fileId: Long): this(context) {
-        inStream = RaceDownloadManager(context).getFile(fileId)
-    }
-
-    /**
-     * Set the input stream value used by the XPath InputSource.
-     * @param inStream: The input stream to use.
-     */    fun setInputStream(inStream: InputStream) {
-        this.inStream = inStream
-    }
-
-    /**
-     * Set the current input stream based upon a file id.
-     * @param fileId: The file id.
-     */
-    fun setInputStream(fileId: Long) {
-        inStream = RaceDownloadManager(context).getFile(fileId)
+    constructor(context: Context, downloadId: Long): this(context) {
+        inStream = RaceDownloadManager(context).getDownloadAsStream(downloadId)
     }
 
     /**
@@ -48,16 +28,6 @@ class RaceDayParser(private val context: Context) {
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
         val expr = context.resources.getString(R.string.meeting_parse_path)
         return parse(expr)
-    }
-
-    /**
-     * Parse for a specific <Race></Race> with a <Meeting></Meeting>.
-     * @param meetingCode: The Meeting code, e.g. BR.
-     * @return A Map<LocalName, NodeValue>.
-     */
-    fun parseForMeeting(meetingCode: String): MutableMap<String,String> {
-        val expr = "/RaceDay/Meeting[@MeetingCode='$meetingCode']"
-        return parse(expr)[0]     // only one Meeting is expected.
     }
 
     /**
@@ -102,3 +72,34 @@ class RaceDayParser(private val context: Context) {
     }
 
 }
+//    // Secondary constructor TBA.
+//    constructor(context: Context, inStream: InputStream) : this(context) {
+//        this.inStream = inStream
+//    }
+
+//    /**
+//     * Set the input stream value used by the XPath InputSource.
+//     * @param inStream: The input stream to use.
+//     */    fun setInputStream(inStream: InputStream) {
+//        this.inStream = inStream
+//    }
+
+//    /**
+//     * Set the current input stream based upon a download id.
+//     * @param downloadId: The download id.
+//     */
+//    fun setInputStream(downloadId: Long) {
+//        inStream = RaceDownloadManager(context).getDownloadAsStream(downloadId)
+//    }
+
+//    /**
+//     * Parse for a specific <Race></Race> with a <Meeting></Meeting>.
+//     * @param meetingCode: The Meeting code, e.g. BR.
+//     * @return A Map<LocalName, NodeValue>.
+//     */
+//    fun parseForMeeting(meetingCode: String): MutableMap<String,String> {
+//        val expr = "/RaceDay/Meeting[@MeetingCode='$meetingCode']"
+//        return parse(expr)[0]     // only one Meeting is expected.
+//    }
+
+

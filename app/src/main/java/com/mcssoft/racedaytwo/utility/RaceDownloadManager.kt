@@ -40,10 +40,11 @@ class RaceDownloadManager @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Returns a downloaded file (as InputStream) by the given file identifier [fileId].
+     * Returns a download as InputStream by the given download identifier
+     * @param downloadId: The download id (from the previous download).
      */
-    fun getFile(fileId: Long): InputStream =
-        ParcelFileDescriptor.AutoCloseInputStream(downloadManager.openDownloadedFile(fileId))
+    fun getDownloadAsStream(downloadId: Long): InputStream =
+        ParcelFileDescriptor.AutoCloseInputStream(downloadManager.openDownloadedFile(downloadId))
 
 //    /**
 //     * Returns the cursor associated with the RaceDownloadManager.Query [query].

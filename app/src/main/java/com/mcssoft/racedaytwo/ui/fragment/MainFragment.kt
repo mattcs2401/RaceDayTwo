@@ -32,12 +32,12 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        Log.d("TAG","MainFragment.onCreateView")
+        Log.d("TAG","[MainFragment.onCreateView]")
         return MainFragmentBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("TAG","MainFragment.onViewCreated")
+        Log.d("TAG","[MainFragment.onViewCreated]")
         // set view binding.
         binding = MainFragmentBinding.bind(view)
         // set options menu (on toolbar ATT).
@@ -50,13 +50,13 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
 
     override fun onStart() {
         super.onStart()
-        Log.d("TAG","MainFragment.onStart")
+        Log.d("TAG","[MainFragment.onStart]")
         // Add on back pressed handler.
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, raceDayBackPressCallback)
     }
 
     override fun onStop() {
-        Log.d("TAG","MainFragment.onStop")
+        Log.d("TAG","[MainFragment.onStop]")
         // Remove back press handler callback.
         raceDayBackPressCallback.removeCallback()
         // Super.
@@ -65,13 +65,13 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("TAG","MainFragment.onDestroy")
+        Log.d("TAG","[MainFragment.onDestroy]")
         binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        Log.d("TAG","MainFragment.onCreateOptionsMenu")
+        Log.d("TAG","[MainFragment.onCreateOptionsMenu]")
         inflater.inflate(R.menu.options_menu, menu)
     }
     //</editor-fold>
@@ -131,7 +131,6 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
         // Set observe.
         mainViewModel.raceDayCacheLiveData.observe(viewLifecycleOwner) { meetings ->
             raceAdapter.submitList(meetings)
-//            raceAdapter.notifyDataSetChanged()
         }
     }
     //</editor-fold>

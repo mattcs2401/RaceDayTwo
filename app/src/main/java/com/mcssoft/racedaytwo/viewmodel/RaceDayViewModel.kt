@@ -1,10 +1,11 @@
 package com.mcssoft.racedaytwo.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RaceDayViewModel @ViewModelInject constructor(repository: RaceDayRepository)
-    : BaseViewModel()  {
+@HiltViewModel
+class RaceDayViewModel @Inject constructor(repository: RaceDayRepository) : BaseViewModel()  {
 
     var raceDayCacheLiveData = repository.fetchFromCache().asLiveDataViewModelScope()
 

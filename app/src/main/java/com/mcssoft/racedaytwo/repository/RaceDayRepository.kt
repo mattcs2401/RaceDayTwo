@@ -15,30 +15,36 @@ import javax.inject.Inject
 class RaceDayRepository @Inject constructor(context: Context) {
     // The local cache.
     private var lRaceDay: List<RaceMeetingCacheEntity>? = null
+
     // Coroutine scope.
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
     // Database access.
     private val raceDetailsDAO = RaceDay.getDatabase(context.applicationContext as Application)
             .raceDayDetailsDao()
 
-    // Fetch the current contents of the cache.
+    /**
+     * Essentially recreate the cache and provide that.
+     */
     fun fetchFromCache() = flow {
-        if (lRaceDay == null || lRaceDay!!.isEmpty()) {
-            createCache()
-        }
+        createCache()
         emit(lRaceDay)
     }.flowOn(Dispatchers.IO)
 
-    // Delete all from the local cache, and database (ready to re-create).
+    /**
+     * Delete all from the local cache, and database (ready to re-create).
+     */
     fun clearCache() {
         lRaceDay = null
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch {
             raceDetailsDAO.deleteAll()
         }
     }
 
-    // Create the local cache.
-    // Note: Meeting entities must already exist in the database.
+    /**
+     * Create the local cache.
+     * @note Meeting entities must already exist in the database.
+     */
     private fun createCache(): List<RaceMeetingCacheEntity> {
         val raceDayMapper = RaceDayMapper()
         lRaceDay =  raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.Navigation
+import androidx.navigation.ui.setupWithNavController
 import androidx.preference.*
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
@@ -15,7 +17,7 @@ import javax.inject.Inject
  * Class to implement a "front end" for the app preferences.
  */
 class PreferencesFragment : PreferenceFragmentCompat(),
-    Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
+    Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener, View.OnClickListener {
     /*
      Examples:
      https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
@@ -34,17 +36,18 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("TAG", "PreferencesFragment.onViewCreated")
-        // Set toolbar title.
-        requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.title =
-                resources.getString(R.string.pref_fragment_name)
-//        initialise()
+        // Set the toolbar title and navigation listener.
+        requireActivity().findViewById<Toolbar>(R.id.id_toolbar)?.apply {
+            title = resources.getString(R.string.pref_fragment_name)
+            setNavigationOnClickListener(this@PreferencesFragment)
+        }
     }
 
-    override fun onStop() {
-        super.onStop()
-        // Simply a marker for testing purposes.
-        Log.d("TAG", "PreferencesFragment.onStop")
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        // Simply a marker for testing purposes.
+//        Log.d("TAG", "PreferencesFragment.onStop")
+//    }
 
     //<editor-fold default state="collapsed" desc="Region: Listeners">
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
@@ -62,6 +65,15 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     override fun onPreferenceClick(preference: Preference): Boolean {
         /** Note: OnPreferenceChange will have already happened. **/
         return true
+    }
+
+    /**
+     * Used for the Up navigation on the toolbar. Seems to be a work around as back arrow displays
+     * ok, but nothing would happen when pressed. Navigation config issue ??
+     */
+    override fun onClick(view: View?) {
+        Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
+            .navigate(R.id.action_preferencesFragment_to_mainFragment)
     }
     //</editor-fold>
 

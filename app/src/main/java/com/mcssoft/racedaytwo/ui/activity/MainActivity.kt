@@ -13,7 +13,7 @@ import com.mcssoft.racedaytwo.databinding.MainActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {//}, IPopBack {
 
     private lateinit var binding: MainActivityBinding
     private lateinit var navController: NavController
@@ -50,16 +50,14 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("TAG","MainActivity.onStart")
+//    override fun onStart() {
+//        super.onStart()
+//        Log.d("TAG","MainActivity.onStart")
+//    }
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("TAG","MainActivity.onStop")
-
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        Log.d("TAG","MainActivity.onStop")
+//    }
 
 }

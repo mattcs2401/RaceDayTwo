@@ -1,12 +1,15 @@
 package com.mcssoft.racedaytwo.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,22 +17,40 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
-import com.mcssoft.racedaytwo.repository.RaceDayPreferences
-import com.mcssoft.racedaytwo.utility.RaceDayBackPressCB
+import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
-/* Some initial display info here.
-https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-first-load
- */
+class MainFragment() : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
+
+    //constructor(iPopBack: IPopBack) : this()
+
     @Inject lateinit var mainViewModel: RaceDayViewModel
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
-    @Inject lateinit var raceDayPreferences: RaceDayPreferences
+//    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        var backPressedTime: Long = 0
+        val backToast = Toast.makeText(context, " Press back again to exit. ", Toast.LENGTH_SHORT)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(backPressedTime + Constants.BACK_PRESS_TIME > System.currentTimeMillis()) {
+                    backToast.cancel()
+                    activity?.finish()
+                } else {
+                    backToast.show()
+                }
+                backPressedTime = System.currentTimeMillis()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         Log.d("TAG","[MainFragment.onCreateView]")
@@ -42,26 +63,19 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
         binding = MainFragmentBinding.bind(view)
         // set options menu (on toolbar ATT).
         setHasOptionsMenu(true)
-        // initialise back press callback.
-        raceDayBackPressCallback = RaceDayBackPressCB(true )
         // Setup the UI and related components.
         initialise()
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("TAG","[MainFragment.onStart]")
-        // Add on back pressed handler.
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, raceDayBackPressCallback)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        Log.d("TAG","[MainFragment.onStart]")
+//    }
 
-    override fun onStop() {
-        Log.d("TAG","[MainFragment.onStop]")
-        // Remove back press handler callback.
-        raceDayBackPressCallback.removeCallback()
-        // Super.
-        super.onStop()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        Log.d("TAG","[MainFragment.onStop]")
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -130,13 +144,15 @@ https://stackoverflow.com/questions/54133757/recyclerview-not-showing-data-on-fi
         }
         // Set observe.
         mainViewModel.raceDayCacheLiveData.observe(viewLifecycleOwner) { meetings ->
-            raceAdapter.submitList(meetings)
+            // testing only.
+            val lMeetings = meetings?.filter { meeting ->
+                meeting.meetingType in ("R")
+            }
+            raceAdapter.submitList(lMeetings)
         }
     }
     //</editor-fold>
 
     // For UI components.
     private var binding : MainFragmentBinding? = null
-    // Callback to block the user from pressing back (otherwise will reload the SplashFragment).
-    private lateinit var raceDayBackPressCallback : RaceDayBackPressCB
 }

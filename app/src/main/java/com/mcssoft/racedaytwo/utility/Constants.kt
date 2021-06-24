@@ -5,7 +5,7 @@ object Constants {
     // MainFragment back press interval time (between presses).
     const val BACK_PRESS_TIME: Long = 2000
 
-    // Default, or error vals.
+    // Default, or error values.
     const val NO_FILE_PATH: String = ""
     const val MINUS_ONE_L: Long = -1
 

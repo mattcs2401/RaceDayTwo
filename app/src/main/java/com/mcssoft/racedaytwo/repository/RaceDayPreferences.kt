@@ -8,9 +8,7 @@ import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.utility.Constants
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class RaceDayPreferences @Inject constructor (private val context: Context) {
 

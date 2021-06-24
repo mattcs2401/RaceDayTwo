@@ -121,7 +121,7 @@ class SplashFragment : Fragment() {
         // Get the network (path) url.
         val url = raceDayUtilities.createRaceDayUrl(requireContext())
         // Download file to parse later.
-        raceDownloadManager.getPage(url, path, "RaceDay.xml")
+        raceDownloadManager.getPage(url, path, resources.getString(R.string.main_page))
     }
 
     // receiver for the DownloadManager broadcast.

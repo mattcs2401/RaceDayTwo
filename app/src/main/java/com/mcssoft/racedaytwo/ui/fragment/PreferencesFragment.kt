@@ -66,26 +66,14 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Utility">
-//    private fun initialise() {
-//        if(spCacheUse.isChecked)
-//            raceDayPreferences.setCacheUse(true)
-//        else
-//            raceDayPreferences.setCacheUse(false)
-//
-////        if(msDefaultMeetingType. isChecked)
-////            raceDayPreferences.setDefaultMeetingType(true)
-////        else
-////            raceDayPreferences.setDefaultMeetingType(false)
-//    }
-
     /**
      * Switch preference as whether to re-use existing download file data.
      */
     private fun setUseCache() {
         spCacheUse = SwitchPreferenceCompat(context).apply {
             key = resources.getString(R.string.key_use_cache)
-            title = "Use cache."
-            summary = "Reload application data from cache."
+            title = resources.getString(R.string.title_use_cache)
+            summary = resources.getString(R.string.summary_use_cache)
         }
         spCacheUse.setDefaultValue(true)
         spCacheUse.onPreferenceChangeListener = this
@@ -98,10 +86,10 @@ class PreferencesFragment : PreferenceFragmentCompat(),
     private fun setDefaultMeetingType() {
         msDefaultMeetingType = MultiSelectListPreference(context).apply {
             key = resources.getString(R.string.key_default_meeting_type)
-            title = "Default Meeting Type"
-            summary = "Select the default meeting type/s to display."
-            entries = arrayOf("Racing", "Trotting", "Greyhound")
-            entryValues = arrayOf("R", "T", "G")
+            title = resources.getString(R.string.title_default_meeting_type)
+            summary = resources.getString(R.string.summary_default_meeting_type)
+            entries = resources.getStringArray(R.array.racing_types)
+            entryValues = resources.getStringArray(R.array.racing_values)
         }
         msDefaultMeetingType.setDefaultValue(setOf("R"))
         msDefaultMeetingType.onPreferenceChangeListener = this

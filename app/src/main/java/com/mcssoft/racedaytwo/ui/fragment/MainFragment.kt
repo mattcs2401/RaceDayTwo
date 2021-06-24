@@ -9,7 +9,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,25 +16,25 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
+import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment() : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
-
-    //constructor(iPopBack: IPopBack) : this()
+class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
 
     @Inject lateinit var mainViewModel: RaceDayViewModel
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
-//    @Inject lateinit var raceDayPreferences: RaceDayPreferences
+    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onAttach(context: Context) {
         super.onAttach(context)
         var backPressedTime: Long = 0
-        val backToast = Toast.makeText(context, " Press back again to exit. ", Toast.LENGTH_SHORT)
+        val backToast = Toast
+            .makeText(context, resources.getString(R.string.back_press_text), Toast.LENGTH_SHORT)
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

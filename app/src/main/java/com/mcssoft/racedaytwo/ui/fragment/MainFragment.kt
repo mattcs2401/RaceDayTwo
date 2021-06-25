@@ -98,24 +98,25 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     }
 
     override fun onButtonChecked(group: MaterialButtonToggleGroup?, checkedId: Int, isChecked: Boolean) {
-        when(checkedId) {
-            binding?.idBtnRace?.id -> {
-                if(isChecked) addToTypeList("R") else removeFromTypeList("R")
-            }
-            binding?.idBtnTrots?.id -> {
-                if(isChecked) addToTypeList("T") else removeFromTypeList("T")
-            }
-            binding?.idBtnGreyhound?.id -> {
-                if(isChecked) addToTypeList("G") else removeFromTypeList("G")
-            }
-        }
-        // Must have one button checked and "R" is it.
         binding?.apply {
+            when (checkedId) {
+                idBtnRace.id -> {
+                    if (isChecked) addToTypeList("R") else removeFromTypeList("R")
+                }
+                idBtnTrots.id -> {
+                    if (isChecked) addToTypeList("T") else removeFromTypeList("T")
+                }
+                idBtnGreyhound.id -> {
+                    if (isChecked) addToTypeList("G") else removeFromTypeList("G")
+                }
+            }
+            // Must have one button checked and "R" is it.
             if(!idBtnRace.isChecked && !idBtnTrots.isChecked && !idBtnGreyhound.isChecked) {
                 idBtnRace.isChecked = true
                 addToTypeList("R")
             }
         }
+        //Log.d("TAG", "Race type: $lRaceType")
     }
     //</editor-fold>
 

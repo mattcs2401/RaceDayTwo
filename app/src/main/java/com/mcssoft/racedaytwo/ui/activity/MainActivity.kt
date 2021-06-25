@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {//}, IPopBack {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG","MainActivity.onCreate")
+        Log.d("TAG","[MainActivity.onCreate]")
 
         // Set view binding.
         binding = MainActivityBinding.inflate(layoutInflater)
@@ -33,12 +33,13 @@ class MainActivity : AppCompatActivity() {//}, IPopBack {
         // Navigation.
         navController = Navigation.findNavController(this, R.id.id_nav_host_fragment)
 
-        // Note:
-        // This makes these top level destinations. App starts with SplashFragment and when done,
-        // navigation moves to MainFragment. We don't want a back arrow from MainFragment.
-        val appBarConfig = AppBarConfiguration(
-            setOf(R.id.id_splash_fragment, R.id.id_main_fragment)
-        )
+        /* Notes:
+          (1) This makes the MainFragment a top level destination. App starts with SplashFragment
+              and then navigation moves to MainFragment. We don't want a back arrow from MainFragment.
+              That is also trapped with an on back press callback.
+          (2) Trial and error - also puts the "<-" Up nav button on the PreferencesFragment ??
+        */
+        val appBarConfig = AppBarConfiguration(setOf(R.id.id_main_fragment))
 
         // TBA - bottom navigation view ?
 //        bottomNavView = binding.idBottomNavView

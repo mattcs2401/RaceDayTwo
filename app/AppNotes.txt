@@ -8,11 +8,6 @@ TO DO:
 ------
 In no particular order.
 
---> We're not navigating back to the SplashFragment.
-    - pop off the back stack when transition to MainFragment.
-
---> Migrate from LiveData to Kotlin Flow.
-
 --> Filter the listing showing in the main recyclerview.
     - Dependant on which toggle button selected.
         - This only filters what is coming from the cache.

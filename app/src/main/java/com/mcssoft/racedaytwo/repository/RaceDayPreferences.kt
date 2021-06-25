@@ -45,6 +45,7 @@ class RaceDayPreferences @Inject constructor (private val context: Context) {
 //    }
     //</editor-fold>
 
+    //<editor-fold default state="collapsed" desc="Region: Utility - Read/Write preferences">
     /**
      * Save the given value to the DataStore.
      * @param key: The key part of a key-value pair.
@@ -113,4 +114,6 @@ class RaceDayPreferences @Inject constructor (private val context: Context) {
         val preference = dsPreferences.data.first()
         return preference[dataStoreKey] ?: ""
     }
+    //</editor-fold>
+
 }

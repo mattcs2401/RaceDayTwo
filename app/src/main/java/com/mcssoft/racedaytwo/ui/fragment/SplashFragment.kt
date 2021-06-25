@@ -43,11 +43,7 @@ class SplashFragment : Fragment() {
             addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         }
 
-        // Defaults TBA (mainly for app 1st run).
-        raceDayPreferences.apply {
-            setUseCache(true)
-            setDefaultMeetingType("R")
-        }
+        // TODO - the very first time the app is run, the datastore won't exist.
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -80,18 +76,20 @@ class SplashFragment : Fragment() {
     /**
      * Perform some preferences and file system checks and decide on the "start" type.
      */
-    private fun initialise() = if(raceDayPreferences.getUseCache()) {
-        // The use cache preference is set.
-        if (raceDayUtilities.dateCheck()) {
-            // Date is today's date.
-            reStart()
+    private fun initialise() {
+        if (raceDayPreferences.getUseCache()) {
+            // The use cache preference is set.
+            if (raceDayUtilities.dateCheck()) {
+                // Date is today's date.
+                reStart()
+            } else {
+                // Date isn't today's date, or date check failed as no file found.
+                cleanStart()
+            }
         } else {
-            // Date isn't today's date, or date check failed as no file found.
+            // The use cache preference is not set.
             cleanStart()
         }
-    } else {
-        // The use cache preference is not set.
-        cleanStart()
     }
 
     /**

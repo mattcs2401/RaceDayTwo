@@ -11,9 +11,9 @@ In no particular order.
 --> We're not navigating back to the SplashFragment.
     - pop off the back stack when transition to MainFragment.
 
+--> Migrate from LiveData to Kotlin Flow.
+
 --> Filter the listing showing in the main recyclerview.
-    - When app starts, use preference value if set.
-        - Else default is toggle all on ?
     - Dependant on which toggle button selected.
         - This only filters what is coming from the cache.
         - Use object's 'meetingType'.
@@ -32,9 +32,7 @@ In no particular order.
 -------------
 Useful Links:
 -------------
-
-Jetpack preferences.
---------------------
-https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
-https://blog.mindorks.com/implementing-android-jetpack-preferences
+--> Jetpack preferences.
+    https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
+    https://blog.mindorks.com/implementing-android-jetpack-preferences
 

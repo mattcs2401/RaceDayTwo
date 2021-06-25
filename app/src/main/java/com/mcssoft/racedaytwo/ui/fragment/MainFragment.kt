@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,17 +21,16 @@ import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
 
-    @Inject
-    lateinit var mainViewModel: RaceDayViewModel
-    @Inject
-    lateinit var raceAdapter: RaceMeetingAdapter
-    @Inject
-    lateinit var raceDayPreferences: RaceDayPreferences
+    @Inject lateinit var mainViewModel: RaceDayViewModel
+    @Inject lateinit var raceAdapter: RaceMeetingAdapter
+    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onAttach(context: Context) {
@@ -72,10 +72,10 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        //super.onDestroy()
         Log.d("TAG","[MainFragment.onDestroy]")
         binding = null
-    }
+        super.onDestroy()    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -98,25 +98,28 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     }
 
     override fun onButtonChecked(group: MaterialButtonToggleGroup?, checkedId: Int, isChecked: Boolean) {
+        var value = ""  // will use the button label as the value to add/remove.
         binding?.apply {
             when (checkedId) {
                 idBtnRace.id -> {
-                    if (isChecked) addToTypeList("R") else removeFromTypeList("R")
+                    value = resources.getString(R.string.btn_lbl_R)
                 }
                 idBtnTrots.id -> {
-                    if (isChecked) addToTypeList("T") else removeFromTypeList("T")
+                    value = resources.getString(R.string.btn_lbl_T)
                 }
                 idBtnGreyhound.id -> {
-                    if (isChecked) addToTypeList("G") else removeFromTypeList("G")
+                    value = resources.getString(R.string.btn_lbl_G)
                 }
             }
+            if (isChecked) addToTypeList(value) else removeFromTypeList(value)
             // Must have one button checked and "R" is it.
             if(!idBtnRace.isChecked && !idBtnTrots.isChecked && !idBtnGreyhound.isChecked) {
+                // This will fire the onButtonChecked method again, but the value won't be added a
+                // 2nd time.
                 idBtnRace.isChecked = true
-                addToTypeList("R")
             }
         }
-        //Log.d("TAG", "Race type: $lRaceType")
+        Log.d("TAG", "Race type: $lRaceType")
     }
     //</editor-fold>
 
@@ -174,12 +177,14 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
      * Observe and filter what's coming from the cache.
      */
     private fun setObserve() {
-        mainViewModel.raceDayCacheLiveData.observe(viewLifecycleOwner) { meetings ->
-            // Filter what's from cache.
-            val lMeetings = meetings?.filter { meeting ->
-                meeting.meetingType in lRaceType
+        lifecycleScope.launch {
+            mainViewModel.raceDayCache.collect { meetings ->
+                // Filter what's from cache.
+                val lMeetings = meetings?.filter { meeting ->
+                    meeting.meetingType in lRaceType
+                }
+                raceAdapter.submitList(lMeetings)
             }
-            raceAdapter.submitList(lMeetings)
         }
     }
 

@@ -16,7 +16,6 @@ class RaceDayPreferences @Inject constructor (private val context: Context) {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
     private var dsPreferences: DataStore<Preferences> = context.dataStore
-//    private val scope: CoroutineScope = CoroutineScope(context as CoroutineContext)
 
     //<editor-fold default state="collapsed" desc="Region: User selectable preferences">
     fun setUseCache(value: Boolean) = runBlocking(Dispatchers.IO) {
@@ -41,9 +40,9 @@ class RaceDayPreferences @Inject constructor (private val context: Context) {
         saveLong(context.resources.getString(R.string.key_download_id), id)
     }
 
-    fun getDownloadId(): Long = runBlocking(Dispatchers.IO) {
-        return@runBlocking readLong(context.resources.getString(R.string.key_download_id))
-    }
+//    fun getDownloadId(): Long = runBlocking(Dispatchers.IO) {
+//        return@runBlocking readLong(context.resources.getString(R.string.key_download_id))
+//    }
     //</editor-fold>
 
     /**

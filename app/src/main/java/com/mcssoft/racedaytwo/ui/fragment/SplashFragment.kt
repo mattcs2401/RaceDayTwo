@@ -80,19 +80,18 @@ class SplashFragment : Fragment() {
     /**
      * Perform some preferences and file system checks and decide on the "start" type.
      */
-    private fun initialise() {
-        if(raceDayPreferences.getUseCache()) {
-            if (raceDayUtilities.dateCheck()) {
-                // Date is today's date.
-                reStart()
-            } else {
-                // Date isn't today's date, or date check failed as no file found.
-                cleanStart()
-            }
+    private fun initialise() = if(raceDayPreferences.getUseCache()) {
+        // The use cache preference is set.
+        if (raceDayUtilities.dateCheck()) {
+            // Date is today's date.
+            reStart()
         } else {
-            // Preference is not set.
+            // Date isn't today's date, or date check failed as no file found.
             cleanStart()
         }
+    } else {
+        // The use cache preference is not set.
+        cleanStart()
     }
 
     /**
@@ -178,6 +177,8 @@ class SplashFragment : Fragment() {
                     navigateToMain()
                 }
                 WorkInfo.State.FAILED -> {
+                    // TODO - some sort of retry mechanism, maybe through a dialog. At least need to
+                    //        notify somehow, not just continually sit there.
                     Log.d("TAG", "WorkInfo.State.Failed")
                     workInfo.outputData.getString("key_result_failure")?.let { Log.d("TAG", it) }
                     workInfo.outputData.getString("key_msg")?.let { Log.d("TAG", it) }

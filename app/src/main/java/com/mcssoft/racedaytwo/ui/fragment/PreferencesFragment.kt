@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.Navigation
-import androidx.navigation.ui.setupWithNavController
 import androidx.preference.*
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
@@ -18,11 +17,7 @@ import javax.inject.Inject
  */
 class PreferencesFragment : PreferenceFragmentCompat(),
     Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener, View.OnClickListener {
-    /*
-     Examples:
-     https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
-     https://blog.mindorks.com/implementing-android-jetpack-preferences
-     */
+
     @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -42,12 +37,6 @@ class PreferencesFragment : PreferenceFragmentCompat(),
             setNavigationOnClickListener(this@PreferencesFragment)
         }
     }
-
-//    override fun onStop() {
-//        super.onStop()
-//        // Simply a marker for testing purposes.
-//        Log.d("TAG", "PreferencesFragment.onStop")
-//    }
 
     //<editor-fold default state="collapsed" desc="Region: Listeners">
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {

@@ -8,29 +8,33 @@ TO DO:
 ------
 In no particular order.
 
-(1) The repository does both the database and the network service  (ref Android std architecture).
-    - The database (via DAO) and network service (via ?) are repository dependencies.
+--> We're not navigating back to the SplashFragment.
+    - pop off the back stack when transition to MainFragment.
 
-(2) Filter the listing showing in the main recyclerview.
+--> Filter the listing showing in the main recyclerview.
     - When app starts, use preference value if set.
         - Else default is toggle all on ?
     - Dependant on which toggle button selected.
         - This only filters what is coming from the cache.
         - Use object's 'meetingType'.
 
-(3) Preferences.
-    - A default meeting type, i.e. an initial filter on the main recyclerview.
-    - Control the availability of the Delete (All) menu option.
-    - Use cache if exists, rather than a network download.
-        - Data age, i.e. no point having yesterday's.
-
-(4) Display list of Races?
+--> Display list of Races?
     - Dependant on what meeting is selected.
         - Will need new:
             - entities
             - storage
             - linkage
 
-(5) TBA
+--> Parse file data in SplashFragment. If work manager fails?
+    - notification
+    - need a retry mechanism
 
+-------------
+Useful Links:
+-------------
+
+Jetpack preferences.
+--------------------
+https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
+https://blog.mindorks.com/implementing-android-jetpack-preferences
 

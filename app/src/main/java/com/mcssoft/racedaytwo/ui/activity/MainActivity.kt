@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.MainActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +16,7 @@ class MainActivity : AppCompatActivity() {//}, IPopBack {
 
     private lateinit var binding: MainActivityBinding
     private lateinit var navController: NavController
-    private lateinit var bottomNavView: BottomNavigationView
+//    private lateinit var bottomNavView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {//}, IPopBack {
             setOf(R.id.id_splash_fragment, R.id.id_main_fragment)
         )
 
-        // TODO - implement bottom navigation view ?
+        // TBA - bottom navigation view ?
 //        bottomNavView = binding.idBottomNavView
 //        NavigationUI.setupWithNavController(bottomNavView, navController)
 //        bottomNavView.setOnNavigationItemSelectedListener(this)
@@ -49,15 +48,5 @@ class MainActivity : AppCompatActivity() {//}, IPopBack {
         // Back navigation is basically restricted by the AppBarConfiguration.
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        Log.d("TAG","MainActivity.onStart")
-//    }
-
-//    override fun onStop() {
-//        super.onStop()
-//        Log.d("TAG","MainActivity.onStop")
-//    }
 
 }

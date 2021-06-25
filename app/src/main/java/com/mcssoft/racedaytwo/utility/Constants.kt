@@ -8,6 +8,7 @@ object Constants {
     // Default, or error values.
     const val NO_FILE_PATH: String = ""
     const val MINUS_ONE_L: Long = -1
+    const val DEFAULT_MEETING_TYPE: String = "R"
 
     // Recyclerview.
     const val VIEW_TYPE_HEADER = 0

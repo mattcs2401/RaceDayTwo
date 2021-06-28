@@ -9,7 +9,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -88,9 +87,7 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.id_menu_item_settings -> {
-                // Navigate to MainFragment.
-                Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
-                    .navigate(R.id.action_mainFragment_to_preferencesFragment)
+                Toast.makeText(activity, " Settings are TBA ", Toast.LENGTH_SHORT).show()
             }
             else -> super.onOptionsItemSelected(item)
         }

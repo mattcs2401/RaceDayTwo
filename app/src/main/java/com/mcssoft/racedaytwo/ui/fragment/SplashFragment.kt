@@ -2,12 +2,15 @@ package com.mcssoft.racedaytwo.ui.fragment
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.work.OneTimeWorkRequestBuilder
@@ -16,21 +19,19 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
-import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
+import com.mcssoft.racedaytwo.utility.Constants
+import com.mcssoft.racedaytwo.utility.RaceDayUtilities
+import com.mcssoft.racedaytwo.utility.RaceDayWorker
+import com.mcssoft.racedaytwo.utility.RaceDownloadManager
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import com.mcssoft.racedaytwo.utility.*
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
-    @Inject lateinit var raceDayPreferences: RaceDayPreferences
     @Inject lateinit var raceDayRepository: RaceDayRepository
     @Inject lateinit var raceDownloadManager: RaceDownloadManager
 
@@ -77,17 +78,12 @@ class SplashFragment : Fragment() {
      * Perform some preferences and file system checks and decide on the "start" type.
      */
     private fun initialise() {
-        if (raceDayPreferences.getUseCache()) {
-            // The use cache preference is set.
-            if (raceDayUtilities.dateCheck()) {
-                // Date is today's date.
-                reStart()
-            } else {
-                // Date isn't today's date, or date check failed as no file found.
-                cleanStart()
-            }
+        // The use cache preference is set.
+        if (raceDayUtilities.dateCheck()) {
+            // Date is today's date.
+            reStart()
         } else {
-            // The use cache preference is not set.
+            // Date isn't today's date, or date check failed as no file found.
             cleanStart()
         }
     }
@@ -135,8 +131,6 @@ class SplashFragment : Fragment() {
                     if(fileId != Constants.MINUS_ONE_L) {
                         // Download was successful (ATT testing ?).
                         Toast.makeText(context, "Download successful. File id=$fileId", Toast.LENGTH_SHORT).show()
-                        // Save file id to preferences as metadata.
-                        raceDayPreferences.setDownloadId(fileId)
                         // Parse the file data.
                         parseFileData(context, fileId)
                     } else {

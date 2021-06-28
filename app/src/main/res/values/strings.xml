@@ -4,7 +4,6 @@
 
     <!-- Fragment titles. -->
     <string name="main_fragment_name">Race Day</string>
-    <string name="pref_fragment_name">Preferences</string>
 
     <!-- Base url. -->
     <string name="base_url">https://tatts.com/pagedata/racing/</string>
@@ -36,20 +35,6 @@
     <string name="key_default_meeting_type">key_default_meeting_type</string>
 
     <!-- Preferences text. -->
-    <string name="title_use_cache">Use Cache</string>
-    <string name="summary_use_cache">Reload application data from cache</string>
-    <string name="title_default_meeting_type">Default Meeting Type</string>
-    <string name="summary_default_meeting_type">Select the default meeting type/s to display.</string>
-    <string-array name="racing_types">
-        <item name="racing">Racing</item>
-        <item name="totting">Trotting</item>
-        <item name="greyhounds">Greyhounds</item>
-    </string-array>
-    <string-array name="racing_values">
-        <item name="racing">R</item>
-        <item name="totting">T</item>
-        <item name="greyhounds">G</item>
-    </string-array>
 
     <!-- General. -->
     <string name="msg_tba">TBA - other view components.</string>

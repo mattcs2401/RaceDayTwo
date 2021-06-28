@@ -8,6 +8,8 @@ TO DO:
 ------
 In no particular order.
 
+--> Implement StateFlow ??
+
 --> Filter the listing showing in the main recyclerview.
     - Dependant on which toggle button selected.
         - This only filters what is coming from the cache.
@@ -31,3 +33,5 @@ Useful Links:
     https://medium.com/google-developer-experts/exploring-android-jetpack-preferences-8bcb0b7bdd14
     https://blog.mindorks.com/implementing-android-jetpack-preferences
 
+--> Flow vs LiveData
+https://newbedev.com/kotlin-flow-vs-android-livedata

@@ -93,10 +93,12 @@ class SplashFragment : Fragment() {
      */
     private fun reStart() {
         Log.d("TAG", "SplashFragment: Restart")
-        // Create repository cache.
+//        // Create repository cache.
         binding.idTvProgress.text = resources.getString(R.string.init_cache)
-        // create cache if doesn't already exist (and get).
-        raceDayRepository.fetchFromCache()
+        // create cache if doesn't already exist.
+        if(!raceDayRepository.hasCache()) {
+            raceDayRepository.createCache()
+        }
         // Navigate to MainFragment.
         navigateToMain()
     }
@@ -110,7 +112,7 @@ class SplashFragment : Fragment() {
         // Delete whatever file is there.
         raceDayUtilities.deleteFromStorage(File(path))
         // Clear cache and underlying data.
-        raceDayRepository.clearCache()
+        raceDayRepository.clearCacheAndData()
         // Get the network (path) url.
         val url = raceDayUtilities.createRaceDayUrl(requireContext())
         // Download file to parse later.

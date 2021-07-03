@@ -24,5 +24,4 @@ object RepositoryModule {
     fun provideMainViewModel(repository: RaceDayRepository): RaceDayViewModel {
         return RaceDayViewModel(repository)
     }
-
 }

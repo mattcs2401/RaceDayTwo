@@ -16,7 +16,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
-import com.mcssoft.racedaytwo.repository.RaceDayPreferences
 import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +28,13 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     @Inject lateinit var mainViewModel: RaceDayViewModel
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
-    @Inject lateinit var raceDayPreferences: RaceDayPreferences
+//    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Set the view model initial state.
+        mainViewModel.initialise()
+    }
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -122,23 +126,23 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     //<editor-fold default state="collapsed" desc="Region: Utility">
     private fun initialise() {
-        setFromPreferences() // basically the default meeting type.
+//        setFromPreferences() // basically the default meeting type.
         setUIComponents()    // toolbar title, button listeners, recyclerview etc.
         setObserve()         // observe the cache.
     }
 
-    /**
-     * Get preferences specific to this fragment, basically just the default meeting type (ATT).
-     */
-    private fun setFromPreferences() {
-        // Get default meeting type as per preferences.
-        val value = raceDayPreferences.getDefaultMeetingType()
-        if(value != "") {
-            addToTypeList(value)
-        } else {
-            addToTypeList(Constants.DEFAULT_MEETING_TYPE)
-        }
-    }
+//    /**
+//     * Get preferences specific to this fragment, basically just the default meeting type (ATT).
+//     */
+//    private fun setFromPreferences() {
+//        // Get default meeting type as per preferences.
+//        val value = raceDayPreferences.getDefaultMeetingType()
+//        if(value != "") {
+//            addToTypeList(value)
+//        } else {
+//            addToTypeList(Constants.DEFAULT_MEETING_TYPE)
+//        }
+//    }
 
     /**
      * Establish the various UI components.
@@ -175,12 +179,12 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
      */
     private fun setObserve() {
         lifecycleScope.launch {
-            mainViewModel.raceDayCache.collect { meetings ->
-                // Filter what's from cache.
-                val lMeetings = meetings?.filter { meeting ->
-                    meeting.meetingType in lRaceType
-                }
-                raceAdapter.submitList(lMeetings)
+            mainViewModel.getFromCache().collect { meetings ->
+//                // Filter what's from cache.
+//                val lMeetings = meetings?.filter { meeting ->
+//                    meeting.meetingType in lRaceType
+//                }
+                raceAdapter.submitList(meetings)//lMeetings)
             }
         }
     }

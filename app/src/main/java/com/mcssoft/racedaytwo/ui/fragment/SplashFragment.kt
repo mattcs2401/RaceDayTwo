@@ -24,6 +24,7 @@ import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.utility.RaceDayUtilities
 import com.mcssoft.racedaytwo.utility.RaceDayWorker
 import com.mcssoft.racedaytwo.utility.RaceDownloadManager
+import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
@@ -32,7 +33,7 @@ import javax.inject.Inject
 class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
-    @Inject lateinit var raceDayRepository: RaceDayRepository
+    @Inject lateinit var mainViewModel: RaceDayViewModel
     @Inject lateinit var raceDownloadManager: RaceDownloadManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
@@ -54,7 +55,7 @@ class SplashFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("TAG", "[MainFragment.onViewCreated]")
+        Log.d("TAG", "[SplashFragment.onViewCreated]")
         binding = SplashFragmentBinding.bind(view)
     }
 
@@ -92,13 +93,10 @@ class SplashFragment : Fragment() {
      * Perform a re-start (just recreate the cache).
      */
     private fun reStart() {
-        Log.d("TAG", "SplashFragment: Restart")
-//        // Create repository cache.
+        Log.d("TAG", "[SplashFragment.reStart]")
         binding.idTvProgress.text = resources.getString(R.string.init_cache)
-        // create cache if doesn't already exist.
-        if(!raceDayRepository.hasCache()) {
-            raceDayRepository.createCache()
-        }
+        // Create repository cache.
+        mainViewModel.createCache()
         // Navigate to MainFragment.
         navigateToMain()
     }
@@ -107,24 +105,24 @@ class SplashFragment : Fragment() {
      * Perform a "clean" start (basically delete everything, re-download and recreate).
      */
     private fun cleanStart() {
-        Log.d("TAG", "SplashFragment: Clean start")
+        Log.d("TAG", "[SplashFragment.cleanStart]")
         val path = raceDayUtilities.getPrimaryStoragePath()
         // Delete whatever file is there.
         raceDayUtilities.deleteFromStorage(File(path))
         // Clear cache and underlying data.
-        raceDayRepository.clearCacheAndData()
+        mainViewModel.clearCacheAndData()
         // Get the network (path) url.
         val url = raceDayUtilities.createRaceDayUrl(requireContext())
         // Download file to parse later.
         raceDownloadManager.getPage(url, path, resources.getString(R.string.main_page))
     }
 
-    // receiver for the DownloadManager broadcast.
+    // Receiver for the DownloadManager broadcast.
     private var raceDownloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when(intent.action) {
                 DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
-                    Log.d("TAG","DownloadManager.ACTION_DOWNLOAD_COMPLETE")
+                    Log.d("TAG","[DownloadManager.ACTION_DOWNLOAD_COMPLETE]")
 
                     // Get the file id of the downloaded file.
                     val fileId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,
@@ -162,20 +160,24 @@ class SplashFragment : Fragment() {
         // Observe.
         workManager.getWorkInfoByIdLiveData(raceDayWorker.id).observe(viewLifecycleOwner) { workInfo ->
             when(workInfo.state) {
-                WorkInfo.State.ENQUEUED -> { Log.d("TAG", "WorkInfo.State.Enqueued") }
-                WorkInfo.State.RUNNING -> { Log.d("TAG", "WorkInfo.State.Running") }
-                WorkInfo.State.BLOCKED -> { Log.d("TAG", "WorkInfo.State.Blocked") }
-                WorkInfo.State.CANCELLED -> { Log.d("TAG", "WorkInfo.State.Cancelled") }
+                WorkInfo.State.ENQUEUED -> { Log.d("TAG", "[WorkInfo.State.Enqueued]") }
+                WorkInfo.State.RUNNING -> { Log.d("TAG", "[WorkInfo.State.Running]") }
+                WorkInfo.State.BLOCKED -> { Log.d("TAG", "[WorkInfo.State.Blocked]") }
+                WorkInfo.State.CANCELLED -> { Log.d("TAG", "[WorkInfo.State.Cancelled]") }
                 WorkInfo.State.SUCCEEDED -> {
-                    Log.d("TAG", "WorkInfo.State.Succeeded")
+                    Log.d("TAG", "[WorkInfo.State.Succeeded]")
+                    mainViewModel.createCache()
                     navigateToMain()
                 }
                 WorkInfo.State.FAILED -> {
                     // TODO - some sort of retry mechanism, maybe through a dialog. At least need to
                     //        notify somehow, not just continually sit there.
-                    Log.d("TAG", "WorkInfo.State.Failed")
+                    Log.d("TAG", "[WorkInfo.State.Failed]")
+                    // TBA.
                     workInfo.outputData.getString("key_result_failure")?.let { Log.d("TAG", it) }
                     workInfo.outputData.getString("key_msg")?.let { Log.d("TAG", it) }
+
+                    workManager.cancelWorkById(raceDayWorker.id)
                 }
             }
         }

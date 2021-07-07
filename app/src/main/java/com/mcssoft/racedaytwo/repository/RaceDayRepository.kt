@@ -5,10 +5,10 @@ import android.content.Context
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.mapper.RaceDayMapper
+import com.mcssoft.racedaytwo.utility.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,10 +25,12 @@ class RaceDayRepository @Inject constructor(context: Context) {
     private var lRaceDay: List<RaceMeetingCacheEntity>? = null
 
     /**
-     * Essentially recreate the cache and provide that.
+     * TBA.
      */
-    fun getFromCache() = flow {
-        emit(lRaceDay)
+    fun getFromCache(lFilterVals: ArrayList<String>) = flow {
+        emit(lRaceDay?.filter { meeting ->
+                meeting.meetingType in lFilterVals
+        })
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -45,16 +47,19 @@ class RaceDayRepository @Inject constructor(context: Context) {
      * Create the local cache.
      * @note Meeting entities must already exist in the database.
      */
-    fun createCache() {//}: List<RaceMeetingCacheEntity> {
+    fun createCache() {
         val raceDayMapper = RaceDayMapper()
         coroutineScope.launch {
             lRaceDay =  raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
         }
-//        return lRaceDay as List<RaceMeetingCacheEntity>
-    }
-
-    fun hasCache(): Boolean {
-        return lRaceDay != null
     }
 
 }
+//fun fetchFromCache() = flow {
+//    createCache()
+//    emit(lRaceDay)
+//}.flowOn(Dispatchers.IO)
+//                // Filter what's from cache.
+//                val lMeetings = meetings?.filter { meeting ->
+//                    meeting.meetingType in lRaceType
+//                }

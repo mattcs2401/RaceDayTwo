@@ -25,7 +25,7 @@ class RaceDownloadManager @Inject constructor(private val context: Context) {
      * @param fileName: The name of the file.
      */
     fun getPage(url: String, path: String, fileName: String) {
-        Log.d("TAG","RaceDownloadManager.downloadPage")
+        Log.d("TAG","[RaceDownloadManager.downloadPage]")
 
         val file = File(path, fileName)
 

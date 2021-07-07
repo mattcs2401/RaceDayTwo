@@ -19,11 +19,15 @@ abstract class RaceDay : RoomDatabase() {
         fun getDatabase(context: Application): RaceDay {
             // https://proandroiddev.com/sqlite-triggers-android-room-2e7120bb3e3a
             return instance ?: Room
-                .databaseBuilder(context.applicationContext,
+                .databaseBuilder(context,
                     RaceDay::class.java, "race_day.db")
 //                .addCallback(db_callback)
                 .build()
                 .also { instance = it }
+        }
+
+        fun getDatabase(): Companion {
+            return RaceDay
         }
 
 //        private val db_callback = object : RoomDatabase.Callback() {

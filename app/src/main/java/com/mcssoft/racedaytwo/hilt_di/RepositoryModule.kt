@@ -6,6 +6,7 @@ import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -16,12 +17,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideRaceDayRepo(@ApplicationContext context: Context): RaceDayRepository {
-        return RaceDayRepository(context)
-    }
+    fun provideRaceDayRepo(@ApplicationContext context: Context) = RaceDayRepository(context)
 
     @Provides
-    fun provideMainViewModel(repository: RaceDayRepository): RaceDayViewModel {
-        return RaceDayViewModel(repository)
-    }
+    fun provideMainViewModel(repository: RaceDayRepository): RaceDayViewModel = RaceDayViewModel(repository)
 }

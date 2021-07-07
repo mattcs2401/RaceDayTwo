@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
 import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,8 +34,10 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO - change hard coded defaults ?
         // Set the view model initial state.
-        mainViewModel.initialise()
+        lRaceType = arrayListOf("R","","")
+        mainViewModel.initialise(lRaceType)
     }
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onAttach(context: Context) {
@@ -74,11 +78,12 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
         initialise()
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         //super.onDestroy()
-        Log.d("TAG","[MainFragment.onDestroy]")
+        Log.d("TAG","[MainFragment.onStop]")
         binding = null
-        super.onDestroy()    }
+        job?.cancel()
+        super.onStop()    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -99,27 +104,22 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     }
 
     override fun onButtonChecked(group: MaterialButtonToggleGroup?, checkedId: Int, isChecked: Boolean) {
-        var value = ""  // will use the button label as the value to add/remove.
+        var value = ""  // we will use the button label as the value to add/remove.
         binding?.apply {
             when (checkedId) {
                 idBtnRace.id -> {
-                    value = resources.getString(R.string.btn_lbl_R)
+                    value = idBtnRace.text.toString()// resources.getString(R.string.btn_lbl_R)
                 }
                 idBtnTrots.id -> {
-                    value = resources.getString(R.string.btn_lbl_T)
+                    value = idBtnTrots.text.toString()// resources.getString(R.string.btn_lbl_T)
                 }
                 idBtnGreyhound.id -> {
-                    value = resources.getString(R.string.btn_lbl_G)
+                    value = idBtnGreyhound.text.toString()// resources.getString(R.string.btn_lbl_G)
                 }
             }
             if (isChecked) addToTypeList(value) else removeFromTypeList(value)
-            // Must have one button checked and "R" is it.
-            if(!idBtnRace.isChecked && !idBtnTrots.isChecked && !idBtnGreyhound.isChecked) {
-                // This will fire the onButtonChecked method again, but the value won't be added a
-                // 2nd time.
-                idBtnRace.isChecked = true
-            }
         }
+        mainViewModel.setTypeFilter(lRaceType)
         Log.d("TAG", "Race type: $lRaceType")
     }
     //</editor-fold>
@@ -130,19 +130,6 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
         setUIComponents()    // toolbar title, button listeners, recyclerview etc.
         setObserve()         // observe the cache.
     }
-
-//    /**
-//     * Get preferences specific to this fragment, basically just the default meeting type (ATT).
-//     */
-//    private fun setFromPreferences() {
-//        // Get default meeting type as per preferences.
-//        val value = raceDayPreferences.getDefaultMeetingType()
-//        if(value != "") {
-//            addToTypeList(value)
-//        } else {
-//            addToTypeList(Constants.DEFAULT_MEETING_TYPE)
-//        }
-//    }
 
     /**
      * Establish the various UI components.
@@ -178,13 +165,9 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
      * Observe and filter what's coming from the cache.
      */
     private fun setObserve() {
-        lifecycleScope.launch {
+        job = lifecycleScope.launch {
             mainViewModel.getFromCache().collect { meetings ->
-//                // Filter what's from cache.
-//                val lMeetings = meetings?.filter { meeting ->
-//                    meeting.meetingType in lRaceType
-//                }
-                raceAdapter.submitList(meetings)//lMeetings)
+                raceAdapter.submitList(meetings)
             }
         }
     }
@@ -194,27 +177,49 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
      * @param value: The value to add.
      */
     private fun addToTypeList(value: String) {
-        if (lRaceType.contains(value)) {
-            return
-        } else {
-            lRaceType.add(value)
+        val ndx: Int
+        when(value) {
+            Constants.MEETING_TYPE_R -> {
+                ndx = Constants.R_INDEX
+                lRaceType[ndx] = Constants.MEETING_TYPE_R
+            }
+            Constants.MEETING_TYPE_T -> {
+                ndx = Constants.T_INDEX
+                lRaceType[ndx] = Constants.MEETING_TYPE_T
+            }
+            Constants.MEETING_TYPE_G -> {
+                ndx = Constants.G_INDEX
+                lRaceType[ndx] = Constants.MEETING_TYPE_G
+            }
         }
     }
 
     /**
-     * Remove a value to the meeting type filter.
+     * Remove a value from the meeting type filter.
      * @param value: The value to remove.
      */
     private fun removeFromTypeList(value: String) {
-        if(lRaceType.contains(value)) {
-            lRaceType.remove(value)
-        } else {
-            return
+        val ndx: Int
+        when(value) {
+            Constants.MEETING_TYPE_R -> {
+                ndx = Constants.R_INDEX
+                lRaceType[ndx] = ""
+            }
+            Constants.MEETING_TYPE_T -> {
+                ndx = Constants.T_INDEX
+                lRaceType[ndx] = ""
+            }
+            Constants.MEETING_TYPE_G -> {
+                ndx = Constants.G_INDEX
+                lRaceType[ndx] = ""
+            }
         }
     }
     //</editor-fold>
 
     // For UI components.
     private var binding : MainFragmentBinding? = null
-    private var lRaceType = arrayListOf<String>()
+    private var lRaceType = Constants.MEETING_DEFAULT
+    private var job: Job? = null
+
 }

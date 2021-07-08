@@ -18,5 +18,18 @@
         android:name="com.mcssoft.racedaytwo.ui.fragment.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/main_fragment">
+        <action
+            android:id="@+id/action_main_fragment_to_meeting_fragment"
+            app:destination="@id/id_meeting_fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/id_meeting_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.MeetingFragment"
+        android:label="MeetingFragment"
+        tools:layout="@layout/meeting_fragment">
+        <action
+            android:id="@+id/action_meeting_fragment_to_main_fragment"
+            app:destination="@id/id_main_fragment" />
+    </fragment>
+
 </navigation>

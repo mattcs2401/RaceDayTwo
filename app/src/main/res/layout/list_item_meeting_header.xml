@@ -31,36 +31,36 @@
 
             <TextView
                 android:id="@+id/id_tv_meeting_code"
-                android:text="@{meeting.meetingCode}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:text="@{meeting.meetingCode}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/id_tv_venue_name"
-                android:text="@{meeting.venueName}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:text="@{meeting.venueName}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/id_tv_meeting_code"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/id_tv_meeting_type"
-                android:text="@{meeting.meetingType}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{meeting.meetingType}"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

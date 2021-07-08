@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Note: This just a placeholder ATT, to be built later (uses data binding). -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -49,17 +50,60 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/id_tv_abandoned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/msg_tba"
+                android:text="Abandoned"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/id_tv_abandoned_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{meeting.abandoned}"
+                app:layout_constraintStart_toEndOf="@+id/id_tv_abandoned"
+                app:layout_constraintTop_toTopOf="@+id/id_tv_abandoned" />
+
+            <TextView
+                android:id="@+id/id_tv_num_races"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:text="Races"
+                app:layout_constraintStart_toEndOf="@+id/id_tv_abandoned_response"
+                app:layout_constraintTop_toTopOf="@+id/id_tv_abandoned" />
+
+            <TextView
+                android:id="@+id/id_tv_num_races_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{meeting.hiRaceNo}"
+                app:layout_constraintStart_toEndOf="@+id/id_tv_num_races"
+                app:layout_constraintTop_toTopOf="@+id/id_tv_num_races" />
+
+            <TextView
+                android:id="@+id/id_tv_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:text="Details"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
+<!--<Meeting MeetingType="R" Abandoned="N" WeatherChanged="Y" TrackChanged="N" VenueName="Ipswich"
+ SortOrder="0" HiRaceNo="10" NextRaceNo="10" MeetingCode="QR" MtgId="1850213120">-->

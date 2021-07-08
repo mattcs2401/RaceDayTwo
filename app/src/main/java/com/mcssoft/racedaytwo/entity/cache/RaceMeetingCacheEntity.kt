@@ -5,21 +5,20 @@ package com.mcssoft.racedaytwo.entity.cache
  * includes a flag for recyclerview item expand purposes.
  */
 class RaceMeetingCacheEntity {
-    var id: Long? = null               // just mapped, use TBA.
-    var mtgId: String = ""
-    var meetingCode: String = ""
-    var meetingType: String = ""
-    var venueName: String = ""
-    var abandoned: String = ""
+    var id: Long? = null          // just mapped, use TBA.
+    var mtgId: String = ""        // "    "       "   "
+    var meetingCode: String = ""  //
+    var meetingType: String = ""  //
+    var venueName: String = ""    //
+    var abandoned: String = ""    //
+    var hiRaceNo: String = ""     //
 
     // Adapter flag, if true, signifies an adapter view type change.
     var meta: Boolean = false
 
 //    var weatherChanged: String = ""
 //    var venueName: String = ""
-//    var hiRaceNo: String = ""
 //    var trackChanged: String = ""
 //    var nextRaceNo: String = ""
 //    var sortOrder: String = ""
-
 }

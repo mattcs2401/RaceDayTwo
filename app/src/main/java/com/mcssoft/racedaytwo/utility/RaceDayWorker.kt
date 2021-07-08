@@ -27,13 +27,13 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             if(meetingsListing.size > 0) {
                 // Write the new details.
                 for (item in meetingsListing) {
-                    // TODO - filter this in the parse for meeting type S.
                     val meeting = RaceMeetingDBEntity()
                     meeting.mtgId = item["MtgId"]!!
                     meeting.meetingCode = item["MeetingCode"]!!
                     meeting.meetingType = item["MeetingType"]!!
                     meeting.venueName = item["VenueName"]!!
                     meeting.abandoned = item["Abandoned"]!!
+                    meeting.hiRaceNo = item["HiRaceNo"]!!
                     // Insert meeting object into the the database.
                     raceMeetingDao.insertMeeting(meeting)
                 }

@@ -25,7 +25,8 @@ class RaceDayRepository @Inject constructor(context: Context) {
     private var lRaceDay: List<RaceMeetingCacheEntity>? = null
 
     /**
-     * TBA.
+     * Get from the current copy of the cache.
+     * @param lFilterVals: Array of values representing the Meeting type to filter on.
      */
     fun getFromCache(lFilterVals: ArrayList<String>) = flow {
         emit(lRaceDay?.filter { meeting ->
@@ -55,11 +56,3 @@ class RaceDayRepository @Inject constructor(context: Context) {
     }
 
 }
-//fun fetchFromCache() = flow {
-//    createCache()
-//    emit(lRaceDay)
-//}.flowOn(Dispatchers.IO)
-//                // Filter what's from cache.
-//                val lMeetings = meetings?.filter { meeting ->
-//                    meeting.meetingType in lRaceType
-//                }

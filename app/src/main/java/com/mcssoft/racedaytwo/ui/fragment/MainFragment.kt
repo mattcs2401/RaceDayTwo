@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,14 +31,14 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     @Inject lateinit var raceAdapter: RaceMeetingAdapter
 //    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
+    //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO - change hard coded defaults ?
-        // Set the view model initial state.
-        lRaceType = arrayListOf("R","","")
+        // TODO - change hard coded defaults ? Get from a datastore ?
+        lRaceType = Constants.MEETING_DEFAULT
         mainViewModel.initialise(lRaceType)
     }
-    //<editor-fold default state="collapsed" desc="Region: Lifecycle">
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         var backPressedTime: Long = 0
@@ -64,26 +63,33 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        Log.d("TAG","[MainFragment.onCreateView]")
+//        Log.d("TAG","[MainFragment.onCreateView]")
         return MainFragmentBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("TAG","[MainFragment.onViewCreated]")
+//        Log.d("TAG","[MainFragment.onViewCreated]")
         // set view binding.
         binding = MainFragmentBinding.bind(view)
         // set options menu (on toolbar ATT).
         setHasOptionsMenu(true)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("TAG","[MainFragment.onStart]")
         // Setup the UI and related components.
-        initialise()
+        setUIComponents()    // toolbar title, button listeners, recyclerview etc.
+        setCollect()         // observe the cache.
     }
 
     override fun onStop() {
         //super.onDestroy()
         Log.d("TAG","[MainFragment.onStop]")
         binding = null
-        job?.cancel()
-        super.onStop()    }
+        collectJob?.cancel()
+        super.onStop()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -108,29 +114,28 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
         binding?.apply {
             when (checkedId) {
                 idBtnRace.id -> {
-                    value = idBtnRace.text.toString()// resources.getString(R.string.btn_lbl_R)
+                    value = idBtnRace.text.toString()
                 }
                 idBtnTrots.id -> {
-                    value = idBtnTrots.text.toString()// resources.getString(R.string.btn_lbl_T)
+                    value = idBtnTrots.text.toString()
                 }
                 idBtnGreyhound.id -> {
-                    value = idBtnGreyhound.text.toString()// resources.getString(R.string.btn_lbl_G)
+                    value = idBtnGreyhound.text.toString()
                 }
             }
             if (isChecked) addToTypeList(value) else removeFromTypeList(value)
         }
+        // Cancel the current collect.
+        collectJob?.cancel()
+        // Update the type filter.
         mainViewModel.setTypeFilter(lRaceType)
-        Log.d("TAG", "Race type: $lRaceType")
+        // Restart the collect.
+        setCollect()
+//        Log.d("TAG", "[Race type: $lRaceType]")
     }
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Utility">
-    private fun initialise() {
-//        setFromPreferences() // basically the default meeting type.
-        setUIComponents()    // toolbar title, button listeners, recyclerview etc.
-        setObserve()         // observe the cache.
-    }
-
     /**
      * Establish the various UI components.
       */
@@ -162,10 +167,10 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     }
 
     /**
-     * Observe and filter what's coming from the cache.
+     * Collect what's coming from the cache.
      */
-    private fun setObserve() {
-        job = lifecycleScope.launch {
+    private fun setCollect() {
+        collectJob = lifecycleScope.launch {
             mainViewModel.getFromCache().collect { meetings ->
                 raceAdapter.submitList(meetings)
             }
@@ -196,7 +201,7 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     /**
      * Remove a value from the meeting type filter.
-     * @param value: The value to remove.
+     * @param value: The value to remove. Array element replaced with "".
      */
     private fun removeFromTypeList(value: String) {
         val ndx: Int
@@ -220,6 +225,6 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     // For UI components.
     private var binding : MainFragmentBinding? = null
     private var lRaceType = Constants.MEETING_DEFAULT
-    private var job: Job? = null
+    private var collectJob: Job? = null
 
 }

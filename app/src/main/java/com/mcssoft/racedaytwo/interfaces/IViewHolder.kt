@@ -11,4 +11,10 @@ interface IViewHolder {
      * @param position: The adapter position.
      */
     fun onViewHolderSelect(vhType: Int, position: Int)
+
+    /**
+     * Indicate that the "Details" of the expanded recyclerview item was selected.
+     */
+    fun onDetailsSelect()
+
 }

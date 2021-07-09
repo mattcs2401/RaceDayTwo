@@ -2,6 +2,7 @@ package com.mcssoft.racedaytwo.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
 import com.mcssoft.racedaytwo.interfaces.IViewHolder
@@ -16,6 +17,7 @@ class RaceMeetingDetailViewHolder(private val binding: ListItemMeetingDetailBind
 
     init {
         binding.clickListener = this
+        binding.idTvDetails.setOnClickListener(this)
     }
 
     internal fun bind(mtg: RaceMeetingCacheEntity) {
@@ -27,7 +29,13 @@ class RaceMeetingDetailViewHolder(private val binding: ListItemMeetingDetailBind
     }
 
     override fun onClick(view: View) {
-        iViewHolder.onViewHolderSelect(Constants.VIEW_TYPE_HEADER, adapterPosition)
+        when(view.id) {
+            R.id.id_tv_details -> {
+                iViewHolder.onDetailsSelect()
+            } else -> {
+                iViewHolder.onViewHolderSelect(Constants.VIEW_TYPE_HEADER, adapterPosition)
+            }
+        }
     }
 
 }

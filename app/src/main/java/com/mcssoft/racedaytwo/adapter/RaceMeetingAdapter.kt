@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
+import com.mcssoft.racedaytwo.interfaces.IAdapter
 import com.mcssoft.racedaytwo.interfaces.IViewHolder
 import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_DETAIL
 import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_HEADER
-import javax.inject.Inject
 
 /**
  * Class implements the RaceMeeting list adapter.
  */
-class RaceMeetingAdapter @Inject constructor()
+class RaceMeetingAdapter(private val iAdapter: IAdapter)
     : ListAdapter<RaceMeetingCacheEntity, RecyclerView.ViewHolder>(RaceMeetingDiffCallback()) , IViewHolder {
 
     //https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
@@ -40,7 +40,7 @@ class RaceMeetingAdapter @Inject constructor()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("TAG","RaceMeetingAdapter.onBindViewHolder")
+        Log.d("TAG","[RaceMeetingAdapter.onBindViewHolder]")
         when(getItemViewType(position)) {
             VIEW_TYPE_HEADER -> {
                 holder as RaceMeetingHeaderViewHolder
@@ -61,6 +61,7 @@ class RaceMeetingAdapter @Inject constructor()
         //return super.getItemViewType(position)
     }
 
+    //<editor-fold default state="collapsed" desc="Region: IViewHolder">
     override fun onViewHolderSelect(vhType: Int, position: Int) {
         when(vhType) {
             VIEW_TYPE_HEADER -> {
@@ -73,8 +74,14 @@ class RaceMeetingAdapter @Inject constructor()
         notifyItemChanged(position)
     }
 
+    override fun onDetailsSelect() {
+        // Hand back to the MainFragment.
+        iAdapter.onDetailsSelected()
+    }
+    //</editor-fold>
 }
 
+//<editor-fold default state="collapsed" desc="Region: DiffCallback">
 private class RaceMeetingDiffCallback : DiffUtil.ItemCallback<RaceMeetingCacheEntity>() {
 
     override fun areItemsTheSame(oldItem: RaceMeetingCacheEntity, newItem: RaceMeetingCacheEntity): Boolean {
@@ -86,6 +93,8 @@ private class RaceMeetingDiffCallback : DiffUtil.ItemCallback<RaceMeetingCacheEn
         // TODO - add the rest of the comparison elements.
     }
 }
+//</editor-fold>
+
 /*
   private void animateExpand() {
     RotateAnimation rotate =

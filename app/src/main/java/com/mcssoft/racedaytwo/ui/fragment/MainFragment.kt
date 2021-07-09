@@ -16,6 +16,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.RaceMeetingAdapter
 import com.mcssoft.racedaytwo.databinding.MainFragmentBinding
+import com.mcssoft.racedaytwo.interfaces.IAdapter
 import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,10 +26,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
+class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener, IAdapter {
 
     @Inject lateinit var mainViewModel: RaceDayViewModel
-    @Inject lateinit var raceAdapter: RaceMeetingAdapter
+    lateinit var raceAdapter: RaceMeetingAdapter
 //    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
@@ -69,10 +70,12 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        Log.d("TAG","[MainFragment.onViewCreated]")
-        // set view binding.
+        // Set view binding.
         binding = MainFragmentBinding.bind(view)
-        // set options menu (on toolbar ATT).
+        // Set options menu (on toolbar ATT).
         setHasOptionsMenu(true)
+        // Set the adapter.
+        raceAdapter = RaceMeetingAdapter(this)
     }
 
     override fun onStart() {
@@ -132,6 +135,13 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
         // Restart the collect.
         setCollect()
 //        Log.d("TAG", "[Race type: $lRaceType]")
+    }
+
+    //</editor-fold>
+
+    //<editor-fold default state="collapsed" desc="Region: IAdapter">
+    override fun onDetailsSelected() {
+        Toast.makeText(requireActivity(),"Details is not implemented yet.",Toast.LENGTH_SHORT).show()
     }
     //</editor-fold>
 

@@ -17,7 +17,7 @@ class RaceMeetingDetailViewHolder(private val binding: ListItemMeetingDetailBind
 
     init {
         binding.clickListener = this
-        binding.idTvDetails.setOnClickListener(this)
+        binding.detailsClickListener = this
     }
 
     internal fun bind(mtg: RaceMeetingCacheEntity) {

@@ -23,10 +23,12 @@
     <!-- Splash message. -->
     <string name="splash_message">Getting things ready.</string>
 
-    <!-- Button labels. -->
+    <!-- MainFragment button labels. -->
     <string name="btn_lbl_R">R</string>
     <string name="btn_lbl_T">T</string>
     <string name="btn_lbl_G">G</string>
+
+    <!-- MainFragment menu labels. -->
     <string name="lbl_settings">Settings</string>
 
     <!-- Keys. -->
@@ -38,4 +40,9 @@
 
     <!-- General. -->
     <string name="msg_tba">TBA - other view components.</string>
+
+    <!-- Expanded recyclerview item textview labels. -->
+    <string name="lbl_abandoned">Abandoned</string>
+    <string name="lbl_races">Races</string>
+    <string name="lbl_details">Details</string>
 </resources>

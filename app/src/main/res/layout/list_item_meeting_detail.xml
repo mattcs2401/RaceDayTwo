@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Note: This just a placeholder ATT, to be built later (uses data binding). -->
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -11,6 +9,9 @@
         <variable
             name="meeting"
             type="com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity"/>
+        <variable
+            name="detailsClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -56,7 +57,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="16dp"
-                android:text="Abandoned"
+                android:text="@string/lbl_abandoned"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:text="Races"
+                android:text="@string/lbl_races"
                 app:layout_constraintStart_toEndOf="@+id/id_tv_abandoned_response"
                 app:layout_constraintTop_toTopOf="@+id/id_tv_abandoned" />
 
@@ -94,13 +95,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:clickable="true"
-                android:text="Details"
+                android:text="@string/lbl_details"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{detailsClickListener}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

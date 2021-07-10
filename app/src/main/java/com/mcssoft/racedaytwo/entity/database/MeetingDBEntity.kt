@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "race_day_details")
-class RaceMeetingDBEntity {
+@Entity(tableName = "meeting_details")
+class MeetingDBEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id") var id: Long? = null    // value inserted by Room.
 

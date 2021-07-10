@@ -1,13 +1,13 @@
 package com.mcssoft.racedaytwo.entity.mapper
 
-import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
-import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
+import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
+import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
 
 /*
-  Utility class to map between the network entity model RaceMeetingDBEntity, and the domain model
-  RaceMeetingCacheEntity.
+  Utility class to map between the network entity model MeetingDBEntity, and the domain model
+  MeetingCacheEntity.
  */
-class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity> {
+class MeetingMapper : IMeetingMapper<MeetingDBEntity, MeetingCacheEntity> {
 /* Thought about making this a singleton but sure there would be any real benefit. */
 
     /**
@@ -15,8 +15,8 @@ class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity>
      * @param entity: The entity model.
      * @return A domain model entity.
      */
-    override fun mapFromEntity(entity: RaceMeetingDBEntity): RaceMeetingCacheEntity {
-        val raceMeetingCacheEntity = RaceMeetingCacheEntity()
+    override fun mapFromMeetingEntity(entity: MeetingDBEntity): MeetingCacheEntity {
+        val raceMeetingCacheEntity = MeetingCacheEntity()
         raceMeetingCacheEntity.id = entity.id
         raceMeetingCacheEntity.mtgId = entity.mtgId
         raceMeetingCacheEntity.meetingCode = entity.meetingCode
@@ -31,10 +31,10 @@ class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity>
     /**
      * Map from the domain model to the network entity model.
      * @param domain: The domain model.
-     * @return A network entity model.
+     * @return A database model entity.
      */
-    override fun mapToEntity(domain: RaceMeetingCacheEntity): RaceMeetingDBEntity {
-        val raceMeetingDBEntity = RaceMeetingDBEntity()
+    override fun mapToMeetingEntity(domain: MeetingCacheEntity): MeetingDBEntity {
+        val raceMeetingDBEntity = MeetingDBEntity()
         raceMeetingDBEntity.id = domain.id
         raceMeetingDBEntity.mtgId = domain.mtgId
         raceMeetingDBEntity.meetingCode = domain.meetingCode
@@ -48,7 +48,7 @@ class RaceDayMapper : IEntityMapper<RaceMeetingDBEntity, RaceMeetingCacheEntity>
     /**
      * Map from a list of Xml entity models to a list of domain entity models.
      */
-    fun mapFromEntityList(entities: List<RaceMeetingDBEntity>): List<RaceMeetingCacheEntity> {
-        return entities.map { mapFromEntity(it) }
+    fun mapFromEntityList(entities: List<MeetingDBEntity>): List<MeetingCacheEntity> {
+        return entities.map { mapFromMeetingEntity(it) }
     }
 }

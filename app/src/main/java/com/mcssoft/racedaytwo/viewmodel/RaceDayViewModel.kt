@@ -1,7 +1,7 @@
 package com.mcssoft.racedaytwo.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
+import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.ArrayList
@@ -16,7 +16,7 @@ class RaceDayViewModel @Inject constructor(private val repository: RaceDayReposi
         lFilterValues = lValues
     }
 
-    fun getFromCache(): Flow<List<RaceMeetingCacheEntity>?> =
+    fun getFromCache(): Flow<List<MeetingCacheEntity>?> =
         repository.getFromCache(lFilterValues)
 
     fun setTypeFilter(lValues: ArrayList<String>) {

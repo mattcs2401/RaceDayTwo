@@ -10,7 +10,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="meeting"
-            type="com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity"/>
+            type="com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView

@@ -22,11 +22,20 @@ class RaceDayParser(private val context: Context) {
     }
 
     /**
-     * Parse for all meetings.
+     * Parse for all Meetings.
      * @return A List<Map<LocalName, NodeValue>>.
      */
     fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
         val expr = context.resources.getString(R.string.meeting_parse_path)
+        return parse(expr)
+    }
+
+    /**
+     * Parse for all Races.
+     * @return A List<Map<LocalName, NodeValue>>.
+     */
+    fun parseForRace(): ArrayList<MutableMap<String, String>> {
+        val expr = context.resources.getString(R.string.race_parse_path)
         return parse(expr)
     }
 

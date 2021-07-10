@@ -26,10 +26,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener, IAdapter {
+class MeetingsFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListener, IAdapter {
 
     @Inject lateinit var mainViewModel: RaceDayViewModel
-    lateinit var raceAdapter: RaceMeetingAdapter
 //    @Inject lateinit var raceDayPreferences: RaceDayPreferences
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
@@ -64,12 +63,12 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-//        Log.d("TAG","[MainFragment.onCreateView]")
+//        Log.d("TAG","[MeetingsFragment.onCreateView]")
         return MainFragmentBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        Log.d("TAG","[MainFragment.onViewCreated]")
+//        Log.d("TAG","[MeetingsFragment.onViewCreated]")
         // Set view binding.
         binding = MainFragmentBinding.bind(view)
         // Set options menu (on toolbar ATT).
@@ -80,7 +79,7 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onStart() {
         super.onStart()
-        Log.d("TAG","[MainFragment.onStart]")
+        Log.d("TAG","[MeetingsFragment.onStart]")
         // Setup the UI and related components.
         setUIComponents()    // toolbar title, button listeners, recyclerview etc.
         setCollect()         // observe the cache.
@@ -88,7 +87,7 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onStop() {
         //super.onDestroy()
-        Log.d("TAG","[MainFragment.onStop]")
+        Log.d("TAG","[MeetingsFragment.onStop]")
         binding = null
         collectJob?.cancel()
         super.onStop()
@@ -96,7 +95,7 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        Log.d("TAG","[MainFragment.onCreateOptionsMenu]")
+        Log.d("TAG","[MeetingsFragment.onCreateOptionsMenu]")
         inflater.inflate(R.menu.options_menu, menu)
     }
     //</editor-fold>
@@ -156,7 +155,7 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
         binding?.apply {
             idBtnRace.isChecked = true
             // Set the toggle group listener.
-            idToggleGroup.addOnButtonCheckedListener(this@MainFragment)
+            idToggleGroup.addOnButtonCheckedListener(this@MeetingsFragment)
             // Set the recyclerview.
             idRecyclerView.apply {
                 /* Note: if setHasFixedSize(true), cause initial display issue where nothing displays
@@ -232,9 +231,10 @@ class MainFragment : Fragment(), MaterialButtonToggleGroup.OnButtonCheckedListen
     }
     //</editor-fold>
 
-    // For UI components.
-    private var binding : MainFragmentBinding? = null
-    private var lRaceType = Constants.MEETING_DEFAULT
-    private var collectJob: Job? = null
+    private var binding : MainFragmentBinding? = null      // for UI components.
+    private var lRaceType = Constants.MEETING_DEFAULT      // meeting type filter default.
+    private var collectJob: Job? = null                    // for collection start/stop etc.
+
+    private lateinit var raceAdapter: RaceMeetingAdapter   //
 
 }

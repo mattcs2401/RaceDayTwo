@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
-import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
+import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 import com.mcssoft.racedaytwo.interfaces.IAdapter
 import com.mcssoft.racedaytwo.interfaces.IViewHolder
 import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_DETAIL
@@ -18,7 +18,7 @@ import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_HEADER
  * Class implements the RaceMeeting list adapter.
  */
 class RaceMeetingAdapter(private val iAdapter: IAdapter)
-    : ListAdapter<RaceMeetingCacheEntity, RecyclerView.ViewHolder>(RaceMeetingDiffCallback()) , IViewHolder {
+    : ListAdapter<MeetingCacheEntity, RecyclerView.ViewHolder>(RaceMeetingDiffCallback()) , IViewHolder {
 
     //https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
 
@@ -75,20 +75,20 @@ class RaceMeetingAdapter(private val iAdapter: IAdapter)
     }
 
     override fun onDetailsSelect() {
-        // Hand back to the MainFragment.
+        // Hand back to the MeetingsFragment.
         iAdapter.onDetailsSelected()
     }
     //</editor-fold>
 }
 
 //<editor-fold default state="collapsed" desc="Region: DiffCallback">
-private class RaceMeetingDiffCallback : DiffUtil.ItemCallback<RaceMeetingCacheEntity>() {
+private class RaceMeetingDiffCallback : DiffUtil.ItemCallback<MeetingCacheEntity>() {
 
-    override fun areItemsTheSame(oldItem: RaceMeetingCacheEntity, newItem: RaceMeetingCacheEntity): Boolean {
+    override fun areItemsTheSame(oldItem: MeetingCacheEntity, newItem: MeetingCacheEntity): Boolean {
         return oldItem.mtgId == newItem.mtgId
     }
 
-    override fun areContentsTheSame(oldItem: RaceMeetingCacheEntity, newItem: RaceMeetingCacheEntity): Boolean {
+    override fun areContentsTheSame(oldItem: MeetingCacheEntity, newItem: MeetingCacheEntity): Boolean {
         return oldItem.mtgId == newItem.mtgId
         // TODO - add the rest of the comparison elements.
     }

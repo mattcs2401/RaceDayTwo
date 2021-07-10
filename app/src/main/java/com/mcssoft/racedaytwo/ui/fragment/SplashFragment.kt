@@ -97,7 +97,7 @@ class SplashFragment : Fragment() {
         binding.idTvProgress.text = resources.getString(R.string.init_cache)
         // Create repository cache.
         mainViewModel.createCache()
-        // Navigate to MainFragment.
+        // Navigate to MeetingsFragment.
         navigateToMain()
     }
 
@@ -184,10 +184,10 @@ class SplashFragment : Fragment() {
     }
 
     /**
-     * Programmatic navigation to MainFragment.
+     * Programmatic navigation to MeetingsFragment.
      */
     private fun navigateToMain() {
-        // Navigate to MainFragment.
+        // Navigate to MeetingsFragment.
         Navigation.findNavController(requireActivity(), R.id.id_nav_host_fragment)
             .navigate(R.id.action_splashFragment_to_mainFragment)
     }

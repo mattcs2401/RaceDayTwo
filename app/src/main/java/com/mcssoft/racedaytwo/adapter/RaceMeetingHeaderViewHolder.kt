@@ -3,7 +3,7 @@ package com.mcssoft.racedaytwo.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
-import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
+import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 import com.mcssoft.racedaytwo.interfaces.IViewHolder
 import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_DETAIL
 
@@ -18,7 +18,7 @@ class RaceMeetingHeaderViewHolder(private val binding: ListItemMeetingHeaderBind
         binding.clickListener = this
     }
 
-    internal fun bind(mtg: RaceMeetingCacheEntity) {
+    internal fun bind(mtg: MeetingCacheEntity) {
         binding.apply {
             meeting = mtg
 

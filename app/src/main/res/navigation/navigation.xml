@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/id_main_fragment"
-        android:name="com.mcssoft.racedaytwo.ui.fragment.MainFragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.MeetingsFragment"
         android:label="MainFragment"
         tools:layout="@layout/main_fragment">
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/id_meeting_fragment"
-        android:name="com.mcssoft.racedaytwo.ui.fragment.MeetingFragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.RacesFragment"
         android:label="MeetingFragment"
         tools:layout="@layout/meeting_fragment">
         <action

@@ -4,9 +4,10 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
+import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
+import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 
-@Database(entities = [RaceMeetingDBEntity::class],
+@Database(entities = [MeetingDBEntity::class, RaceDBEntity::class],
     version = 1, exportSchema = false)
 abstract class RaceDay : RoomDatabase() {
 
@@ -24,10 +25,6 @@ abstract class RaceDay : RoomDatabase() {
 //                .addCallback(db_callback)
                 .build()
                 .also { instance = it }
-        }
-
-        fun getDatabase(): Companion {
-            return RaceDay
         }
 
 //        private val db_callback = object : RoomDatabase.Callback() {

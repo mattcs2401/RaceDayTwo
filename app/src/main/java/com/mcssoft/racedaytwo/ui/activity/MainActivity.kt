@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {//}, IPopBack {
         navController = Navigation.findNavController(this, R.id.id_nav_host_fragment)
 
         /* Notes:
-          (1) This makes the MainFragment a top level destination. App starts with SplashFragment
-              and then navigation moves to MainFragment. We don't want a back arrow from MainFragment.
+          (1) This makes the MeetingsFragment a top level destination. App starts with SplashFragment
+              and then navigation moves to MeetingsFragment. We don't want a back arrow from MeetingsFragment.
               That is also trapped with an on back press callback.
           (2) Trial and error - also puts the "<-" Up nav button on the PreferencesFragment ??
         */

@@ -3,9 +3,8 @@ package com.mcssoft.racedaytwo.repository
 import android.app.Application
 import android.content.Context
 import com.mcssoft.racedaytwo.database.RaceDay
-import com.mcssoft.racedaytwo.entity.cache.RaceMeetingCacheEntity
-import com.mcssoft.racedaytwo.entity.mapper.RaceDayMapper
-import com.mcssoft.racedaytwo.utility.Constants
+import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
+import com.mcssoft.racedaytwo.entity.mapper.MeetingMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -22,7 +21,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
         .raceDayDetailsDao()
 
     // The local cache.
-    private var lRaceDay: List<RaceMeetingCacheEntity>? = null
+    private var lRaceDay: List<MeetingCacheEntity>? = null
 
     /**
      * Get from the current copy of the cache.
@@ -40,7 +39,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
     fun clearCacheAndData() {
         lRaceDay = null
         coroutineScope.launch {
-            raceDetailsDAO.deleteAll()
+            raceDetailsDAO.deleteAllMeetings()
         }
     }
 
@@ -49,7 +48,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
      * @note Meeting entities must already exist in the database.
      */
     fun createCache() {
-        val raceDayMapper = RaceDayMapper()
+        val raceDayMapper = MeetingMapper()
         coroutineScope.launch {
             lRaceDay =  raceDayMapper.mapFromEntityList(raceDetailsDAO.getMeetings())
         }

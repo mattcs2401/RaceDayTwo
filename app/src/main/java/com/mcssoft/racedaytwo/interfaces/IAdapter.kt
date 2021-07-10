@@ -1,9 +1,9 @@
 package com.mcssoft.racedaytwo.interfaces
 
 /**
- * Interface between the MainFragment and RaceMeetingAdapter. Implemented by the MainFragment and
+ * Interface between the MeetingsFragment and RaceMeetingAdapter. Implemented by the MeetingsFragment and
  * passed as a constructor parameter to the RaceMeetingAdapter.
- * Note: Basically used to chain IViewHolder back to the MainFragment.
+ * Note: Basically used to chain IViewHolder back to the MeetingsFragment.
  */
 interface IAdapter {
 

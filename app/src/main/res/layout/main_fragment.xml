@@ -5,7 +5,7 @@
     android:id="@+id/id_main_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.MainFragment">
+    tools:context=".ui.fragment.MeetingsFragment">
 
     <ProgressBar
         android:id="@+id/id_progress_bar"

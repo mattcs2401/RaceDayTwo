@@ -5,6 +5,6 @@
     android:id="@+id/id_meeting_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.MeetingFragment">
+    tools:context=".ui.fragment.RacesFragment">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

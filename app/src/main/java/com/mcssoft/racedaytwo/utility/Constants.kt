@@ -2,7 +2,7 @@ package com.mcssoft.racedaytwo.utility
 
 object Constants {
 
-    // MainFragment back press interval time (between presses).
+    // MeetingsFragment back press interval time (between presses).
     const val BACK_PRESS_TIME: Long = 2000
 
     // Default, or error values.

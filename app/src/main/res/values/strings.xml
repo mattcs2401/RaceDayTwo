@@ -13,6 +13,7 @@
 
     <!-- XPath parse paths. -->
     <string name="meeting_parse_path">/RaceDay/Meeting</string>
+    <string name="race_parse_path">/RaceDay/Meeting/Race</string>
 
     <!-- Notification. -->
     <string name="init_cache">Initialing the cache.</string>
@@ -23,12 +24,12 @@
     <!-- Splash message. -->
     <string name="splash_message">Getting things ready.</string>
 
-    <!-- MainFragment button labels. -->
+    <!-- MeetingsFragment button labels. -->
     <string name="btn_lbl_R">R</string>
     <string name="btn_lbl_T">T</string>
     <string name="btn_lbl_G">G</string>
 
-    <!-- MainFragment menu labels. -->
+    <!-- MeetingsFragment menu labels. -->
     <string name="lbl_settings">Settings</string>
 
     <!-- Keys. -->

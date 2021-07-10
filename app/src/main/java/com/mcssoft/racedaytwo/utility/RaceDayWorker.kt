@@ -6,7 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.database.RaceDay
-import com.mcssoft.racedaytwo.entity.database.RaceMeetingDBEntity
+import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -27,7 +27,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             if(meetingsListing.size > 0) {
                 // Write the new details.
                 for (item in meetingsListing) {
-                    val meeting = RaceMeetingDBEntity()
+                    val meeting = MeetingDBEntity()
                     meeting.mtgId = item["MtgId"]!!
                     meeting.meetingCode = item["MeetingCode"]!!
                     meeting.meetingType = item["MeetingType"]!!

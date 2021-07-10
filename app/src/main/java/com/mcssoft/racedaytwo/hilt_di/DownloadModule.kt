@@ -1,7 +1,7 @@
 package com.mcssoft.racedaytwo.hilt_di
 
 import android.content.Context
-import com.mcssoft.racedaytwo.utility.RaceDownloadManager
+import com.mcssoft.racedaytwo.utility.MeetingDownloadManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,8 +15,8 @@ object DownloadModule {
 
     @Singleton
     @Provides
-    fun provideDownloadManager(@ApplicationContext context: Context): RaceDownloadManager {
-        return RaceDownloadManager(context)
+    fun provideDownloadManager(@ApplicationContext context: Context): MeetingDownloadManager {
+        return MeetingDownloadManager(context)
     }
 
 }

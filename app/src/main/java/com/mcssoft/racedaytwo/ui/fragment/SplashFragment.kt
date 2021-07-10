@@ -19,11 +19,10 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
-import com.mcssoft.racedaytwo.repository.RaceDayRepository
 import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.utility.RaceDayUtilities
 import com.mcssoft.racedaytwo.utility.RaceDayWorker
-import com.mcssoft.racedaytwo.utility.RaceDownloadManager
+import com.mcssoft.racedaytwo.utility.MeetingDownloadManager
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -34,7 +33,7 @@ class SplashFragment : Fragment() {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
     @Inject lateinit var mainViewModel: RaceDayViewModel
-    @Inject lateinit var raceDownloadManager: RaceDownloadManager
+    @Inject lateinit var meetingDownloadManager: MeetingDownloadManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,7 +113,7 @@ class SplashFragment : Fragment() {
         // Get the network (path) url.
         val url = raceDayUtilities.createRaceDayUrl(requireContext())
         // Download file to parse later.
-        raceDownloadManager.getPage(url, path, resources.getString(R.string.main_page))
+        meetingDownloadManager.getPage(url, path, resources.getString(R.string.main_page))
     }
 
     // Receiver for the DownloadManager broadcast.

@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Simple wrapper for the DownloadManager.
  * @param context: Basically just used to get the Download service.
  */
-class RaceDownloadManager @Inject constructor(private val context: Context) {
+class MeetingDownloadManager @Inject constructor(private val context: Context) {
 
     private var downloadManager: DownloadManager =
         context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -25,7 +25,7 @@ class RaceDownloadManager @Inject constructor(private val context: Context) {
      * @param fileName: The name of the file.
      */
     fun getPage(url: String, path: String, fileName: String) {
-        Log.d("TAG","[RaceDownloadManager.downloadPage]")
+        Log.d("TAG","[MeetingDownloadManager.downloadPage]")
 
         val file = File(path, fileName)
 
@@ -47,7 +47,7 @@ class RaceDownloadManager @Inject constructor(private val context: Context) {
         ParcelFileDescriptor.AutoCloseInputStream(downloadManager.openDownloadedFile(downloadId))
 
 //    /**
-//     * Returns the cursor associated with the RaceDownloadManager.Query [query].
+//     * Returns the cursor associated with the MeetingDownloadManager.Query [query].
 //     * @Note: Basically only used by the receiver to query the download status.
 //     */
 //    fun getCursor(query: DownloadManager.Query): Cursor = downloadManager.query(query)

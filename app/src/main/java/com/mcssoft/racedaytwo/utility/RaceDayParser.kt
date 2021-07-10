@@ -18,7 +18,7 @@ class RaceDayParser(private val context: Context) {
     private var inStream: InputStream? = null
 
     constructor(context: Context, downloadId: Long): this(context) {
-        inStream = RaceDownloadManager(context).getDownloadAsStream(downloadId)
+        inStream = MeetingDownloadManager(context).getDownloadAsStream(downloadId)
     }
 
     /**
@@ -98,7 +98,7 @@ class RaceDayParser(private val context: Context) {
 //     * @param downloadId: The download id.
 //     */
 //    fun setInputStream(downloadId: Long) {
-//        inStream = RaceDownloadManager(context).getDownloadAsStream(downloadId)
+//        inStream = MeetingDownloadManager(context).getDownloadAsStream(downloadId)
 //    }
 
 //    /**

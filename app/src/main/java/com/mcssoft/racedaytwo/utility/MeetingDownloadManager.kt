@@ -2,9 +2,11 @@ package com.mcssoft.racedaytwo.utility
 
 import android.app.DownloadManager
 import android.content.Context
+import android.database.Cursor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Log
+import android.widget.Toast
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
@@ -18,6 +20,8 @@ class MeetingDownloadManager @Inject constructor(private val context: Context) {
     private var downloadManager: DownloadManager =
         context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
+    private var enqueueId: Long = Constants.MINUS_ONE_L
+
     /**
      * Basically a simple wrapper for the DownloadManager.enqueue()
      * @param url: The network url to download from.
@@ -25,7 +29,7 @@ class MeetingDownloadManager @Inject constructor(private val context: Context) {
      * @param fileName: The name of the file.
      */
     fun getPage(url: String, path: String, fileName: String) {
-        Log.d("TAG","[MeetingDownloadManager.downloadPage]")
+        Log.d("TAG","[MeetingDownloadManager.getPage]")
 
         val file = File(path, fileName)
 
@@ -36,7 +40,7 @@ class MeetingDownloadManager @Inject constructor(private val context: Context) {
             //.setTitle(context.resources.getString(R.string.raceday_downloading))
             //.setDescription(context.resources.getString(R.string.downloading_details_for_raceday))
 
-        downloadManager.enqueue(dlRequest)
+        enqueueId = downloadManager.enqueue(dlRequest)
     }
 
     /**
@@ -46,11 +50,35 @@ class MeetingDownloadManager @Inject constructor(private val context: Context) {
     fun getDownloadAsStream(downloadId: Long): InputStream =
         ParcelFileDescriptor.AutoCloseInputStream(downloadManager.openDownloadedFile(downloadId))
 
-//    /**
-//     * Returns the cursor associated with the MeetingDownloadManager.Query [query].
-//     * @Note: Basically only used by the receiver to query the download status.
-//     */
-//    fun getCursor(query: DownloadManager.Query): Cursor = downloadManager.query(query)
+    /**
+     * Get the id returned by the enqueue() operation.
+     */
+    fun getEnqueueId() = enqueueId
+
+    /**
+     * Returns the cursor associated with the MeetingDownloadManager.Query [query].
+     * @param dmQuery: The Query.
+     * @Note: Basically only used by the receiver to query the download status.
+     */
+    fun getCursor(dmQuery: DownloadManager.Query): Cursor = downloadManager.query(dmQuery)
+
+    /**
+     * Get the status of the download.
+     * @return An array of values. TBA
+     */
+    fun getDownloadStatus(): Int {
+        val query = DownloadManager.Query()
+        query.setFilterById(getEnqueueId())
+        val cursor = getCursor(query)
+
+        if(cursor.moveToFirst()) {
+            val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+            val status = cursor.getInt(columnIndex)
+            return status
+        } else {
+            return Constants.MINUS_ONE_L.toInt()
+        }
+    }
 
 }
 /*

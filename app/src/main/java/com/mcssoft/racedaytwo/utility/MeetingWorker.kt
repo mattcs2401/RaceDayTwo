@@ -3,14 +3,22 @@ package com.mcssoft.racedaytwo.utility
 import android.app.Application
 import android.content.Context
 import androidx.work.CoroutineWorker
+import androidx.work.Data
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RaceDayWorker(private val context: Context, private val params: WorkerParameters)
+/**
+ * Class to:
+ *  -> Parse the Meeting elements from the downloaded file.
+ *  -> Create Meeting objects as an output from the parsing.
+ *  -> Write them to the database.
+ */
+class MeetingWorker(private val context: Context, private val params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -22,7 +30,7 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             // Initialise parser.
             val raceDayParser = RaceDayParser(context, downloadId)
             // Get the list of meetings.
-            val meetingsListing = raceDayParser.parseForMeeting()
+            val meetingsListing = raceDayParser.parseForMeetings()
 
             if(meetingsListing.size > 0) {
                 // Write the new details.
@@ -42,7 +50,8 @@ class RaceDayWorker(private val context: Context, private val params: WorkerPara
             }
             Result.success()
         } catch (ex: Throwable) {
-            Result.failure()
+            val data = workDataOf("key_result_failure" to ("""Message: ${ex.message} Cause: ${ex.cause}"""))
+            Result.failure(data)
         } finally {
             // TBA
         }

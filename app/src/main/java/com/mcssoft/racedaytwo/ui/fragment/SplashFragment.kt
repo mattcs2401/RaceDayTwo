@@ -19,13 +19,11 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
-import com.mcssoft.racedaytwo.utility.Constants
-import com.mcssoft.racedaytwo.utility.RaceDayUtilities
-import com.mcssoft.racedaytwo.utility.RaceDayWorker
-import com.mcssoft.racedaytwo.utility.MeetingDownloadManager
+import com.mcssoft.racedaytwo.utility.*
 import com.mcssoft.racedaytwo.viewmodel.RaceDayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,7 +38,7 @@ class SplashFragment : Fragment() {
         super.onCreate(savedInstanceState)
         Log.d("TAG", "[SplashFragment.onCreate]")
 
-        downloadFilter = IntentFilter().apply {
+        meetingDownloadFilter = IntentFilter().apply {
             addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         }
 
@@ -61,7 +59,7 @@ class SplashFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d("TAG", "[SplashFragment.onStart]")
-        requireContext().registerReceiver(raceDownloadReceiver, downloadFilter)
+        requireContext().registerReceiver(meetingDownloadReceiver, meetingDownloadFilter)
         // Kick it all off.
         initialise()
     }
@@ -69,7 +67,7 @@ class SplashFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.d("TAG", "[SplashFragment.onStop]")
-        requireContext().unregisterReceiver(raceDownloadReceiver)
+        requireContext().unregisterReceiver(meetingDownloadReceiver)
     }
     //</editor-fold>
 
@@ -78,14 +76,14 @@ class SplashFragment : Fragment() {
      * Perform some preferences and file system checks and decide on the "start" type.
      */
     private fun initialise() {
-        // The use cache preference is set.
-        if (raceDayUtilities.dateCheck()) {
-            // Date is today's date.
-            reStart()
-        } else {
-            // Date isn't today's date, or date check failed as no file found.
+//        // The use cache preference is set.
+//        if (raceDayUtilities.dateCheck()) {
+//            // Date is today's date.
+//            reStart()
+//        } else {
+//            // Date isn't today's date, or date check failed as no file found.
             cleanStart()
-        }
+//        }
     }
 
     /**
@@ -95,7 +93,7 @@ class SplashFragment : Fragment() {
         Log.d("TAG", "[SplashFragment.reStart]")
         binding.idTvProgress.text = resources.getString(R.string.init_cache)
         // Create repository cache.
-        mainViewModel.createCache()
+        mainViewModel.createMeetingsCache()
         // Navigate to MeetingsFragment.
         navigateToMain()
     }
@@ -117,26 +115,25 @@ class SplashFragment : Fragment() {
     }
 
     // Receiver for the DownloadManager broadcast.
-    private var raceDownloadReceiver = object : BroadcastReceiver() {
+    private var meetingDownloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when(intent.action) {
+            // TODO - download status check, e.g. the download can fail 404, but still broadcast
+            //  download completed, i.e. download can be completed but not successful.
+            when (intent.action) {
                 DownloadManager.ACTION_DOWNLOAD_COMPLETE -> {
-                    Log.d("TAG","[DownloadManager.ACTION_DOWNLOAD_COMPLETE]")
-
-                    // Get the file id of the downloaded file.
-                    val fileId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,
-                        Constants.MINUS_ONE_L)
-
-                    if(fileId != Constants.MINUS_ONE_L) {
-                        // Download was successful (ATT testing ?).
-                        Toast.makeText(context, "Download successful. File id=$fileId", Toast.LENGTH_SHORT).show()
-                        // Parse the file data.
-                        parseFileData(context, fileId)
-                    } else {
-                        // TODO - some sort of retry strategy based on the DownloadManager COLUMN_REASON
-                        //  and COLUMN_STATUS codes.
-                        // Download was not successful.
-                        Toast.makeText(context, "Download not successful.", Toast.LENGTH_SHORT).show()
+                    Log.d("TAG", "[DownloadManager.ACTION_DOWNLOAD_COMPLETE]")
+                    when (meetingDownloadManager.getDownloadStatus()) {
+                        DownloadManager.STATUS_SUCCESSFUL -> {
+                            Log.d("TAG", "[DownloadManager.STATUS_SUCCESSFUL]")
+                            val fileId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, Constants.MINUS_ONE_L)
+                            Toast.makeText(context, "Download successful. File id=$fileId", Toast.LENGTH_SHORT).show()
+                            parseFileData(context, fileId)
+                        }
+                        DownloadManager.STATUS_FAILED -> {
+                            // TODO - how many times do we try this if it keeps happening.
+                            Log.d("TAG", "[DownloadManager.STATUS_FAILED]: cleanStart()")
+                            cleanStart()
+                        }
                     }
                 }
             }
@@ -149,34 +146,71 @@ class SplashFragment : Fragment() {
      * @param fileId: Id of the downloaded file.
      */
     private fun parseFileData(context: Context, fileId: Long) {
+        // Downloaded file id is input data.
         val workData = workDataOf(context.resources.getString(R.string.key_download_id) to fileId)
-        val raceDayWorker = OneTimeWorkRequestBuilder<RaceDayWorker>()
-            .setInputData(workData).
-            build()
+        // Create MeetingWorker.
+        val meetingWorker = OneTimeWorkRequestBuilder<MeetingWorker>()
+            .setInputData(workData)
+            .build()
+        // Create RaceWorker.
+        val raceWorker = OneTimeWorkRequestBuilder<RaceWorker>()
+            .setInputData(workData)
+            .build()
+        // WorkManager instance.
         val workManager = WorkManager.getInstance(requireContext())
-        workManager.enqueue(raceDayWorker)
+        // Chain and enqueue.
+        workManager.beginWith(meetingWorker)
+            .then(raceWorker)
+            .enqueue()
+        // Meetings observer.
+        observeMeetings(workManager, meetingWorker.id)
+        // Races observer.
+        observeRaces(workManager, raceWorker.id)
+    }
 
-        // Observe.
-        workManager.getWorkInfoByIdLiveData(raceDayWorker.id).observe(viewLifecycleOwner) { workInfo ->
+    private fun observeMeetings(workManager: WorkManager, workerId: UUID) {
+        workManager.getWorkInfoByIdLiveData(workerId).observe(viewLifecycleOwner) { workInfo ->
             when(workInfo.state) {
-                WorkInfo.State.ENQUEUED -> { Log.d("TAG", "[WorkInfo.State.Enqueued]") }
-                WorkInfo.State.RUNNING -> { Log.d("TAG", "[WorkInfo.State.Running]") }
-                WorkInfo.State.BLOCKED -> { Log.d("TAG", "[WorkInfo.State.Blocked]") }
-                WorkInfo.State.CANCELLED -> { Log.d("TAG", "[WorkInfo.State.Cancelled]") }
+                WorkInfo.State.ENQUEUED -> { Log.d("TAG", "[MeetingWorker:WorkInfo.State.Enqueued]") }
+                WorkInfo.State.RUNNING -> { Log.d("TAG", "[MeetingWorker:WorkInfo.State.Running]") }
+                WorkInfo.State.BLOCKED -> { Log.d("TAG", "[MeetingWorker:WorkInfo.State.Blocked]") }
+                WorkInfo.State.CANCELLED -> { Log.d("TAG", "[MeetingWorker:WorkInfo.State.Cancelled]") }
                 WorkInfo.State.SUCCEEDED -> {
-                    Log.d("TAG", "[WorkInfo.State.Succeeded]")
-                    mainViewModel.createCache()
+                    Log.d("TAG", "[MeetingWorker:WorkInfo.State.Succeeded]")
+                    mainViewModel.createMeetingsCache()
                     navigateToMain()
                 }
                 WorkInfo.State.FAILED -> {
-                    // TODO - some sort of retry mechanism, maybe through a dialog. At least need to
-                    //        notify somehow, not just continually sit there.
-                    Log.d("TAG", "[WorkInfo.State.Failed]")
-                    // TBA.
-                    workInfo.outputData.getString("key_result_failure")?.let { Log.d("TAG", it) }
-                    workInfo.outputData.getString("key_msg")?.let { Log.d("TAG", it) }
+                    // TODO - some sort of retry mechanism.
+                    Log.d("TAG", "[MeetingWorker:WorkInfo.State.Failed]")
+                    val message = workInfo.outputData.getString("key_result_failure")
+                    Log.d("TAG", message ?: "No error message available.")
+                    workManager.cancelWorkById(workerId)
+                    binding.idProgressBar.visibility = View.GONE
+                    binding.idTvProgress.text = message
+                }
+            }
+        }
+    }
 
-                    workManager.cancelWorkById(raceDayWorker.id)
+    private fun observeRaces(workManager: WorkManager, workerId: UUID) {
+        workManager.getWorkInfoByIdLiveData(workerId).observe(viewLifecycleOwner) { workInfo ->
+            when(workInfo.state) {
+                WorkInfo.State.ENQUEUED -> { Log.d("TAG", "[RaceWorker:WorkInfo.State.Enqueued]") }
+                WorkInfo.State.RUNNING -> { Log.d("TAG", "[RaceWorker:WorkInfo.State.Running]") }
+                WorkInfo.State.BLOCKED -> { Log.d("TAG", "[RaceWorker:WorkInfo.State.Blocked]") }
+                WorkInfo.State.CANCELLED -> { Log.d("TAG", "[RaceWorker:WorkInfo.State.Cancelled]") }
+                WorkInfo.State.SUCCEEDED -> {
+                    Log.d("TAG", "[RaceWorker:WorkInfo.State.Succeeded]")
+//                    mainViewModel.createCache()
+//                    navigateToMain()
+                }
+                WorkInfo.State.FAILED -> {
+                    // TODO - some sort of retry mechanism.
+                    Log.d("TAG", "[RaceWorker:WorkInfo.State.Failed]")
+                    val message = workInfo.outputData.getString("key_result_failure")
+                    Log.d("TAG", message ?: "No error message available.")
+                    workManager.cancelWorkById(workerId)
                 }
             }
         }
@@ -193,5 +227,5 @@ class SplashFragment : Fragment() {
     //</editor-fold>
 
     private lateinit var binding: SplashFragmentBinding
-    private lateinit var downloadFilter: IntentFilter
+    private lateinit var meetingDownloadFilter: IntentFilter
 }

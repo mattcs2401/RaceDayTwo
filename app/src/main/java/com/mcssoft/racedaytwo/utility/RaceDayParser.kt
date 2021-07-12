@@ -25,7 +25,7 @@ class RaceDayParser(private val context: Context) {
      * Parse for all Meetings.
      * @return A List<Map<LocalName, NodeValue>>.
      */
-    fun parseForMeeting(): ArrayList<MutableMap<String, String>> {
+    fun parseForMeetings(): ArrayList<MutableMap<String, String>> {
         val expr = context.resources.getString(R.string.meeting_parse_path)
         return parse(expr)
     }
@@ -34,7 +34,7 @@ class RaceDayParser(private val context: Context) {
      * Parse for all Races.
      * @return A List<Map<LocalName, NodeValue>>.
      */
-    fun parseForRace(): ArrayList<MutableMap<String, String>> {
+    fun parseForRaces(): ArrayList<MutableMap<String, String>> {
         val expr = context.resources.getString(R.string.race_parse_path)
         return parse(expr)
     }
@@ -81,26 +81,6 @@ class RaceDayParser(private val context: Context) {
     }
 
 }
-//    // Secondary constructor TBA.
-//    constructor(context: Context, inStream: InputStream) : this(context) {
-//        this.inStream = inStream
-//    }
-
-//    /**
-//     * Set the input stream value used by the XPath InputSource.
-//     * @param inStream: The input stream to use.
-//     */    fun setInputStream(inStream: InputStream) {
-//        this.inStream = inStream
-//    }
-
-//    /**
-//     * Set the current input stream based upon a download id.
-//     * @param downloadId: The download id.
-//     */
-//    fun setInputStream(downloadId: Long) {
-//        inStream = MeetingDownloadManager(context).getDownloadAsStream(downloadId)
-//    }
-
 //    /**
 //     * Parse for a specific <Race></Race> with a <Meeting></Meeting>.
 //     * @param meetingCode: The Meeting code, e.g. BR.

@@ -23,7 +23,7 @@ class RaceDayViewModel @Inject constructor(private val repository: RaceDayReposi
         lFilterValues = lValues
     }
 
-    fun createCache() = repository.createCache()
+    fun createMeetingsCache() = repository.createCache()
 
     fun clearCacheAndData() = repository.clearCacheAndData()
 

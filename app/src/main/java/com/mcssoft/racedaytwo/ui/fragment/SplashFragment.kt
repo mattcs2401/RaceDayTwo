@@ -27,7 +27,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashFragment : Fragment() {
+class SplashFragment : Fragment(), View.OnClickListener {
 
     @Inject lateinit var raceDayUtilities: RaceDayUtilities
     @Inject lateinit var mainViewModel: RaceDayViewModel
@@ -41,19 +41,14 @@ class SplashFragment : Fragment() {
         meetingDownloadFilter = IntentFilter().apply {
             addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         }
-
-        // TODO - the very first time the app is run, the datastore won't exist.
+    // TODO - the very first time the app is run, the datastore won't exist.
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d("TAG", "[SplashFragment.onCreateView]")
-        return SplashFragmentBinding.inflate(inflater, container, false).root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("TAG", "[SplashFragment.onViewCreated]")
-        binding = SplashFragmentBinding.bind(view)
+        _binding = SplashFragmentBinding.inflate(inflater, container, false)
+        binding.clickListener = this
+        return binding.root
     }
 
     override fun onStart() {
@@ -68,6 +63,21 @@ class SplashFragment : Fragment() {
         super.onStop()
         Log.d("TAG", "[SplashFragment.onStop]")
         requireContext().unregisterReceiver(meetingDownloadReceiver)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    //</editor-fold>
+
+    //<editor-fold default state="collapsed" desc="Region: Listener">
+    override fun onClick(view: View) {
+        when(view.id) {
+            R.id.id_btn_refresh -> {
+                cleanStart()
+            }
+        }
     }
     //</editor-fold>
 
@@ -99,9 +109,18 @@ class SplashFragment : Fragment() {
     }
 
     /**
-     * Perform a "clean" start (basically delete everything, re-download and recreate).
+     * Perform a "clean" start (basically delete everything, re-download and recreate cache and
+     * backing data).
      */
     private fun cleanStart() {
+        // If was previously made visible from a download failure, then make invisible. If text was
+        // previously changed due to a download failure, then change back.
+        binding.apply {
+            idProgressBar.visibility = View.VISIBLE
+            idBtnRefresh.visibility = View.INVISIBLE
+            idTvProgress.text = resources.getString(R.string.splash_message)
+        }
+
         Log.d("TAG", "[SplashFragment.cleanStart]")
         val path = raceDayUtilities.getPrimaryStoragePath()
         // Delete whatever file is there.
@@ -109,7 +128,8 @@ class SplashFragment : Fragment() {
         // Clear cache and underlying data.
         mainViewModel.clearCacheAndData()
         // Get the network (path) url.
-        val url = raceDayUtilities.createRaceDayUrl(requireContext())
+        val url = raceDayUtilities.createRaceDayUrl()
+        Log.d("TAG", "URL: $url")
         // Download file to parse later.
         meetingDownloadManager.getPage(url, path, resources.getString(R.string.main_page))
     }
@@ -131,8 +151,15 @@ class SplashFragment : Fragment() {
                         }
                         DownloadManager.STATUS_FAILED -> {
                             // TODO - how many times do we try this if it keeps happening.
-                            Log.d("TAG", "[DownloadManager.STATUS_FAILED]: cleanStart()")
-                            cleanStart()
+                            Log.d("TAG", "[DownloadManager.STATUS_FAILED]")
+                            //cleanStart()
+                            binding.apply {
+                                idProgressBar.visibility = View.INVISIBLE
+                                idBtnRefresh.visibility = View.VISIBLE
+                                idTvProgress.text = context.getString(R.string.retry_message)
+                            }
+                        } else -> {
+                            // TBA. Some other status ?
                         }
                     }
                 }
@@ -186,8 +213,11 @@ class SplashFragment : Fragment() {
                     val message = workInfo.outputData.getString("key_result_failure")
                     Log.d("TAG", message ?: "No error message available.")
                     workManager.cancelWorkById(workerId)
-                    binding.idProgressBar.visibility = View.GONE
-                    binding.idTvProgress.text = message
+                    binding.apply {
+                        idProgressBar.visibility = View.GONE
+                        idTvProgress.text = message
+                    }
+
                 }
             }
         }
@@ -226,6 +256,7 @@ class SplashFragment : Fragment() {
     }
     //</editor-fold>
 
-    private lateinit var binding: SplashFragmentBinding
+    private var _binding: SplashFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var meetingDownloadFilter: IntentFilter
 }

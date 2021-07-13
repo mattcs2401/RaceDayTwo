@@ -24,7 +24,7 @@ class RaceDayUtilities @Inject constructor(private val context: Context) {
      * @param context: Used to access system string resources.
      * @return The formatted Url.
      */
-    fun createRaceDayUrl(context: Context): String {
+    fun createRaceDayUrl(): String {
         val baseUrl = context.resources.getString(R.string.base_url)
         val datePart = getDateToday(DateFormat.SLASH)
         val mainPage = context.resources.getString(R.string.main_page)

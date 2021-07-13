@@ -23,6 +23,11 @@
 
     <!-- Splash message. -->
     <string name="splash_message">Getting things ready.</string>
+    <!-- Retry message. -->
+    <string name="retry_message">Download failure. Select Retry</string>
+
+    <!-- SplashFragment button label.  -->
+    <string name="btn_lbl_retry">Retry</string>
 
     <!-- MeetingsFragment button labels. -->
     <string name="btn_lbl_R">R</string>
@@ -36,11 +41,6 @@
     <string name="key_download_id">key_download_id</string>
     <string name="key_use_cache">key_use_cache</string>
     <string name="key_default_meeting_type">key_default_meeting_type</string>
-
-    <!-- Preferences text. -->
-
-    <!-- General. -->
-    <string name="msg_tba">TBA - other view components.</string>
 
     <!-- Expanded recyclerview item textview labels. -->
     <string name="lbl_abandoned">Abandoned</string>

@@ -36,10 +36,10 @@ android {
 
 dependencies {
     def lifecycle_ver = '2.4.0'
-    def coroutine_ver = '1.5.0'
+    def coroutine_ver = '1.5.2'
     def nav_ver = '2.3.5'
     def room_ver = '2.4.0-rc01'
-    def hilt_models_ver = "1.0.0-alpha03"
+    def hilt_models_ver = '1.0.0-alpha03'
     def pref_ver = "1.1.1"
     def ds_ver = "1.0.0"
     def work_ver = "2.7.1"

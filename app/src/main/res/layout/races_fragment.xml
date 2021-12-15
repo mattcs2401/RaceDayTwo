@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_races_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.RacesFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <!-- Meeting summary here, e.g. MeetingCode, Venue, Weather/Track detail. -->
+    <TextView
+        android:id="@+id/id_tv_lbl_meetingCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/tv_lbl_meeting_code"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/id_tv_meetingCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/id_tv_lbl_meetingCode"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/id_tv_lbl_venue_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/tv_lbl_venue_name"
+        app:layout_constraintStart_toEndOf="@+id/id_tv_meetingCode"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/id_tv_race_venue_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/id_tv_lbl_venue_name"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/id_tv_lbl_trackWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/tv_lbl_weather"
+        app:layout_constraintStart_toStartOf="@+id/id_tv_lbl_meetingCode"
+        app:layout_constraintTop_toBottomOf="@+id/id_tv_lbl_meetingCode" />
+
+    <TextView
+        android:id="@+id/id_tv_trackWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text=""
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/id_tv_lbl_trackWeather"
+        app:layout_constraintStart_toEndOf="@+id/id_tv_lbl_trackWeather" />
+
+    <TextView
+        android:id="@+id/id_tv_track"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_lbl_track"
+        app:layout_constraintBottom_toBottomOf="@+id/id_tv_trackWeather"
+        app:layout_constraintStart_toStartOf="@+id/id_tv_lbl_venue_name" />
+
+    <TextView
+        android:id="@+id/id_tv_trackDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text=""
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/id_tv_track"
+        app:layout_constraintStart_toEndOf="@+id/id_tv_track" />
+
+    <TextView
+        android:id="@+id/id_tv_track_cond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text=""
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/id_tv_trackDesc"
+        app:layout_constraintStart_toEndOf="@+id/id_tv_trackDesc" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/id_races_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        tools:context="com.mcssoft.raceday.ui.activity.MainActivity"
+        tools:listitem="@layout/list_item_race_header">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="80dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

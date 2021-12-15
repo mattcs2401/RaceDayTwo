@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/id_splash_fragment">
+
+    <!-- SplashFragment. -->
+    <fragment
+        android:id="@+id/id_splash_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.SplashFragment"
+        android:label="Splash"
+        tools:layout="@layout/splash_fragment">
+        <action
+            android:id="@+id/action_splashFragment_to_meetingFragment"
+            app:destination="@id/id_meetings_fragment">
+        </action>
+        <argument
+            android:name="refresh"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+
+    <!-- MeetingsFragment. -->
+    <fragment
+        android:id="@+id/id_meetings_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.MeetingsFragment"
+        android:label="Meetings"
+        tools:layout="@layout/meetings_fragment">
+        <action
+            android:id="@+id/action_meetingsFragment_to_splashFragment"
+            app:destination="@id/id_splash_fragment">
+            <argument
+                android:name="refresh"
+                app:argType="boolean" />
+        </action>
+        <action
+            android:id="@+id/action_meetingFragment_to_raceFragment"
+            app:destination="@id/id_races_fragment" >
+            <argument
+                android:name="meeting"
+                app:argType="com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity"/>
+        </action>
+        <action
+            android:id="@+id/action_meetingsFragment_to_settingsFragment"
+            app:destination="@+id/id_settings_fragment">
+        </action>
+        <action
+            android:id="@+id/action_meetingsFragment_to_summaryFragment"
+            app:destination="@+id/id_summary_fragment">
+        </action>
+        <argument
+            android:name="mtgFilter"
+            app:argType="string[]"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+
+    <!-- RacesFragment. -->
+    <fragment
+        android:id="@+id/id_races_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.RacesFragment"
+        android:label="Races"
+        tools:layout="@layout/races_fragment">
+        <action
+            android:id="@+id/action_racesFragment_to_meetingsFragment"
+            app:destination="@id/id_meetings_fragment" />
+        <action
+            android:id="@+id/action_racesFragment_to_runnersFragment"
+            app:destination="@id/id_runner_fragment">
+            <argument
+                android:name="race"
+                app:argType="com.mcssoft.racedaytwo.entity.cache.RaceCacheEntity" />
+        </action>
+        <!-- Argument can be nullable if it's back nav from RunnersFragment. -->
+        <argument
+            android:name="meeting"
+            app:argType="com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </fragment>
+
+    <!-- RunnersFragment. -->
+    <fragment
+        android:id="@+id/id_runner_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.RunnersFragment"
+        android:label="Runners"
+        tools:layout="@layout/runners_fragment">
+        <action
+            android:id="@+id/action_runnersFragment_to_racesFragment"
+            app:destination="@id/id_races_fragment" />
+        <argument
+            android:name="race"
+            app:argType="com.mcssoft.racedaytwo.entity.cache.RaceCacheEntity" />
+    </fragment>
+
+    <!-- SettingsFragment. -->
+    <fragment
+        android:id="@+id/id_settings_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_fragment">
+        <action
+            android:id="@+id/action_settingsFragment_to_meetingsFragment"
+            app:destination="@+id/id_meetings_fragment"/>
+    </fragment>
+
+    <!-- SummaryFragment. -->
+    <fragment
+        android:id="@+id/id_summary_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.SummaryFragment"
+        android:label="Settings"
+        tools:layout="@layout/summary_fragment">
+        <action
+            android:id="@+id/action_summaryFragment_to_meetingsFragment"
+            app:destination="@+id/id_meetings_fragment"/>
+    </fragment>
+</navigation>

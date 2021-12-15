@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ui.MainFragment">
+
+    <item android:id="@+id/id_mnu_bnv_refresh"
+        android:enabled="true"
+        android:icon="@drawable/ic_refresh_24px"
+        android:title="@string/lbl_refresh"/>
+
+    <item android:id="@+id/id_mnu_bnv_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_24px"
+        android:title="@string/lbl_settings"/>
+
+    <!-- TBA - icon. -->
+    <item android:id="@+id/id_mnu_bnv_summary"
+        android:enabled="true"
+        android:icon="@drawable/ic_summary_24px"
+        android:title="@string/lbl_summary"/>
+
+    <item android:id="@+id/id_mnu_bnv_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_24px"
+        android:title="@string/lbl_home"/>
+
+</menu>

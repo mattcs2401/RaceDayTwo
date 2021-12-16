@@ -43,8 +43,8 @@ class Downloader  @Inject constructor(private val context: Context) {
         try {
             // Open connection and get input stream.
             val httpConn = url.openConnection() as HttpURLConnection
-//            val code = httpConn.responseCode
-//            val msg = httpConn.responseMessage
+            val code = httpConn.responseCode
+            val msg = httpConn.responseMessage
             val inStream = BufferedInputStream(httpConn.inputStream)
             // Create the file.
             val file = File(context.externalCacheDir, urlPage)

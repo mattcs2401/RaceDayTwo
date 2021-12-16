@@ -118,16 +118,18 @@ class RacesFragment : Fragment(), View.OnClickListener, IRaceAdapter {
                 // Set the recycler view adapter.
                 adapter = raceAdapter
                 // Hide the progress bar when the layout is complete.
-                layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)            }
-            // Set the Meeting details in the header.
-            if (racesArgs.meeting != null) {
-                racesArgs.meeting?.let { meeting -> setHeaderDetail(meeting) }
-            } else {
-                // Back nav from Runner.
-                val meeting = racesViewModel.getMeetingFromCache(mtgId)
-                setHeaderDetail(meeting)
-          }
+                layoutManager =
+                    LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            }
         }
+        // Set the Meeting details in the header.
+        if (racesArgs.meeting != null) {
+            racesArgs.meeting?.let { meeting -> setHeaderDetail(meeting) }
+        } else {
+            // Back nav from Runner.
+            val meeting = racesViewModel.getMeetingFromCache(mtgId)
+            setHeaderDetail(meeting)
+      }
     }
 
     /**
@@ -168,6 +170,8 @@ class RacesFragment : Fragment(), View.OnClickListener, IRaceAdapter {
                 lifecycleScope.launch(Dispatchers.IO) {
                     mtgId = preferences.getMeetingId(key)
                 }
+                // From testing; needed a delay to make sure local variable is set.
+                Thread.sleep(25)
             }
         }
     }
@@ -175,20 +179,21 @@ class RacesFragment : Fragment(), View.OnClickListener, IRaceAdapter {
     /**
      * Initialise the values in the meeting details header.
      */
-    private fun setHeaderDetail(meeting: MeetingCacheEntity) {
+    private fun setHeaderDetail(mce: MeetingCacheEntity) {
         fragmentBinding?.apply {
-            idTvMeetingCode.text = meeting.meetingCode
-            idTvRaceVenueName.text = meeting.venueName
-            idTvTrackWeather.text = meeting.weatherDesc
-            idTvTrackDesc.text = meeting.trackDesc
-            idTvTrackCond.text = meeting.trackCond
+            idTvMeetingCode.text = mce.meetingCode
+            idTvRaceVenueName.text = mce.venueName
+            idTvTrackWeather.text = mce.weatherDesc
+            idTvTrackDesc.text = mce.trackDesc
+            idTvTrackCond.text = mce.trackCond
             idRacesFragment.setOnClickListener(this@RacesFragment)
         }
     }
+
     //</editor-fold>
 
-    private var collectJob: Job? = Job()                         // for collection start/stop etc.
-    private var mtgId: Long = -1                          // nav args or datastore.
+    private var collectJob: Job? = Job()                        // for collection start/stop etc.
+    private var mtgId: Long = -1                                // nav args or datastore.
     private var raceAdapter: RaceAdapter? = null                // adapter for the recyclerview.
     private lateinit var racesArgs: RacesFragmentArgs           // nav args from MeetingsFragment.
     private var fragmentBinding : RacesFragmentBinding? = null  // for UI components.

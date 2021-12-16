@@ -91,8 +91,11 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
                 eNdx = findLastRace(ndx, count)             // last Race index.
                 lRaces = listing.subList(ndx, eNdx)         // create sublist of Races.
 
-                /* TODO - Currently MeetingType is hard coded to "R". */
-                if(meeting.meetingType == "R") {
+                /* TODO - MeetingType excludes all except "R" (T and G is TBA).
+                *       - MeetingCode excludes those that end in "S" (mainly overseas races).
+                */
+                if(meeting.meetingType == "R" &&
+                        !meeting.meetingCode.endsWith("S")) {
                     // Update Meeting object with track & weather details from the Race detail. Each
                     // element in lRaces will have the same info, so just pick the first.
                     val id = writeMeeting(meeting, lRaces[0])

@@ -26,8 +26,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.mcssoft.racedaytwo.utility.UIManager
-import com.mcssoft.racedaytwo.utility.UIManager.UIMgr
+import com.mcssoft.racedaytwo.utility.NavManager
+import com.mcssoft.racedaytwo.utility.NavManager.UIMgr
 
 /**
  * Class that implements the list of Meetings.
@@ -37,7 +37,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
 
     @Inject lateinit var mainViewModel: MeetingsViewModel
     @Inject lateinit var preferences: RaceDayPreferences
-    @Inject lateinit var  uiManager: UIManager
+    @Inject lateinit var  navManager: NavManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onAttach(context: Context) {
@@ -113,7 +113,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
      * Establish the various UI components.
       */
     private fun setUIComponents() {
-        uiManager.apply {
+        navManager.apply {
             hideView(UIMgr.BOTTOM_NAV_VIEW, false)
             hideView(UIMgr.APP_BAR_VIEW, false)
             tbView.title = resources.getString(R.string.meeting_fragment_name)

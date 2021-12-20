@@ -1,9 +1,6 @@
 package com.mcssoft.racedaytwo.utility
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -12,13 +9,14 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mcssoft.racedaytwo.R
 import javax.inject.Inject
-import com.mcssoft.racedaytwo.utility.UIManager.UIMgr.BOTTOM_NAV_VIEW
-import com.mcssoft.racedaytwo.utility.UIManager.UIMgr.APP_BAR_VIEW
+import com.mcssoft.racedaytwo.utility.NavManager.UIMgr.BOTTOM_NAV_VIEW
+import com.mcssoft.racedaytwo.utility.NavManager.UIMgr.APP_BAR_VIEW
 
 /**
- * Utility class to enable or disable elements of the UI depending on what fragment is displaying.
+ * Utility class to enable or disable navigation related elements of the UI depending on what
+ * fragment is displaying.
  */
-class UIManager @Inject constructor(private val context: Context)  {
+class NavManager @Inject constructor(private val context: Context)  {
 
     enum class UIMgr {
         BOTTOM_NAV_VIEW,     // bottom navigation menu view.
@@ -120,10 +118,10 @@ class UIManager @Inject constructor(private val context: Context)  {
      * Convenience method.
      */
     fun disableAllButHome() {
-        enableHome(true)
-        enableRefresh(false)
-        enableSettings(false)
-        enableSummary(false)
+        homeMenu.isEnabled = true
+        summaryMenu.isEnabled = false
+        settingsMenu.isEnabled = false
+        refreshMenu.isEnabled = false
     }
 
 }

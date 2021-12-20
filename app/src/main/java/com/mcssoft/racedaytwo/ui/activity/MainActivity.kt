@@ -1,10 +1,8 @@
 package com.mcssoft.racedaytwo.ui.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -19,7 +17,7 @@ import com.mcssoft.racedaytwo.ui.dialog.IRefresh
 import com.mcssoft.racedaytwo.ui.dialog.RefreshDialog
 import com.mcssoft.racedaytwo.ui.fragment.MeetingsFragmentDirections
 import com.mcssoft.racedaytwo.utility.Alarm
-import com.mcssoft.racedaytwo.utility.UIManager
+import com.mcssoft.racedaytwo.utility.NavManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,7 +25,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener, IRefresh {
 
     @Inject lateinit var alarm: Alarm
-    @Inject lateinit var uiManager: UIManager
+    @Inject lateinit var navManager: NavManager
 
     private lateinit var navController: NavController
     private lateinit var bottomNavView: BottomNavigationView
@@ -118,13 +116,13 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     //</editor-fold>
 
     private fun setViews() {
-        uiManager.apply {
+        navManager.apply {
             // Establish the views with the menu manager.
-            setView(UIManager.UIMgr.BOTTOM_NAV_VIEW, bottomNavView)
-            setView(UIManager.UIMgr.APP_BAR_VIEW, appBarLayout)
+            setView(NavManager.UIMgr.BOTTOM_NAV_VIEW, bottomNavView)
+            setView(NavManager.UIMgr.APP_BAR_VIEW, appBarLayout)
             // Hide the views to start with. The fragments will change the views.
-            hideView(UIManager.UIMgr.BOTTOM_NAV_VIEW, true)
-            hideView(UIManager.UIMgr.APP_BAR_VIEW, true)
+            hideView(NavManager.UIMgr.BOTTOM_NAV_VIEW, true)
+            hideView(NavManager.UIMgr.APP_BAR_VIEW, true)
         }
     }
 

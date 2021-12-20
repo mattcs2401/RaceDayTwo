@@ -5,19 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SettingsFragmentBinding
-import com.mcssoft.racedaytwo.utility.UIManager
+import com.mcssoft.racedaytwo.utility.NavManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment: Fragment(), View.OnClickListener {
 
-    @Inject lateinit var uiManager: UIManager
+    @Inject lateinit var navManager: NavManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -46,7 +45,7 @@ class SettingsFragment: Fragment(), View.OnClickListener {
      */
     private fun setUIComponents() {
         // Set toolbar title and back nav listener.
-        uiManager.apply {
+        navManager.apply {
             tbView.title = resources.getString(R.string.settings_fragment_name)
             tbView.setNavigationOnClickListener(this@SettingsFragment)
             disableAllButHome()

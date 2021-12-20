@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.work.*
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
@@ -24,7 +22,7 @@ import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_FAILED
 import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_SUCCESS
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.Downloader
-import com.mcssoft.racedaytwo.utility.UIManager
+import com.mcssoft.racedaytwo.utility.NavManager
 import com.mcssoft.racedaytwo.viewmodel.SplashViewModel
 import com.mcssoft.racedaytwo.worker.MeetingWorker
 import com.mcssoft.racedaytwo.worker.RunnerWorker
@@ -33,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import com.mcssoft.racedaytwo.utility.UIManager.UIMgr
+import com.mcssoft.racedaytwo.utility.NavManager.UIMgr
 
 /**
  * Class that acts as a splash screen whilst downloading and parsing files, then writing the
@@ -46,7 +44,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
     @Inject lateinit var viewModel: SplashViewModel
     @Inject lateinit var preferences: RaceDayPreferences
     @Inject lateinit var downloader: Downloader
-    @Inject lateinit var uiManager: UIManager         // simply to remove any navigation options.
+    @Inject lateinit var navManager: NavManager         // simply to remove any navigation options.
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -375,11 +373,11 @@ class SplashFragment : Fragment(), View.OnClickListener {
     private fun setViews() {
         /** Note: We don't want any navigation options in the SplashFragment. **/
         // If views are visible, then hide them.
-        if(uiManager.viewVisible(UIMgr.BOTTOM_NAV_VIEW)) {
-            uiManager.hideView(UIMgr.BOTTOM_NAV_VIEW, true)
+        if(navManager.viewVisible(UIMgr.BOTTOM_NAV_VIEW)) {
+            navManager.hideView(UIMgr.BOTTOM_NAV_VIEW, true)
         }
-        if(uiManager.viewVisible(UIMgr.APP_BAR_VIEW)) {
-            uiManager.hideView(UIMgr.APP_BAR_VIEW, true)
+        if(navManager.viewVisible(UIMgr.APP_BAR_VIEW)) {
+            navManager.hideView(UIMgr.APP_BAR_VIEW, true)
         }
     }
     //</editor-fold>

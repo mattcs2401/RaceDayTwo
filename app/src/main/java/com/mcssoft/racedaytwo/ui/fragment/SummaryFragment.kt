@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.summary.SummaryAdapter
 import com.mcssoft.racedaytwo.databinding.SummaryFragmentBinding
-import com.mcssoft.racedaytwo.utility.UIManager
+import com.mcssoft.racedaytwo.utility.NavManager
 import com.mcssoft.racedaytwo.viewmodel.SummaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -26,7 +25,7 @@ import javax.inject.Inject
 class SummaryFragment: Fragment(), View.OnClickListener {
 
     @Inject lateinit var summaryViewModel: SummaryViewModel
-    @Inject lateinit var uiManager: UIManager
+    @Inject lateinit var navManager: NavManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +80,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
      */
     private fun setUIComponents() {
         // Set title and back nav listener.
-        uiManager.apply {
+        navManager.apply {
             tbView.title = resources.getString(R.string.summary_fragment_name)
             tbView.setNavigationOnClickListener(this@SummaryFragment)
             disableAllButHome()

@@ -18,6 +18,7 @@ import com.mcssoft.racedaytwo.ui.dialog.RefreshDialog
 import com.mcssoft.racedaytwo.ui.fragment.MeetingsFragmentDirections
 import com.mcssoft.racedaytwo.utility.Alarm
 import com.mcssoft.racedaytwo.utility.NavManager
+import com.mcssoft.racedaytwo.utility.NavManager.NMView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -60,10 +61,16 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         // Set listener for bottom nav menu items. Note: doesn't seem to work within the binding
         // code block.
         bottomNavView.setOnItemSelectedListener(this)
-//        bottomNavView.itemIconTintList = null
 
-        // Set the views for the menu manager.
-        setViews()
+        // Set the views for the nav manager.
+        navManager.apply {
+            // Establish the views with the menu manager.
+            setView(NMView.BOTTOM_NAV_VIEW, bottomNavView)
+            setView(NMView.APP_BAR_VIEW, appBarLayout)
+            // Hide the views to start with. The fragments will change the views.
+            hideView(NMView.BOTTOM_NAV_VIEW, true)
+            hideView(NMView.APP_BAR_VIEW, true)
+        }
     }
 
     override fun onStart() {
@@ -114,17 +121,5 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         navController.navigate(action)
     }
     //</editor-fold>
-
-    private fun setViews() {
-        navManager.apply {
-            // Establish the views with the menu manager.
-            setView(NavManager.UIMgr.BOTTOM_NAV_VIEW, bottomNavView)
-            setView(NavManager.UIMgr.APP_BAR_VIEW, appBarLayout)
-            // Hide the views to start with. The fragments will change the views.
-            hideView(NavManager.UIMgr.BOTTOM_NAV_VIEW, true)
-            hideView(NavManager.UIMgr.APP_BAR_VIEW, true)
-        }
-    }
-
 
 }

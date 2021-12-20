@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.mcssoft.racedaytwo.utility.NavManager
-import com.mcssoft.racedaytwo.utility.NavManager.UIMgr
+import com.mcssoft.racedaytwo.utility.NavManager.NMView
 
 /**
  * Class that implements the list of Meetings.
@@ -114,13 +114,10 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
       */
     private fun setUIComponents() {
         navManager.apply {
-            hideView(UIMgr.BOTTOM_NAV_VIEW, false)
-            hideView(UIMgr.APP_BAR_VIEW, false)
+            hideView(NMView.BOTTOM_NAV_VIEW, false)
+            hideView(NMView.APP_BAR_VIEW, false)
             tbView.title = resources.getString(R.string.meeting_fragment_name)
-            enableHome(false)
-            enableSummary(true)
-            enableSettings(true)
-            enableRefresh(true)
+            enableAllButHome()
         }
         // Set the adapter.
         meetingAdapter = MeetingAdapter(this)

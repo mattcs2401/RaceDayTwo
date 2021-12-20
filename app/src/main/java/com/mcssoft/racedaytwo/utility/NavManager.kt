@@ -9,8 +9,8 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mcssoft.racedaytwo.R
 import javax.inject.Inject
-import com.mcssoft.racedaytwo.utility.NavManager.UIMgr.BOTTOM_NAV_VIEW
-import com.mcssoft.racedaytwo.utility.NavManager.UIMgr.APP_BAR_VIEW
+import com.mcssoft.racedaytwo.utility.NavManager.NMView.BOTTOM_NAV_VIEW
+import com.mcssoft.racedaytwo.utility.NavManager.NMView.APP_BAR_VIEW
 
 /**
  * Utility class to enable or disable navigation related elements of the UI depending on what
@@ -18,7 +18,10 @@ import com.mcssoft.racedaytwo.utility.NavManager.UIMgr.APP_BAR_VIEW
  */
 class NavManager @Inject constructor(private val context: Context)  {
 
-    enum class UIMgr {
+    /**
+     * Nav manager specific views.
+     */
+    enum class NMView {
         BOTTOM_NAV_VIEW,     // bottom navigation menu view.
         APP_BAR_VIEW         // the app bar that contains the tool bar.
     }
@@ -66,12 +69,12 @@ class NavManager @Inject constructor(private val context: Context)  {
 
     /**
      * Set the view variables.
-     * @param uiMgr: The name of the view to set.
+     * @param NMView: The name of the view to set.
      * @param view: The view value.
      * @note This method must be called first.
      */
-    fun setView(uiMgr: UIMgr, view: View) {
-        when(uiMgr) {
+    fun setView(NMView: NMView, view: View) {
+        when(NMView) {
             BOTTOM_NAV_VIEW -> {
                 bnView = view as BottomNavigationView
                 refreshMenu = bnView.menu.findItem(R.id.id_mnu_bnv_refresh)
@@ -89,11 +92,11 @@ class NavManager @Inject constructor(private val context: Context)  {
 
     /**
      * Hide a view.
-     * @param uiMgr: The name of the view to hide.
+     * @param NMView: The name of the view to hide.
      * @param hide: True to make the view invisible, else, visible.
      */
-    fun hideView(uiMgr: UIMgr, hide: Boolean) {
-        when(uiMgr) {
+    fun hideView(NMView: NMView, hide: Boolean) {
+        when(NMView) {
             BOTTOM_NAV_VIEW -> {
                 if(hide) bnView.visibility = View.INVISIBLE else bnView.visibility = View.VISIBLE
             }
@@ -105,10 +108,10 @@ class NavManager @Inject constructor(private val context: Context)  {
 
     /**
      * Check the visibility status of a view.
-     * @param uiMgr: The name of the view to check.
+     * @param NMView: The name of the view to check.
      */
-    fun viewVisible(uiMgr: UIMgr): Boolean {
-        return when(uiMgr) {
+    fun viewVisible(NMView: NMView): Boolean {
+        return when(NMView) {
             BOTTOM_NAV_VIEW -> bnView.isVisible
             APP_BAR_VIEW -> abView.isVisible
         }
@@ -122,6 +125,16 @@ class NavManager @Inject constructor(private val context: Context)  {
         summaryMenu.isEnabled = false
         settingsMenu.isEnabled = false
         refreshMenu.isEnabled = false
+    }
+
+    /**
+     * Convenience method.
+     */
+    fun enableAllButHome() {
+        homeMenu.isEnabled = false
+        summaryMenu.isEnabled = true
+        settingsMenu.isEnabled = true
+        refreshMenu.isEnabled = true
     }
 
 }

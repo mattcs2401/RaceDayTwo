@@ -97,7 +97,7 @@ class RunnersFragment : Fragment(), View.OnClickListener, IRunnerAdapter {
         navManager.apply {
             tbView.title = resources.getString(R.string.runners_fragment_name)
             tbView.setNavigationOnClickListener(this@RunnersFragment)
-            disableAllButHome()
+//            disableAllButHome()
         }
         // Set the adapter.
         runnerAdapter = RunnerAdapter(this)

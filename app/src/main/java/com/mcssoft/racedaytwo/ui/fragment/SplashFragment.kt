@@ -23,6 +23,7 @@ import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_SUCCESS
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.Downloader
 import com.mcssoft.racedaytwo.utility.NavManager
+import com.mcssoft.racedaytwo.utility.NavManager.NMView
 import com.mcssoft.racedaytwo.viewmodel.SplashViewModel
 import com.mcssoft.racedaytwo.worker.MeetingWorker
 import com.mcssoft.racedaytwo.worker.RunnerWorker
@@ -31,7 +32,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import com.mcssoft.racedaytwo.utility.NavManager.UIMgr
 
 /**
  * Class that acts as a splash screen whilst downloading and parsing files, then writing the
@@ -373,11 +373,11 @@ class SplashFragment : Fragment(), View.OnClickListener {
     private fun setViews() {
         /** Note: We don't want any navigation options in the SplashFragment. **/
         // If views are visible, then hide them.
-        if(navManager.viewVisible(UIMgr.BOTTOM_NAV_VIEW)) {
-            navManager.hideView(UIMgr.BOTTOM_NAV_VIEW, true)
+        if(navManager.viewVisible(NMView.BOTTOM_NAV_VIEW)) {
+            navManager.hideView(NMView.BOTTOM_NAV_VIEW, true)
         }
-        if(navManager.viewVisible(UIMgr.APP_BAR_VIEW)) {
-            navManager.hideView(UIMgr.APP_BAR_VIEW, true)
+        if(navManager.viewVisible(NMView.APP_BAR_VIEW)) {
+            navManager.hideView(NMView.APP_BAR_VIEW, true)
         }
     }
     //</editor-fold>

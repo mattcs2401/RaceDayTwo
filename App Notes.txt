@@ -1,0 +1,13 @@
+-------
+Issues:
+-------
+-> Last item in recyclerview doesn't always display properly.
+-> xx
+
+-------
+Others:
+-------
+-> Put Races into time order (RacesFragment listing).
+-> Put Summary in time order.
+-> xxx
+

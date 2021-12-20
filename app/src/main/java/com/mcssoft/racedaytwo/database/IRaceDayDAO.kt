@@ -5,7 +5,7 @@ import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
 import com.mcssoft.racedaytwo.entity.database.SummaryDBEntity
 import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
-import com.mcssoft.racedaytwo.entity.tuples.MtgIdAndCode
+import com.mcssoft.racedaytwo.entity.events.MtgIdAndCode
 
 @Dao
 interface IRaceDayDAO {

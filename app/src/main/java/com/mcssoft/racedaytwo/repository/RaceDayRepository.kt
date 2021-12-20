@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.cache.SummaryCacheEntity
-import com.mcssoft.racedaytwo.entity.tuples.SelectedRunner
+import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

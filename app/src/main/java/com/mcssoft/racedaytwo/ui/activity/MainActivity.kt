@@ -1,13 +1,16 @@
 package com.mcssoft.racedaytwo.ui.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.mcssoft.racedaytwo.R
@@ -16,6 +19,7 @@ import com.mcssoft.racedaytwo.ui.dialog.IRefresh
 import com.mcssoft.racedaytwo.ui.dialog.RefreshDialog
 import com.mcssoft.racedaytwo.ui.fragment.MeetingsFragmentDirections
 import com.mcssoft.racedaytwo.utility.Alarm
+import com.mcssoft.racedaytwo.utility.UIManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,9 +27,11 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener, IRefresh {
 
     @Inject lateinit var alarm: Alarm
+    @Inject lateinit var uiManager: UIManager
 
     private lateinit var navController: NavController
     private lateinit var bottomNavView: BottomNavigationView
+    private lateinit var appBarLayout: AppBarLayout
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             setSupportActionBar(idToolbar)
             bottomNavView = idBottomNavView
             bottomNavView.visibility = View.INVISIBLE
+            appBarLayout = idAppBarLayout
         }
         supportActionBar?.setDisplayShowTitleEnabled(false)
         /* Notes:
@@ -55,6 +62,10 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         // Set listener for bottom nav menu items. Note: doesn't seem to work within the binding
         // code block.
         bottomNavView.setOnItemSelectedListener(this)
+//        bottomNavView.itemIconTintList = null
+
+        // Set the views for the menu manager.
+        setViews()
     }
 
     override fun onStart() {
@@ -72,24 +83,30 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.id_mnu_bnv_home -> {
-                if(navController.currentDestination?.id != R.id.id_meetings_fragment) {
+                if (navController.currentDestination?.id != R.id.id_meetings_fragment) {
                     navController.navigate(R.id.id_meetings_fragment)
                 }
+                return true
             }
             R.id.id_mnu_bnv_refresh -> {
                 val dialog = RefreshDialog(this)
                 dialog.show(supportFragmentManager, resources.getString(R.string.tag_refresh_dialog))
+                return true
             }
             R.id.id_mnu_bnv_summary -> {
-                val action = MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
+                val action =
+                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
                 navController.navigate(action)
+                return true
             }
             R.id.id_mnu_bnv_settings -> {
-                val action = MeetingsFragmentDirections.actionMeetingsFragmentToSettingsFragment()
+                val action =
+                    MeetingsFragmentDirections.actionMeetingsFragmentToSettingsFragment()
                 navController.navigate(action)
+                return true
             }
         }
-        return true
+        return false
     }
     //</editor-fold>
 
@@ -99,4 +116,17 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         navController.navigate(action)
     }
     //</editor-fold>
+
+    private fun setViews() {
+        uiManager.apply {
+            // Establish the views with the menu manager.
+            setView(UIManager.UIMgr.BOTTOM_NAV_VIEW, bottomNavView)
+            setView(UIManager.UIMgr.APP_BAR_VIEW, appBarLayout)
+            // Hide the views to start with. The fragments will change the views.
+            hideView(UIManager.UIMgr.BOTTOM_NAV_VIEW, true)
+            hideView(UIManager.UIMgr.APP_BAR_VIEW, true)
+        }
+    }
+
+
 }

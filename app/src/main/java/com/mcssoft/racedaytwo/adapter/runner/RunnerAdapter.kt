@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.databinding.ListItemRunnerHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.RunnerCacheEntity
-import com.mcssoft.racedaytwo.entity.tuples.SelectedRunner
+import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 
 class RunnerAdapter(private val adapter: IRunnerAdapter) :
     ListAdapter<RunnerCacheEntity, RecyclerView.ViewHolder>(RunnerDiffCallback()),

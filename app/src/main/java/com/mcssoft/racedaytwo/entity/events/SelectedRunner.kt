@@ -1,4 +1,4 @@
-package com.mcssoft.racedaytwo.entity.tuples
+package com.mcssoft.racedaytwo.entity.events
 
 /**
  * Utility class to model that a certain Runner was selected in the Runner's listing.

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,7 +15,8 @@ import com.mcssoft.racedaytwo.adapter.runner.IRunnerAdapter
 import com.mcssoft.racedaytwo.adapter.runner.RunnerAdapter
 import com.mcssoft.racedaytwo.databinding.RunnersFragmentBinding
 import com.mcssoft.racedaytwo.entity.cache.RaceCacheEntity
-import com.mcssoft.racedaytwo.entity.tuples.SelectedRunner
+import com.mcssoft.racedaytwo.entity.events.SelectedRunner
+import com.mcssoft.racedaytwo.utility.UIManager
 import com.mcssoft.racedaytwo.viewmodel.RunnersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -31,6 +31,7 @@ import javax.inject.Inject
 class RunnersFragment : Fragment(), View.OnClickListener, IRunnerAdapter {
 
     @Inject lateinit var runnersViewModel: RunnersViewModel
+    @Inject lateinit var uiManager: UIManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -92,10 +93,11 @@ class RunnersFragment : Fragment(), View.OnClickListener, IRunnerAdapter {
      * Initialise UI related components.
      */
     private fun setUIComponents() {
-        // Set title and back nav listener.
-        requireActivity().findViewById<Toolbar>(R.id.id_toolbar).apply {
-            title = resources.getString(R.string.runners_fragment_name)
-            setNavigationOnClickListener(this@RunnersFragment)
+        // Set toolbar title and back nav listener.
+        uiManager.apply {
+            tbView.title = resources.getString(R.string.runners_fragment_name)
+            tbView.setNavigationOnClickListener(this@RunnersFragment)
+            disableAllButHome()
         }
         // Set the adapter.
         runnerAdapter = RunnerAdapter(this)

@@ -24,6 +24,7 @@ import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_FAILED
 import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_SUCCESS
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.Downloader
+import com.mcssoft.racedaytwo.utility.UIManager
 import com.mcssoft.racedaytwo.viewmodel.SplashViewModel
 import com.mcssoft.racedaytwo.worker.MeetingWorker
 import com.mcssoft.racedaytwo.worker.RunnerWorker
@@ -32,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import com.mcssoft.racedaytwo.utility.UIManager.UIMgr
 
 /**
  * Class that acts as a splash screen whilst downloading and parsing files, then writing the
@@ -44,6 +46,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
     @Inject lateinit var viewModel: SplashViewModel
     @Inject lateinit var preferences: RaceDayPreferences
     @Inject lateinit var downloader: Downloader
+    @Inject lateinit var uiManager: UIManager         // simply to remove any navigation options.
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,13 +74,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        // Hide the bottom nav view.
-        requireActivity()
-            .findViewById<BottomNavigationView>(R.id.id_bottom_nav_view).visibility = View.INVISIBLE
-        // Hide app bar.
-        requireActivity()
-            .findViewById<AppBarLayout>(R.id.id_app_bar_layout).visibility = View.INVISIBLE
-        // Register receiver.
+        // Register the download receiver.
         requireContext().registerReceiver(downloadReceiver, downloadFilter)
         // Kick it all off.
         initialise()
@@ -108,6 +105,10 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * Perform file system checks and decide on the "start" type.
      */
     private fun initialise() {
+        // Set UI components. This is mainly for a Refresh which causes a programmatic back nav from
+        // the MeetingsFragment.
+        setViews()
+        //
         if (refresh || !downloader.dateCheck(resources.getString(R.string.main_page))) {
             cleanStart()
         } else {
@@ -368,6 +369,17 @@ class SplashFragment : Fragment(), View.OnClickListener {
                 appendLine()
                 append(msgText)
             }.toString()
+        }
+    }
+
+    private fun setViews() {
+        /** Note: We don't want any navigation options in the SplashFragment. **/
+        // If views are visible, then hide them.
+        if(uiManager.viewVisible(UIMgr.BOTTOM_NAV_VIEW)) {
+            uiManager.hideView(UIMgr.BOTTOM_NAV_VIEW, true)
+        }
+        if(uiManager.viewVisible(UIMgr.APP_BAR_VIEW)) {
+            uiManager.hideView(UIMgr.APP_BAR_VIEW, true)
         }
     }
     //</editor-fold>

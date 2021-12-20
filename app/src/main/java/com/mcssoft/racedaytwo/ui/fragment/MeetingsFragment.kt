@@ -8,14 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.meeting.IMeetingAdapter
 import com.mcssoft.racedaytwo.adapter.meeting.MeetingAdapter
@@ -29,6 +26,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.mcssoft.racedaytwo.utility.UIManager
+import com.mcssoft.racedaytwo.utility.UIManager.UIMgr
 
 /**
  * Class that implements the list of Meetings.
@@ -38,6 +37,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
 
     @Inject lateinit var mainViewModel: MeetingsViewModel
     @Inject lateinit var preferences: RaceDayPreferences
+    @Inject lateinit var  uiManager: UIManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onAttach(context: Context) {
@@ -113,11 +113,14 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
      * Establish the various UI components.
       */
     private fun setUIComponents() {
-        // Un-hide bottom nav view, app bar and set title in toolbar.
-        requireActivity().apply {
-            findViewById<BottomNavigationView>(R.id.id_bottom_nav_view).visibility = View.VISIBLE
-            findViewById<AppBarLayout>(R.id.id_app_bar_layout).visibility = View.VISIBLE
-            findViewById<Toolbar>(R.id.id_toolbar)?.title = resources.getString(R.string.meeting_fragment_name)
+        uiManager.apply {
+            hideView(UIMgr.BOTTOM_NAV_VIEW, false)
+            hideView(UIMgr.APP_BAR_VIEW, false)
+            tbView.title = resources.getString(R.string.meeting_fragment_name)
+            enableHome(false)
+            enableSummary(true)
+            enableSettings(true)
+            enableRefresh(true)
         }
         // Set the adapter.
         meetingAdapter = MeetingAdapter(this)

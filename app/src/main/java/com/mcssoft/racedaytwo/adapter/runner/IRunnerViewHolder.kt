@@ -1,6 +1,6 @@
 package com.mcssoft.racedaytwo.adapter.runner
 
-import com.mcssoft.racedaytwo.entity.tuples.SelectedRunner
+import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 
 /**
  * Interface between the RunnerAdapter and the ViewHolders. Implemented by the RunnerAdapter and

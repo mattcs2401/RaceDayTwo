@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.work.*
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
-import com.mcssoft.racedaytwo.entity.tuples.MtgIdAndCode
+import com.mcssoft.racedaytwo.entity.events.MtgIdAndCode
 import com.mcssoft.racedaytwo.utility.DataResult
 import com.mcssoft.racedaytwo.utility.Downloader
 import com.mcssoft.racedaytwo.utility.RaceDayParser

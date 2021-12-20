@@ -3,7 +3,7 @@ package com.mcssoft.racedaytwo.viewmodel
 import androidx.lifecycle.ViewModel
 import com.mcssoft.racedaytwo.repository.RaceDayRepository
 import com.mcssoft.racedaytwo.entity.cache.RunnerCacheEntity
-import com.mcssoft.racedaytwo.entity.tuples.SelectedRunner
+import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

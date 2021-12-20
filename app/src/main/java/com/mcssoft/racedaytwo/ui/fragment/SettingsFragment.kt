@@ -10,10 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SettingsFragmentBinding
+import com.mcssoft.racedaytwo.utility.UIManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment: Fragment(), View.OnClickListener {
+
+    @Inject lateinit var uiManager: UIManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -42,9 +46,10 @@ class SettingsFragment: Fragment(), View.OnClickListener {
      */
     private fun setUIComponents() {
         // Set toolbar title and back nav listener.
-        requireActivity().findViewById<Toolbar>(R.id.id_toolbar).apply {
-            title = resources.getString(R.string.settings_fragment_name)
-            setNavigationOnClickListener(this@SettingsFragment)
+        uiManager.apply {
+            tbView.title = resources.getString(R.string.settings_fragment_name)
+            tbView.setNavigationOnClickListener(this@SettingsFragment)
+            disableAllButHome()
         }
     }
 

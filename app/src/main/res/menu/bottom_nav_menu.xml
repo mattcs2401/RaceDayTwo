@@ -4,24 +4,19 @@
     tools:context="ui.MainFragment">
 
     <item android:id="@+id/id_mnu_bnv_refresh"
-        android:enabled="true"
-        android:icon="@drawable/ic_refresh_24px"
+        android:icon="@drawable/state_nav_item_refresh_select"
         android:title="@string/lbl_refresh"/>
 
     <item android:id="@+id/id_mnu_bnv_settings"
-        android:enabled="true"
-        android:icon="@drawable/ic_settings_24px"
+        android:icon="@drawable/state_nav_item_settings_select"
         android:title="@string/lbl_settings"/>
 
-    <!-- TBA - icon. -->
     <item android:id="@+id/id_mnu_bnv_summary"
-        android:enabled="true"
-        android:icon="@drawable/ic_summary_24px"
+        android:icon="@drawable/state_nav_item_summary_select"
         android:title="@string/lbl_summary"/>
 
     <item android:id="@+id/id_mnu_bnv_home"
-        android:enabled="true"
-        android:icon="@drawable/ic_home_24px"
+        android:icon="@drawable/state_nav_item_home_select"
         android:title="@string/lbl_home"/>
 
 </menu>

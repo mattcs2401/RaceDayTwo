@@ -1,4 +1,4 @@
-package com.mcssoft.racedaytwo.entity.tuples
+package com.mcssoft.racedaytwo.entity.events
 
 import androidx.room.ColumnInfo
 

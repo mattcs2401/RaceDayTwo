@@ -9,7 +9,7 @@ import com.mcssoft.racedaytwo.entity.mapper.MeetingMapper
 import com.mcssoft.racedaytwo.entity.mapper.RaceMapper
 import com.mcssoft.racedaytwo.entity.mapper.RunnerMapper
 import com.mcssoft.racedaytwo.entity.mapper.SummaryMapper
-import com.mcssoft.racedaytwo.entity.tuples.SelectedRunner
+import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn

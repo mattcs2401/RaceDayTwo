@@ -18,6 +18,7 @@ import com.mcssoft.racedaytwo.databinding.RacesFragmentBinding
 import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.cache.RaceCacheEntity
 import com.mcssoft.racedaytwo.repository.RaceDayPreferences
+import com.mcssoft.racedaytwo.utility.UIManager
 import com.mcssoft.racedaytwo.viewmodel.RacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +36,7 @@ class RacesFragment : Fragment(), View.OnClickListener, IRaceAdapter {
 
     @Inject lateinit var racesViewModel: RacesViewModel
     @Inject lateinit var preferences: RaceDayPreferences
+    @Inject lateinit var uiManager: UIManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -101,9 +103,10 @@ class RacesFragment : Fragment(), View.OnClickListener, IRaceAdapter {
      */
     private fun setUIComponents() {
         // Set toolbar title and back nav listener.
-        requireActivity().findViewById<Toolbar>(R.id.id_toolbar).apply {
-            title = resources.getString(R.string.races_fragment_name)
-            setNavigationOnClickListener(this@RacesFragment)
+        uiManager.apply {
+            tbView.title = resources.getString(R.string.races_fragment_name)
+            tbView.setNavigationOnClickListener(this@RacesFragment)
+            disableAllButHome()
         }
         // Set the adapter.
         raceAdapter = RaceAdapter(this)

@@ -27,11 +27,10 @@ class SummaryAdapter :
 private class SummaryDiffCallback : DiffUtil.ItemCallback<SummaryCacheEntity>() {
 
     override fun areItemsTheSame(oldItem: SummaryCacheEntity, newItem: SummaryCacheEntity): Boolean {
-        return true// oldItem.runnerNo == newItem.runnerNo
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: SummaryCacheEntity, newItem: SummaryCacheEntity): Boolean {
-        return true //oldItem.runnerNo == newItem.runnerNo
-        // TODO - add the rest of the comparison elements.
+        return oldItem.equals(newItem)
     }
 }

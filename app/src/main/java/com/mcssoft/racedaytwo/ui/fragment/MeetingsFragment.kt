@@ -143,7 +143,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
         if(collect) {
             collectJob = lifecycleScope.launch {
                 mainViewModel.getMeetingsFromCache().collect { meetings ->
-                    meetingAdapter?.submitList(meetings)
+                    meetingAdapter?.submitList(meetings?.sortedBy { it.meetingTime })
                 }
             }
         } else {

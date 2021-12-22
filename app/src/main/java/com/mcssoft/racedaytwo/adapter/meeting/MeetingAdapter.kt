@@ -86,8 +86,7 @@ private class MeetingDiffCallback : DiffUtil.ItemCallback<MeetingCacheEntity>() 
     }
 
     override fun areContentsTheSame(oldItem: MeetingCacheEntity, newItem: MeetingCacheEntity): Boolean {
-        return oldItem.meetingId == newItem.meetingId
-        // TODO - add the rest of the comparison elements.
+        return oldItem.equals(newItem)
     }
 }
 //</editor-fold>

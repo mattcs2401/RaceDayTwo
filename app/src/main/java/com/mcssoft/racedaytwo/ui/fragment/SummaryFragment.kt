@@ -113,7 +113,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         if(collect) {
             collectJob = lifecycleScope.launch {
                 summaryViewModel.getFromCache().collect { summaries ->
-                    summaryAdapter?.submitList(summaries)
+                    summaryAdapter?.submitList(summaries.sortedBy { it.raceTime })
                 }
             }
         } else {

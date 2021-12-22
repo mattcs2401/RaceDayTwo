@@ -61,12 +61,8 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
     //<editor-fold default state="collapsed" desc="Region: IMeetingViewHolder">
     override fun onExpandCollapseSelect(vhType: Int, position: Int) {
         when(vhType) {
-            VIEW_TYPE_HEADER -> {
-                getItem(position).isExpanded = false
-            }
-            VIEW_TYPE_DETAIL -> {
-                getItem(position).isExpanded = true
-            }
+            VIEW_TYPE_HEADER -> getItem(position).isExpanded = false
+            VIEW_TYPE_DETAIL -> getItem(position).isExpanded = true
         }
         notifyItemChanged(position)
     }

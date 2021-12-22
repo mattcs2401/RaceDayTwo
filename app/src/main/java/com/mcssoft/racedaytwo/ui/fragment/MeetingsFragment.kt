@@ -143,6 +143,9 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
         if(collect) {
             collectJob = lifecycleScope.launch {
                 mainViewModel.getMeetingsFromCache().collect { meetings ->
+                    // If meeting was previously expanded, then set for collapse by view holder.
+                    meetings?.forEach { if(it.isExpanded) it.isExpanded = false }
+                    // Submit the listing.
                     meetingAdapter?.submitList(meetings?.sortedBy { it.meetingTime })
                 }
             }

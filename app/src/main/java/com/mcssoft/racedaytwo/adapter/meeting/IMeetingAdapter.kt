@@ -10,8 +10,8 @@ import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 interface IMeetingAdapter {
 
     /**
-     * Indicate that the "Details" of the expanded recyclerview item was selected.
+     * Indicate that the recyclerview item was selected.
      * @param meeting: The Meeting.
      */
-    fun onDetailsSelected(meeting: MeetingCacheEntity)
+    fun onSelected(meeting: MeetingCacheEntity)
 }

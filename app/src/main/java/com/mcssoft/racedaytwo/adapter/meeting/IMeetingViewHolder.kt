@@ -15,11 +15,11 @@ interface IMeetingViewHolder {
     fun onExpandCollapseSelect(vhType: Int, position: Int)
 
     /**
-     * Indicate that the expanded Meeting recyclerview item was selected. The Meeting object is
-     * passed as a nav args to the RacesFragment and used to display header information for the
+     * Indicate that the Meeting recyclerview item was selected. The Meeting object is passed as a
+     * nav args to the RacesFragment and used to display header information for the
      * list of Races.
      * @param meeting: The Meeting.
      */
-    fun onExpandedSelect(meeting: MeetingCacheEntity)
+    fun onSelect(meeting: MeetingCacheEntity)
 
 }

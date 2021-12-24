@@ -16,11 +16,16 @@ class MeetingHeaderViewHolder(private val binding: ListItemMeetingHeaderBinding,
                               private val iViewHolder: IMeetingViewHolder)
     : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-    internal fun bind(meetingCacheEntity: MeetingCacheEntity) {
+    fun bind(meetingCacheEntity: MeetingCacheEntity) {
+        // Refer IMeetingViewHolder interface.
+        this.meetingCacheEntity = meetingCacheEntity
+
         binding.apply {
             idTvMeetingCode.text = meetingCacheEntity.meetingCode
             idTvVenueName.text = meetingCacheEntity.venueName
             idTvFirstTime.text = meetingCacheEntity.meetingTime
+
+            idCvListItemMeetingHeader.setOnClickListener(this@MeetingHeaderViewHolder)
             idArrowDown.setOnClickListener(this@MeetingHeaderViewHolder)
         }
     }
@@ -29,7 +34,9 @@ class MeetingHeaderViewHolder(private val binding: ListItemMeetingHeaderBinding,
         when (view.id) {
             R.id.id_arrow_down ->
                 iViewHolder.onExpandCollapseSelect(VIEW_TYPE_DETAIL, bindingAdapterPosition)
+            else -> iViewHolder.onSelect(meetingCacheEntity)
         }
     }
 
+    private lateinit var meetingCacheEntity: MeetingCacheEntity
 }

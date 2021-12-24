@@ -25,6 +25,12 @@ class MeetingDetailViewHolder(private val binding: ListItemMeetingDetailBinding,
             idTvFirstTime.text = meetingCacheEntity.meetingTime
             idTvAbandonedResponse.text = meetingCacheEntity.abandoned
             idTvNumRacesResponse.text = meetingCacheEntity.hiRaceNo
+            // Weather related.
+            if(meetingCacheEntity.weatherDesc != "") {
+                idTvWeather.text = meetingCacheEntity.weatherDesc
+                idTvTrackDesc.text = meetingCacheEntity.trackDesc
+                idTvTrackCond.text = meetingCacheEntity.trackCond
+            }
 
             idCvListItemMeetingDetail.setOnClickListener(this@MeetingDetailViewHolder)
             idArrowUp.setOnClickListener(this@MeetingDetailViewHolder)
@@ -36,7 +42,7 @@ class MeetingDetailViewHolder(private val binding: ListItemMeetingDetailBinding,
             R.id.id_arrow_up ->
                 iViewHolder.onExpandCollapseSelect(VIEW_TYPE_HEADER, bindingAdapterPosition)
 
-            else -> iViewHolder.onExpandedSelect(meetingCacheEntity)
+            else -> iViewHolder.onSelect(meetingCacheEntity)
         }
     }
 

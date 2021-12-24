@@ -67,9 +67,9 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
         notifyItemChanged(position)
     }
 
-    override fun onExpandedSelect(meeting: MeetingCacheEntity) {
+    override fun onSelect(meeting: MeetingCacheEntity) {
         // Hand back to the MeetingsFragment.
-        iMeetingAdapter.onDetailsSelected(meeting)
+        iMeetingAdapter.onSelected(meeting)
     }
     //</editor-fold>
 }

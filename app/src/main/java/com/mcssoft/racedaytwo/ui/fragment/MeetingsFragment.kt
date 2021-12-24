@@ -100,7 +100,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
      * Provide the navigation to the RacesFragment.
      * @param meeting: The Meeting for the navigation args.
      */
-    override fun onDetailsSelected(meeting: MeetingCacheEntity) {
+    override fun onSelected(meeting: MeetingCacheEntity) {
         // Set the navigation args (the selected Meeting) and navigate to RacesFragment.
         // Note: alternate navigate(R.id.action_a_to_b) doesn't take a navigation argument.
         val action = MeetingsFragmentDirections.actionMeetingFragmentToRaceFragment(meeting)

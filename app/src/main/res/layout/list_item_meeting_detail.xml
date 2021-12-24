@@ -21,7 +21,7 @@
             android:id="@+id/id_tv_meeting_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
             android:id="@+id/id_tv_venue_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/id_tv_meeting_code"
@@ -40,10 +40,11 @@
             android:id="@+id/id_tv_abandoned"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="16dp"
             android:text="@string/lbl_abandoned"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/id_tv_abandoned"
             app:layout_constraintTop_toTopOf="@+id/id_tv_abandoned" />
@@ -61,8 +63,9 @@
             android:id="@+id/id_tv_num_races"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:text="@string/lbl_races"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/id_tv_abandoned_response"
             app:layout_constraintTop_toTopOf="@+id/id_tv_abandoned" />
 
@@ -71,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/id_tv_num_races"
             app:layout_constraintTop_toTopOf="@+id/id_tv_num_races" />
@@ -97,6 +101,30 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="#666666"
             tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/id_tv_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            app:layout_constraintStart_toEndOf="@+id/id_tv_num_races_response"
+            app:layout_constraintTop_toTopOf="@+id/id_tv_num_races" />
+
+        <TextView
+            android:id="@+id/id_tv_track_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@+id/id_tv_weather"
+            app:layout_constraintTop_toTopOf="@+id/id_tv_weather" />
+
+        <TextView
+            android:id="@+id/id_tv_track_cond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@+id/id_tv_track_desc"
+            app:layout_constraintTop_toTopOf="@+id/id_tv_track_desc" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
 <!--<Meeting MeetingType="R" Abandoned="N" WeatherChanged="Y" TrackChanged="N" VenueName="Ipswich"

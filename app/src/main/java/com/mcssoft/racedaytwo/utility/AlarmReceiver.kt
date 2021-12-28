@@ -3,7 +3,6 @@ package com.mcssoft.racedaytwo.utility
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import com.mcssoft.racedaytwo.entity.cache.SummaryCacheEntity
 import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_BEFORE
 import com.mcssoft.racedaytwo.viewmodel.AlarmViewModel

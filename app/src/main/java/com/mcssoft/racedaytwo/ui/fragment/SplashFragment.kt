@@ -32,6 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import androidx.compose.material.Text
+import androidx.compose.ui.res.stringResource
 
 /**
  * Class that acts as a splash screen whilst downloading and parsing files, then writing the
@@ -56,6 +58,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
             addAction(DOWNLOAD_OTHER_SUCCESS)
             addAction(DOWNLOAD_OTHER_FAILED)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -144,6 +147,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
             idTvMessage.text = resources.getString(R.string.splash_message)
             idBtnRetry.setOnClickListener(this@SplashFragment)
         }
+
         // Delete whatever files are there. There could be several dozen or so.
         downloader.clearFileCache()
         // Clear all caches and underlying data.

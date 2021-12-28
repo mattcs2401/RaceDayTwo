@@ -28,16 +28,10 @@
     <!-- Splash message. -->
     <string name="splash_message">Getting things ready.</string>
     <!-- Retry message. -->
-    <string name="download_retry_message">Download failure. Select Retry</string>
     <string name="parse_retry_message">Parsing failure. Select Retry</string>
 
     <!-- SplashFragment button label.  -->
     <string name="btn_lbl_retry">Retry</string>
-
-    <!-- MeetingsFragment button labels. -->
-    <string name="btn_lbl_R">R</string>
-    <string name="btn_lbl_T">T</string>
-    <string name="btn_lbl_G">G</string>
 
     <!-- Menu labels. -->
     <string name="lbl_refresh">Refresh</string>
@@ -67,14 +61,12 @@
     <string name="key_result_failure">key_result_failure</string>
     <!--    <string name="key_use_cache">key_use_cache</string>-->
     <string name="key_meeting_type">key_list_meeting_codes</string>
-    <string name="key_meeting_filter">key_meeting_filter</string>
     <string name="key_meeting_id">key_meeting_id</string>
     <string name="key_broadcast_message">key_broadcast_message</string>
 
     <!-- Expanded recyclerview item textview labels. -->
     <string name="lbl_abandoned">Abandoned</string>
     <string name="lbl_races">Races</string>
-    <string name="lbl_races_detail">Details</string>
     <string name="tv_lbl_race_no">Race:</string>
     <string name="tv_lbl_race_name">Name:</string>
 

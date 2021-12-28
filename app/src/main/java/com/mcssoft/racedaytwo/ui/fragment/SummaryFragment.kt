@@ -31,9 +31,9 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        val binding = SummaryFragmentBinding.inflate(inflater, container, false)
-        fragmentBinding = binding
-        return binding.root
+//        val binding = SummaryFragmentBinding.inflate(inflater, container, false)
+        _fragmentBinding = SummaryFragmentBinding.inflate(inflater, container, false)
+        return fragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         if(summaryViewModel.getCount() > 0) {
             collect(true)
         } else {
-            fragmentBinding?.let { binding ->
+            fragmentBinding.let { binding ->
                 binding.idTvSummaryMessage.visibility = View.VISIBLE
             }
         }
@@ -62,7 +62,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         Log.d("TAG","[RunnersFragment.onDestroyView]")
         // Need this explicitly else LeakCanary reports leaks.
         summaryAdapter = null
-        fragmentBinding = null
+        _fragmentBinding = null
         super.onDestroyView()
     }
     //</editor-fold>
@@ -88,7 +88,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         // Set the adapter.
         summaryAdapter = SummaryAdapter()
         //
-        fragmentBinding?.apply {
+        fragmentBinding.apply {
             // Set the recyclerview.
             idSummaryRecyclerView.apply {
                 /* Note: if setHasFixedSize(true), cause initial display issue where nothing displays
@@ -101,8 +101,6 @@ class SummaryFragment: Fragment(), View.OnClickListener {
                 layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             }
         }
-//        // Set the Race details in the header.
-//        setHeaderDetail(runnerArgs.race)
     }
 
     /**
@@ -126,5 +124,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
 
     private var collectJob: Job? = Job()                         // for collection start/stop etc.
     private var summaryAdapter: SummaryAdapter? = null            // adapter for the recyclerview.
-    private var fragmentBinding : SummaryFragmentBinding? = null    // for UI components.
+    private var _fragmentBinding : SummaryFragmentBinding? = null    // for UI components.
+    private val fragmentBinding : SummaryFragmentBinding
+        get() = _fragmentBinding!!
 }

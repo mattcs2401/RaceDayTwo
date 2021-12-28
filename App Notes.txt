@@ -1,13 +1,40 @@
 -------
+Design:
+-------
+-> Notification of those Races nearing race time.
+
+-> Summary view:
+   - Past race time - red.
+   - Nearing race time - orange
+   - Before race time - green.
+
+-------
 Issues:
 -------
--> Last item in recyclerview doesn't always display properly.
--> xx
+-> Last item in recyclerview doesn't always display properly, navigation overlays bottom.
+-> xxx
 
 -------
 Others:
 -------
--> Put Races into time order (RacesFragment listing).
--> Put Summary in time order.
--> xxx
+-> Reference values table ?
+   ArchiveFlag | DomCode | Description | xxx
 
+-> Table of country/meeting codes, set when Db is created ?
+   (https://www.nationsonline.org/oneworld/country_code_list.htm)
+
+   e.g. CCode    MCode    Description
+        AU       BR       Brisbane
+        AU       MR       Melbourne
+        AU       SR       Sydney
+        AU       WR       Perth ?
+        AU       AR       Adelaide
+        AU       TR       ?
+        XX       xx       ?
+        XX       xx       ?
+        NZ       xx       New Zealand
+        HK       xx       Hong Kong
+        KR       xx       Korea
+        JP       xx       Japan
+
+-> xxx

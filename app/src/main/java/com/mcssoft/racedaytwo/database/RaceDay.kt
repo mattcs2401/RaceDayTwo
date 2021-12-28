@@ -10,8 +10,12 @@ import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
 
 @Database(entities =
-   [MeetingDBEntity::class, RaceDBEntity::class, RunnerDBEntity::class, SummaryDBEntity::class],
-   version = 1, exportSchema = false)
+   [MeetingDBEntity::class,
+    RaceDBEntity::class,
+    RunnerDBEntity::class,
+    SummaryDBEntity::class],
+    version = 1,
+    exportSchema = false)
 abstract class RaceDay : RoomDatabase() {
 // https://developer.android.com/training/data-storage/room
 // https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1#829a

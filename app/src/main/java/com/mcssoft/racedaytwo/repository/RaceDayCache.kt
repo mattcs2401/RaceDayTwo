@@ -137,8 +137,8 @@ class RaceDayCache {
             runner.raceId == sr.raceId && runner.runnerNo == sr.runnerNo
         }[0]
         .apply { selected = sr.selected }
-        // Update the database.
-        raceDayDAO.setRunnerSelected(sr.selected, runner.id!!)
+//        // Update the database.
+//        raceDayDAO.setRunnerSelected(sr.selected, runner.id!!)
         // Create the Summary entry.
         if(sr.selected)
             populateSummary(raceDayDAO, runner)
@@ -231,8 +231,11 @@ class RaceDayCache {
      */
     private fun removeSummary(raceDayDAO: IRaceDayDAO, runnerId: Long) {
         val mapper = SummaryMapper()
-        val summary = getSummaryByRunnerId(runnerId)
-        raceDayDAO.deleteSummary(mapper.mapToSummaryEntity(summary))
+        val sce = getSummaryByRunnerId(runnerId)
+        // Remove from cache.
+        lSummary.remove(sce)
+        // Remove from database.
+        raceDayDAO.deleteSummary(mapper.mapToSummaryEntity(sce))
     }
 
     /**

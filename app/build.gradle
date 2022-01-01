@@ -31,10 +31,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_ver
     }
 }
 
@@ -44,19 +40,19 @@ dependencies {
     def nav_ver = '2.3.5'
     def room_ver = '2.4.0'
     def hilt_models_ver = '1.0.0-alpha03'
-    def pref_ver = "1.1.1"
-    def ds_ver = "1.0.0"
-    def work_ver = "2.7.1"
+    def pref_ver = '1.1.1'
+    def ds_ver = '1.0.0'
+    def work_ver = '2.7.1'
+    def core_ver = '1.7.0'
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+//    implementation "androidx.core:core:$core_ver"
+    implementation "androidx.core:core-ktx:$core_ver"
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-//    implementation 'androidx.appcompat:appcompat:1.3.1' // for popup menu.
 
     /* RecyclerView. */
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    // TBA - implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
     /*  Lifecycle. */
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ver"
@@ -99,16 +95,5 @@ dependencies {
     // debugImplementation because LeakCanary should only run in debug builds.
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     //implementation 'com.squareup.leakcanary:leakcanary-object-watcher-android:2.7'
-
-    /* Compose (not sure all are required). */
-    implementation "androidx.compose.ui:ui:$compose_ver"
-    implementation "androidx.compose.ui:ui-tooling:$compose_ver"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ver"
-    implementation "androidx.compose.material:material:$compose_ver"
-//    implementation "androidx.compose.material:material-icons-extended:$compose_ver"
-    implementation "androidx.compose.foundation:foundation:$compose_ver"
-    implementation "androidx.compose.foundation:foundation-layout:$compose_ver"
-    implementation "androidx.compose.runtime:runtime:$compose_ver"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
 
 }

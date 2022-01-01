@@ -47,9 +47,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         if(summaryViewModel.getCount() > 0) {
             collect(true)
         } else {
-            fragmentBinding.let { binding ->
-                binding.idTvSummaryMessage.visibility = View.VISIBLE
-            }
+            fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
         }
     }
 

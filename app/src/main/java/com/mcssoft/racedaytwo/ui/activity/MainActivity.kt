@@ -75,12 +75,12 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
     override fun onStart() {
         super.onStart()
-//        alarm.setAlarm(1)
+        alarm.setAlarm(1)
     }
 
     override fun onStop() {
         super.onStop()
-//        alarm.cancelAlarm()
+        alarm.cancelAlarm()
     }
     //</editor-fold>
 

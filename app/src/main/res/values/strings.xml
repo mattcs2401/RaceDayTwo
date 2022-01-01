@@ -27,6 +27,7 @@
 
     <!-- Splash message. -->
     <string name="splash_message">Getting things ready.</string>
+
     <!-- Retry message. -->
     <string name="parse_retry_message">Parsing failure. Select Retry</string>
 
@@ -56,6 +57,9 @@
     <!-- SummaryFragment labels/text.-->
     <string name="nothing_to_display">Nothing to display.</string>
 
+    <!-- SettingsFragment labels/text. -->
+    <string name="settings_is_tba">Settings is TBA.</string>
+
     <!-- Keys. -->
     <string name="key_file_name">key_file_name</string>
     <string name="key_result_failure">key_result_failure</string>
@@ -69,6 +73,5 @@
     <string name="lbl_races">Races</string>
     <string name="tv_lbl_race_no">Race:</string>
     <string name="tv_lbl_race_name">Name:</string>
-
 
 </resources>

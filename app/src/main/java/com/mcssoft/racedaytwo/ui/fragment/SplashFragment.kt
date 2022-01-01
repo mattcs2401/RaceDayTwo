@@ -32,8 +32,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import androidx.compose.material.Text
-import androidx.compose.ui.res.stringResource
 
 /**
  * Class that acts as a splash screen whilst downloading and parsing files, then writing the

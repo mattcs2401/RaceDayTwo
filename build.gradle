@@ -1,9 +1,8 @@
 buildscript {
     ext.hilt_ver = '2.40.5'
     ext.args_ver = '2.3.5'
-    ext.kotlin_ver = '1.6.0'     // Note: Compose req  // 1.6.10
+    ext.kotlin_ver = '1.6.10'
     ext.build_ver = '7.0.4'
-    ext.compose_ver = '1.1.0-rc01'
 
     repositories {
         google()
@@ -15,8 +14,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_ver"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_ver"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$args_ver"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 

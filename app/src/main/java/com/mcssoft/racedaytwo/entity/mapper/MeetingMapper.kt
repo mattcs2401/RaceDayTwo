@@ -58,7 +58,7 @@ class MeetingMapper : IMeetingMapper<MeetingDBEntity, MeetingCacheEntity> {
     /**
      * Map from a list of Xml entity models to a list of domain entity models.
      */
-    fun mapFromEntityList(entities: List<MeetingDBEntity>): List<MeetingCacheEntity> {
-        return entities.map { entity -> mapFromMeetingEntity(entity) }
+    fun mapFromEntityList(entities: List<MeetingDBEntity>): ArrayList<MeetingCacheEntity> {
+        return entities.map { entity -> mapFromMeetingEntity(entity) } as ArrayList<MeetingCacheEntity>
     }
 }

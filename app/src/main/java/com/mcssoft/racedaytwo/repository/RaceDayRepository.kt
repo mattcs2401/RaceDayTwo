@@ -3,6 +3,7 @@ package com.mcssoft.racedaytwo.repository
 import android.app.Application
 import android.content.Context
 import com.mcssoft.racedaytwo.database.RaceDay
+import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.cache.SummaryCacheEntity
 import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 import kotlinx.coroutines.CoroutineScope
@@ -45,6 +46,15 @@ class RaceDayRepository @Inject constructor(context: Context) {
      *
      */
     fun getMeetingsFromCache() = raceDayCache.getMeetingsFromCache()
+
+    /**
+     *
+     */
+    fun removeMeeting(mce: MeetingCacheEntity) {
+        coroutineScope.launch {
+            raceDayCache.removeMeeting(raceDayDAO, mce)
+        }
+    }
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Race">

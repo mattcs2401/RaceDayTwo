@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.flowOn
  */
 class RaceDayCache {
     // Lists that comprise the "cache".
-    private var lMeetings: List<MeetingCacheEntity> = listOf()
+    private var lMeetings: ArrayList<MeetingCacheEntity> = arrayListOf()
     private var lRaces: ArrayList<RaceCacheEntity> = arrayListOf()
     private var lRunners: ArrayList<RunnerCacheEntity> = arrayListOf()
     private var lSummary: ArrayList<SummaryCacheEntity> = arrayListOf()
@@ -53,6 +53,15 @@ class RaceDayCache {
      */
     fun getMeetingById(mtgId: Long): MeetingCacheEntity {
         return lMeetings.filter { meeting -> meeting.id == mtgId }[0]
+    }
+
+    /**
+     *
+     */
+    fun removeMeeting(raceDayDAO: IRaceDayDAO, mce: MeetingCacheEntity) {
+        val meetingMapper = MeetingMapper()
+        lMeetings.remove(mce)
+        raceDayDAO.removeMeeting(meetingMapper.mapToMeetingEntity(mce))
     }
     //</editor-fold>
 
@@ -155,7 +164,7 @@ class RaceDayCache {
      *        2. Destructive, deletes all database entries as well.
      */
     fun clearCachesAndData(raceDayDAO: IRaceDayDAO) {
-        lMeetings = listOf()
+        lMeetings = arrayListOf()
         lRaces = arrayListOf()
         lRunners = arrayListOf()
         lSummary = arrayListOf()

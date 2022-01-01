@@ -19,6 +19,7 @@ import com.mcssoft.racedaytwo.ui.fragment.MeetingsFragmentDirections
 import com.mcssoft.racedaytwo.utility.Alarm
 import com.mcssoft.racedaytwo.utility.NavManager
 import com.mcssoft.racedaytwo.utility.NavManager.NMView
+import com.mcssoft.racedaytwo.utility.NotifyUtilities
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
     @Inject lateinit var alarm: Alarm
     @Inject lateinit var navManager: NavManager
+    @Inject lateinit var notifyUtils: NotifyUtilities
 
     private lateinit var navController: NavController
     private lateinit var bottomNavView: BottomNavigationView
@@ -75,11 +77,17 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
     override fun onStart() {
         super.onStart()
+        // Set notification channel to be used.
+        notifyUtils.createNotificationChannel()
+        // Set the repeating alarm.
         alarm.setAlarm(1)
     }
 
     override fun onStop() {
         super.onStop()
+        // Cancel all previous notifications.
+        notifyUtils.cancel()
+        // Cancel the alarm.
         alarm.cancelAlarm()
     }
     //</editor-fold>

@@ -39,33 +39,33 @@ class NavManager @Inject constructor(private val context: Context)  {
         get() = _tbView
         set(value) { _tbView = value }
 
-    /**
-     * Enable or disable the Home icon on the bottom nav view.
-     */
-    fun enableHome(enable: Boolean) {
-        homeMenu.isEnabled = enable
-    }
+//    /**
+//     * Enable or disable the Home icon on the bottom nav view.
+//     */
+//    fun enableHome(enable: Boolean) {
+//        homeMenu.isEnabled = enable
+//    }
 
-    /**
-     * Enable or disable the Summary icon on the bottom nav view.
-     */
-    fun enableSummary(enable: Boolean) {
-        summaryMenu.isEnabled = enable
-    }
+//    /**
+//     * Enable or disable the Summary icon on the bottom nav view.
+//     */
+//    fun enableSummary(enable: Boolean) {
+//        summaryMenu.isEnabled = enable
+//    }
 
-    /**
-     * Enable or disable the Settings icon on the bottom nav view.
-     */
-    fun enableSettings(enable: Boolean) {
-        settingsMenu.isEnabled = enable
-    }
+//    /**
+//     * Enable or disable the Settings icon on the bottom nav view.
+//     */
+//    fun enableSettings(enable: Boolean) {
+//        settingsMenu.isEnabled = enable
+//    }
 
-    /**
-     * Enable or disable the Refresh icon on the bottom nav view.
-     */
-    fun enableRefresh(enable: Boolean) {
-        refreshMenu.isEnabled = enable
-    }
+//    /**
+//     * Enable or disable the Refresh icon on the bottom nav view.
+//     */
+//    fun enableRefresh(enable: Boolean) {
+//        refreshMenu.isEnabled = enable
+//    }
 
     /**
      * Set the view variables.

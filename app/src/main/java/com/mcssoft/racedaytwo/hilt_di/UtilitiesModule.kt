@@ -4,6 +4,7 @@ import android.content.Context
 import com.mcssoft.racedaytwo.utility.Alarm
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.NavManager
+import com.mcssoft.racedaytwo.utility.NotifyUtilities
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,5 +31,9 @@ object UtilitiesModule {
     fun provideMenuManager(@ApplicationContext context: Context): NavManager
             = NavManager(context)
 
+    @Singleton
+    @Provides
+    fun provideNotifyUtilities(@ApplicationContext context: Context): NotifyUtilities
+            = NotifyUtilities(context)
 
 }

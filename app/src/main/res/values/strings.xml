@@ -74,4 +74,8 @@
     <string name="tv_lbl_race_no">Race:</string>
     <string name="tv_lbl_race_name">Name:</string>
 
+    <!-- Notification (channel). -->
+    <string name="channel_name">Notification Channel</string>
+    <string name="channel_description">Notification channel description.</string>
+
 </resources>

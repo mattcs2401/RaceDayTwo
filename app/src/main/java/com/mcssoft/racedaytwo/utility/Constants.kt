@@ -26,4 +26,8 @@ object Constants {
     // [0]=="HH", and [1]=="MM".
     const val HOUR = 0
     const val MINUTE = 1
+
+    // Notification.
+    const val CHANNEL_ID = "99"
+    const val NOTIFICATION_ID = 0
 }

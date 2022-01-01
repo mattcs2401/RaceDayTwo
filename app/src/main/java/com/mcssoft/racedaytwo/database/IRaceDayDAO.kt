@@ -15,6 +15,9 @@ interface IRaceDayDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMeeting(meeting: MeetingDBEntity): Long
 
+    @Delete()
+    fun removeMeeting(meeting: MeetingDBEntity)
+
     @Query("delete from meeting_details")
     fun deleteAllMeetings(): Int
 

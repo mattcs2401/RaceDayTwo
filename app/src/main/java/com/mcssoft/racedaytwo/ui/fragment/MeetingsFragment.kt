@@ -12,7 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.meeting.IMeetingAdapter
 import com.mcssoft.racedaytwo.adapter.meeting.MeetingAdapter
@@ -35,7 +38,7 @@ import com.mcssoft.racedaytwo.utility.NavManager.NMView
 @AndroidEntryPoint
 class MeetingsFragment : Fragment(), IMeetingAdapter {
 
-    @Inject lateinit var mainViewModel: MeetingsViewModel
+    @Inject lateinit var meetingsViewModel: MeetingsViewModel
     @Inject lateinit var preferences: RaceDayPreferences
     @Inject lateinit var  navManager: NavManager
 
@@ -125,6 +128,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
         fragmentBinding?.apply {
             // Set the recyclerview.
             idRecyclerView.apply {
+                ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this)
                 // Add dividers between row items - TBA anything else.
                 addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
                 // Set the recycler view adapter.
@@ -142,7 +146,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
     private fun collect(collect: Boolean) {
         if(collect) {
             collectJob = lifecycleScope.launch {
-                mainViewModel.getMeetingsFromCache().collect { meetings ->
+                meetingsViewModel.getMeetingsFromCache().collect { meetings ->
                     // If meeting was previously expanded, then set for collapse by view holder.
                     meetings?.forEach { if(it.isExpanded) it.isExpanded = false }
                     // Submit the listing.
@@ -155,10 +159,25 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
             }
         }
     }
-
     //</editor-fold>
 
+    private val itemTouchHelperCallback: SimpleCallback = object : SimpleCallback(0, ItemTouchHelper.LEFT) {
+        // Required but not used ATT.
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
+        ): Boolean { return false }
+        //
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val pos = viewHolder.absoluteAdapterPosition
+            val mce = meetingAdapter?.currentList?.get(pos)
+            mce?.let { meetingsViewModel.removeMeeting(it) }
+            // Re-start the flow collect to update the adapter's current list.
+            collect(false)
+            collect(true)
+        }
+    }
+
     private var collectJob: Job? = Job()                              // for collection start/stop.
+//    private var recyclerView: RecyclerView? = null
     private var meetingAdapter: MeetingAdapter? = null               // adapter for recycler view.
     private var fragmentBinding: MeetingsFragmentBinding? = null     // for UI components.
 

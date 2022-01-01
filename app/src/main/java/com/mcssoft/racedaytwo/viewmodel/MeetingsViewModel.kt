@@ -11,5 +11,7 @@ class MeetingsViewModel @Inject constructor(private val repository: RaceDayRepos
     fun getMeetingsFromCache(): Flow<List<MeetingCacheEntity>?>
         = repository.getMeetingsFromCache()
 
+    fun removeMeeting(mce: MeetingCacheEntity)
+        = repository.removeMeeting(mce)
 }
 

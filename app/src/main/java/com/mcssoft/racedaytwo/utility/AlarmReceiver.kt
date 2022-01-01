@@ -15,6 +15,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     @Inject lateinit var alarmViewModel: AlarmViewModel
     @Inject lateinit var dateUtils: DateUtilities
+    @Inject lateinit var notifyUtils: NotifyUtilities
 
     private var summaryList = mutableListOf<SummaryCacheEntity>()
 

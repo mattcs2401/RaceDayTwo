@@ -5,4 +5,8 @@
     <color name="colourAccent">#D81B60</color>
 <!--    <color name="colourGray">#979797</color>-->
 
+    <!-- Race time colours. -->
+    <color name="pastRaceTime">#FFCDD2</color>
+    <color name="nearRaceTime">#FFF9C4</color>
+    <color name="defaultRaceTime">#C8E6C9</color>
 </resources>

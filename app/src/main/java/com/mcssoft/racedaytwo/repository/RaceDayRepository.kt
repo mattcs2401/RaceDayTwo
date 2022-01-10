@@ -21,7 +21,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
         RaceDay.getDatabase(context.applicationContext as Application).raceDayDao()
 
     // Main cache.
-    private var raceDayCache = RaceDayCache()
+    private var raceDayCache = RaceDayCache(context)
 
     //<editor-fold default state="collapsed" desc="Region: Meeting">
     /**
@@ -48,7 +48,8 @@ class RaceDayRepository @Inject constructor(context: Context) {
     fun getMeetingsFromCache() = raceDayCache.getMeetingsFromCache()
 
     /**
-     *
+     * Remove a Meeting from the cache and database.
+     * @param mce: The Meeting to remove.
      */
     fun removeMeeting(mce: MeetingCacheEntity) {
         coroutineScope.launch {
@@ -96,14 +97,42 @@ class RaceDayRepository @Inject constructor(context: Context) {
     //</editor-fold>
 
     fun getSummariesFromCacheAsFlow()
-        = raceDayCache.getSummariesFromCache()
+        = raceDayCache.getSummariesFromCacheAsFlow()
 
-    fun getSummariesFromCache(elapsed: Boolean)
-            = raceDayCache.getSummariesFromCache(elapsed)
+    fun getSummariesFromCache()
+            = raceDayCache.getSummariesFromCache()
 
     fun getSummaryCount(): Int = raceDayCache.getSummaryCount()
 
-    fun setElapsed(summary: SummaryCacheEntity) = raceDayCache.setElapsed(summary)
+    /**
+     * Update the Summary entry to indicate that the Race time has elapsed.
+     * @param sce: The Summary entity.
+     */
+    fun updateSummaryAsElapsed(sce: SummaryCacheEntity) {
+        coroutineScope.launch {
+            raceDayCache.updateSummaryAsElapsed(raceDayDAO, sce)
+        }
+    }
+
+    /**
+     * Update the Summary entry to indicate that the Race time is nearing.
+     * @param sce: The Summary entity.
+     */
+    fun updateSummaryAsWithinWindow(sce: SummaryCacheEntity) {
+        coroutineScope.launch {
+            raceDayCache.updateSummaryAsWithinWindow(raceDayDAO, sce)
+        }
+    }
+
+    /**
+     * Remove a Meeting from the cache and database.
+     * @param mce: The Meeting to remove.
+     */
+    fun removeSummary(sce: SummaryCacheEntity) {
+        coroutineScope.launch {
+            raceDayCache.removeSummary(raceDayDAO, sce)
+        }
+    }
 
     /**
      * Clear the existing caches and backing data.

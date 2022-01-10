@@ -8,9 +8,9 @@ import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
 import com.mcssoft.racedaytwo.entity.events.MtgIdAndCode
 import com.mcssoft.racedaytwo.utility.DataResult
-import com.mcssoft.racedaytwo.utility.Downloader
 import com.mcssoft.racedaytwo.utility.RaceDayParser
 import com.mcssoft.racedaytwo.utility.DateUtilities
+import com.mcssoft.racedaytwo.utility.Downloader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.StringBuilder

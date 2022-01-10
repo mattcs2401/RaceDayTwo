@@ -96,4 +96,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     //implementation 'com.squareup.leakcanary:leakcanary-object-watcher-android:2.7'
 
+    /* OkHttp */
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 }

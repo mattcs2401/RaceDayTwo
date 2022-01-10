@@ -3,17 +3,18 @@ package com.mcssoft.racedaytwo.utility
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.os.bundleOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_MAIN_FAILED
 import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_MAIN_SUCCESS
 import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_FAILED
 import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_SUCCESS
+import okhttp3.*
+import okio.BufferedSink
+import okio.buffer
+import okio.sink
 import java.io.*
-import java.net.HttpURLConnection
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import javax.inject.Inject
 
 /**
@@ -22,7 +23,11 @@ import javax.inject.Inject
  * or on exception.
  */
 class Downloader  @Inject constructor(private val context: Context) {
-// example: URL("https://tatts.com/pagedata/racing/2021/11/30/RaceDay.xml")
+// example: URL("https://tatts.com/pagedata/racing/2022/1/10/RaceDay.xml")
+
+    private val client: OkHttpClient = OkHttpClient().newBuilder()
+        .addNetworkInterceptor(ErrorInterceptor())
+        .build()
 
     // The broadcast intent.
     private lateinit var intent: Intent
@@ -34,34 +39,44 @@ class Downloader  @Inject constructor(private val context: Context) {
     private var msgKey = context.resources.getString(R.string.key_broadcast_message)
 
     /**
-     * Download a page and save as a file.
-     * @param urlPath: The fully qualified Url.
+     * Download the file at the given address to the local external cache.
+     * @param url: The Url to download from.
      * @param urlPage: The page name, used for the filename.
      */
-    fun downloadFile(urlPath: String, urlPage: String) {
-        val url = URL(urlPath)
-        try {
-            // Open connection and get input stream.
-            val httpConn = url.openConnection() as HttpURLConnection
-            val code = httpConn.responseCode
-            val msg = httpConn.responseMessage
-            val inStream = BufferedInputStream(httpConn.inputStream)
-            // Create the file.
-            val file = File(context.externalCacheDir, urlPage)
-            // Copy the stream into the file.
-            Files.copy(inStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
-            // Broadcast.
-            sendBroadcast(urlPage)
-        } catch(ex: Exception) {
-            handleErrors(ex, urlPath, urlPage)
-        }
+    fun downloadFile(url: String, urlPage: String) {
+        val request = createRequest(url)    // the Request object.
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // TODO - some sort of error message to the user.
+                Log.e("TAG","Downloader.onFailure(): ${e.localizedMessage}")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                val downloadedFile = File(context.externalCacheDir, urlPage)
+                val sink: BufferedSink = downloadedFile.sink().buffer()
+                sink.writeAll(response.body!!.source())
+                sink.close()
+
+                // Broadcast.
+                sendBroadcast(urlPage)
+            }
+        })
     }
+
+    /**
+     * create a request for the given url.
+     * @param url: the Url e.g. "http://some/site/somewhere
+     */
+    private fun createRequest(url: String): Request = Request.Builder().url(url).build()
 
     /**
      * Get the file as an InputStream.
      * @param fileName: The file name.
      * @return An InputStream.
      */
+
     fun getFileAsStream(fileName: String): InputStream {
         val path = """${getCachePath()}${File.separator}$fileName"""
         return FileInputStream(File(path))

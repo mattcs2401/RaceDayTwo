@@ -26,7 +26,8 @@ class SummaryMapper : ISummaryMapper<SummaryDBEntity, SummaryCacheEntity> {
         domain.runnerNo = entity.runnerNo
         domain.runnerName = entity.runnerName
         domain.elapsed = entity.elapsed
-        domain.notified = entity.notified
+        domain.notify = entity.notified
+        domain.colour = entity.colour
         return domain
     }
 
@@ -46,7 +47,8 @@ class SummaryMapper : ISummaryMapper<SummaryDBEntity, SummaryCacheEntity> {
         entity.runnerNo = domain.runnerNo
         entity.runnerName = domain.runnerName
         entity.elapsed = domain.elapsed
-        entity.elapsed = domain.notified
+        entity.notified = domain.notify
+        entity.colour = domain.colour
         return entity
     }
 

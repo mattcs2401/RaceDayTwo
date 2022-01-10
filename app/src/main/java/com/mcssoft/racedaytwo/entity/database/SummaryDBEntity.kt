@@ -22,5 +22,6 @@ class SummaryDBEntity {
     @ColumnInfo(name = "RunnerName") var runnerName: String = ""     //
     @ColumnInfo(name = "Elapsed") var elapsed: Boolean = false       // Race time has elapsed ?
     @ColumnInfo(name = "Notified") var notified: Boolean = false     // Race notified.
+    @ColumnInfo(name = "Colour") var colour: Int? = null             // Background colour.
 
 }

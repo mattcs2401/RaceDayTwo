@@ -17,10 +17,15 @@ object Constants {
 
     const val REQ_CODE = 0             // used by Alarm intent.
 
-    // Use for time comparison.
-    const val CURRENT_TIME_BEFORE = -1 // the current time is before the comparison time.
-    const val CURRENT_TIME_AFTER = 1   // the current time is after the comparison time.
-    const val CURRENT_TIME_EQUAL = 0   // the current time is equal the comparison time.
+    // The current time is before the Race time in a 3 minute window,
+    // i.e. current time >= (race time - 3) amd <= (Race time).
+    const val CURRENT_TIME_IN_WINDOW = -1
+    // The current time is after the Race time, i.e. current time > Race time.
+    const val CURRENT_TIME_AFTER = 1
+//    // The current time is < (Race time - 3).
+//    const val CURRENT_TIME_BEFORE = 0
+
+    const val THREE_MINUTES = 180000   // 3 minutes in milli seconds.
 
     // Use when splitting a string time value formatted as "HH:MI", into an array where index
     // [0]=="HH", and [1]=="MM".
@@ -30,4 +35,10 @@ object Constants {
     // Notification.
     const val CHANNEL_ID = "99"
     const val NOTIFICATION_ID = 0
+
+    // Race time colours.
+    const val PAST_RACE_TIME = "#F44336"
+    const val NEAR_RACE_TIME = "#FF9800"
+    const val PRIOR_RACE_TIME = "#8BC34A"
+
 }

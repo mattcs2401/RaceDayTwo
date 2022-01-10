@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.summary.SummaryAdapter
 import com.mcssoft.racedaytwo.databinding.SummaryFragmentBinding
@@ -31,7 +33,6 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-//        val binding = SummaryFragmentBinding.inflate(inflater, container, false)
         _fragmentBinding = SummaryFragmentBinding.inflate(inflater, container, false)
         return fragmentBinding.root
     }
@@ -89,6 +90,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         fragmentBinding.apply {
             // Set the recyclerview.
             idSummaryRecyclerView.apply {
+                ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this)
                 /* Note: if setHasFixedSize(true), cause initial display issue where nothing displays
                    but backing data is there. */
                 // Add dividers between row items - TBA anything else.
@@ -107,11 +109,15 @@ class SummaryFragment: Fragment(), View.OnClickListener {
      */
     private fun collect(collect: Boolean) {
         if(collect) {
-            collectJob = lifecycleScope.launch {
-                summaryViewModel.getFromCache().collect { summaries ->
-                    summaryAdapter?.submitList(summaries.sortedBy { it.raceTime })
+//            if(summaryViewModel.getCount() == 0) {
+//                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
+//            } else {
+                collectJob = lifecycleScope.launch {
+                    summaryViewModel.getFromCache().collect { summaries ->
+                        summaryAdapter?.submitList(summaries.sortedBy { it.raceTime })
+                    }
                 }
-            }
+//            }
         } else {
             if(!(collectJob?.isCancelled!!)) {
                 collectJob?.cancel()
@@ -119,6 +125,28 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         }
     }
     //</editor-fold>
+
+    // Swipe to delete implementation.
+    private val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback
+        = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        // Required but not used ATT.
+        override fun onMove(recyclerView: RecyclerView,
+                            viewHolder: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder ): Boolean { return false }
+        //
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val sce = summaryAdapter?.currentList?.get(viewHolder.absoluteAdapterPosition)
+            sce?.let { summary -> summaryViewModel.removeSummary(summary) }
+            Thread.sleep(50)     // give time to update cache and database.
+            if(summaryViewModel.getCount() == 0) {
+                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
+            } else {
+                // Re-start the flow collect to update the adapter's current list.
+                collect(false)
+                collect(true)
+            }
+        }
+    }
 
     private var collectJob: Job? = Job()                         // for collection start/stop etc.
     private var summaryAdapter: SummaryAdapter? = null            // adapter for the recyclerview.

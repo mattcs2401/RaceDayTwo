@@ -18,20 +18,19 @@
         android:layout_marginEnd="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         tools:context="com.mcssoft.raceday.ui.activity.MainActivity"
-        tools:listitem="@layout/list_item_summary_header">
-    </androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/list_item_summary_header"></androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="64dp" />
+        app:layout_constraintGuide_begin="32dp" />
 
     <TextView
         android:id="@+id/id_tv_summary_message"

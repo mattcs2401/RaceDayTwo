@@ -161,6 +161,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
     }
     //</editor-fold>
 
+    // Swipe to delete implementation.
     private val itemTouchHelperCallback: SimpleCallback = object : SimpleCallback(0, ItemTouchHelper.LEFT) {
         // Required but not used ATT.
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder

@@ -14,7 +14,9 @@ class SummaryCacheEntity {
     var runnerNo: String = ""
     var runnerName: String = ""
     //
-    var elapsed: Boolean = false       // Flag, race time is now in the past.
-    var notified: Boolean = false      // Flag, notification done.
+    var elapsed: Boolean = false       // flag, race time is now in the past.
+    var notify: Boolean = false      // flag, notification done.
+
+    var colour: Int? = null            // background colour.
 
 }

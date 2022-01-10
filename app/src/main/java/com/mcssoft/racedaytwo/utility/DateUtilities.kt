@@ -3,10 +3,10 @@ package com.mcssoft.racedaytwo.utility
 import android.content.Context
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_AFTER
-import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_BEFORE
-import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_EQUAL
+import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_IN_WINDOW
 import com.mcssoft.racedaytwo.utility.Constants.HOUR
 import com.mcssoft.racedaytwo.utility.Constants.MINUTE
+import com.mcssoft.racedaytwo.utility.Constants.THREE_MINUTES
 import java.util.*
 import javax.inject.Inject
 
@@ -94,21 +94,14 @@ class DateUtilities @Inject constructor(private val context: Context) {
 
     /**
      * Compare the current time to that given.
-     * @param givenTime: The time (in mSec) to compare against the current time.
-     * @return -1: the current time is before that given.
-     *          0: the current time is equal that given.
-     *          1: the current time is after that given.
+     * @param givenTime: The time (i.e. Race time in mSec) to compare against the current time.
+     * @return -1: The current time >= (Race time - 3) amd <= (Race time).
+     *          1: The current time is after the Race time, i.e. current time > Race time.
      */
     fun compareToTime(givenTime: Long) : Int {
-        val calendar = Calendar.getInstance(Locale.getDefault()).apply {
-            timeInMillis = givenTime
-        }
-        return when {
-            isBefore(calendar) -> CURRENT_TIME_BEFORE
-            isAfter(calendar) -> CURRENT_TIME_AFTER
-            isEqual(calendar) -> CURRENT_TIME_EQUAL
-            else -> {99}
-        }
+        if(isBeforeInWindow(givenTime)) return CURRENT_TIME_IN_WINDOW     // -1
+        else if (isAfter(givenTime)) return CURRENT_TIME_AFTER            // 1
+        else return 99
     }
 
     fun getTimeInMillis(): Long = Calendar.getInstance(Locale.getDefault()).timeInMillis
@@ -130,28 +123,32 @@ class DateUtilities @Inject constructor(private val context: Context) {
         }
     }
 
-        /**
-     * Wrapper for Calendar.isBefore()
-     * @param calendar: The calendar to compare.
+    /**
+     * Is the current time within the 3 minute window before the Race time.
+     * @param givenTime: The time to compare against.
      */
-    private fun isBefore(calendar: Calendar) : Boolean {
-        return Calendar.getInstance(Locale.getDefault()).before(calendar)
+    private fun isBeforeInWindow(givenTime: Long) : Boolean {
+        val currentTime = Calendar.getInstance(Locale.getDefault()).timeInMillis
+        val windowTime = givenTime - THREE_MINUTES
+
+        return (currentTime >= windowTime) && (currentTime <= givenTime)
     }
 
     /**
-     * Wrapper for Calendar.isAfter()
-     * @param calendar: The calendar to compare.
+     * Is the current time after the given (Race) time.
+     * @param givenTime: The time to compare against.
      */
-    private fun isAfter(calendar: Calendar) : Boolean {
-        return Calendar.getInstance(Locale.getDefault()).after(calendar)
+    private fun isAfter(givenTime: Long) : Boolean {
+        return Calendar.getInstance(Locale.getDefault()).timeInMillis > givenTime
     }
 
     /**
-     * Wrapper for Calendar.isEqual()
-     * @param calendar: The calendar to compare.
+     * Is the current time before the (Race time - 3 minutes).
+     * @param givenTime: The time to compare against.
      */
-    private fun isEqual(calendar: Calendar): Boolean {
-        return Calendar.getInstance(Locale.getDefault()) == calendar
+    private fun isBefore(givenTime: Long): Boolean {
+        val currentTime = Calendar.getInstance(Locale.getDefault()).timeInMillis
+        return currentTime < (givenTime - THREE_MINUTES)
     }
     //</editor-fold>
 }

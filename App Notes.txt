@@ -1,26 +1,53 @@
 -------
 Design:
 -------
+-> Swipe to delete with Ok/Cancel.
+
 -> Notification of those Races nearing race time.
 
 -> Summary view:
-   - Past race time - red.
-   - Nearing race time - orange
-   - Before race time - green.
+   - Past race time - red       (> race time).
+   - Nearing race time - orange (within race time - 3 min).
+   - Before race time - green   (< race time - 3 min) <<-- default, all text is initially green.
+
+Notification algorithm:
+-----------------------
+Alarm receiver has access to Summary cache/table via view holder.
+
+For each item in summary view:
+  - is elapsed flag already set ?
+    - false
+      - compare race time to current time
+        - is race time > current time ?
+          - true
+            - set text to Red
+            - set elapsed flag true
+            - loop to next item
+        - is race time >= (current time - 3 min) and <= current time ?
+          - is notification flag already set ?
+            - false
+              - set text to orange
+              - set notification flag
+              - trigger notification
+              - loop to next item
+        - is race time < (current time - 3 min)
+          - true
+            - do we care about this condition ?
 
 -------
 Issues:
 -------
 -> Last item in recyclerview doesn't always display properly, navigation overlays bottom.
--> xxx
+
+-> If you swipe to delete a Meeting, then any related Summary values should also be deleted.
+
+-> Need better network connection/monitoring:
+   e.g. the emulator needs the (F5) VPN for network access ??
 
 -------
 Others:
 -------
--> Reference values table ?
-   ArchiveFlag | DomCode | Description | xxx
-
--> Table of country/meeting codes, set when Db is created ?
+-> Table of country/meeting codes, set when Db is created (quasi reference values) ?
    (https://www.nationsonline.org/oneworld/country_code_list.htm)
 
    e.g. CCode    MCode    Description

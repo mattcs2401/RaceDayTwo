@@ -1,15 +1,15 @@
 package com.mcssoft.racedaytwo.adapter.summary
 
+import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
+import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemSummaryHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.SummaryCacheEntity
 
 class SummaryHeaderViewHolder(private val binding: ListItemSummaryHeaderBinding)
-    : RecyclerView.ViewHolder(binding.root) {//}, View.OnClickListener {
+    : RecyclerView.ViewHolder(binding.root) {
 
     internal fun bind(sce: SummaryCacheEntity) {
-        // TBA - local copy.
-        this.summaryCacheEntity = sce
         // Bind.
         binding.apply {
             idTvMeetingCode.text = sce.meetingCode
@@ -18,13 +18,9 @@ class SummaryHeaderViewHolder(private val binding: ListItemSummaryHeaderBinding)
             idTvVenueName.text = sce.venueName
             idTvRunnerNum.text = sce.runnerNo
             idTvRunnerName.text = sce.runnerName
-//            idCvListItemSummaryHeader.setOnClickListener(this@SummaryHeaderViewHolder)
+            // Background colour.
+            idCvListItemSummaryHeader.setCardBackgroundColor(sce.colour!!)
         }
     }
 
-//    override fun onClick(view: View) {
-//        // TBA
-//    }
-
-    private lateinit var summaryCacheEntity: SummaryCacheEntity
 }

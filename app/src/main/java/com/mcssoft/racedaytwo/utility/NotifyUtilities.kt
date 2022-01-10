@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.ui.activity.MainActivity
+import com.mcssoft.racedaytwo.ui.fragment.SummaryFragment
 import com.mcssoft.racedaytwo.utility.Constants.CHANNEL_ID
 import com.mcssoft.racedaytwo.utility.Constants.NOTIFICATION_ID
 import javax.inject.Inject

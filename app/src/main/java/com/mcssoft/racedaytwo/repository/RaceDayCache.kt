@@ -1,5 +1,7 @@
 package com.mcssoft.racedaytwo.repository
 
+import android.content.Context
+import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.database.IRaceDayDAO
 import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
 import com.mcssoft.racedaytwo.entity.cache.RaceCacheEntity
@@ -16,9 +18,10 @@ import kotlinx.coroutines.flow.flowOn
 
 /**
  * Utility class that provides the cache and some helper methods.
+ * @param context: For system resources.
  */
-class RaceDayCache {
-    // Lists that comprise the "cache".
+class RaceDayCache(private val context: Context) {
+    // Lists that comprise the "cache". All of type ArrayList as need to manipulate elements.
     private var lMeetings: ArrayList<MeetingCacheEntity> = arrayListOf()
     private var lRaces: ArrayList<RaceCacheEntity> = arrayListOf()
     private var lRunners: ArrayList<RunnerCacheEntity> = arrayListOf()
@@ -56,20 +59,21 @@ class RaceDayCache {
     }
 
     /**
-     *
+     * Delete a Meeting from the cache and database.
+     * @param dao: Database access.
+     * @param mce: The Meeting to delete.
      */
-    fun removeMeeting(raceDayDAO: IRaceDayDAO, mce: MeetingCacheEntity) {
+    fun removeMeeting(dao: IRaceDayDAO, mce: MeetingCacheEntity) {
         val meetingMapper = MeetingMapper()
         lMeetings.remove(mce)
-        raceDayDAO.removeMeeting(meetingMapper.mapToMeetingEntity(mce))
+        dao.deleteMeeting(meetingMapper.mapToMeetingEntity(mce))
     }
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Race">
     /**
      * Create the Races cache.
-     * @param dao
-     * Database access.
+     * @param dao: Database access.
      * @notes 1. Method must be called within a coroutine.
      *        2. Races cache only contains those Races associated with the given Meeting of type.
      */
@@ -92,6 +96,16 @@ class RaceDayCache {
         val listing = lRaces.filter { race -> race.mtgId == mtgId }
         emit(listing)
     }.flowOn(Dispatchers.IO)
+
+    /**
+     * Get a Race by its id.
+     * @param id: The Race id.
+     * @return A RaceCacheEntity object.
+     * @note 'filter' returns a list but there should only be one entry.
+     */
+    private fun getRaceByRaceId(id: Long): RaceCacheEntity {
+        return lRaces.filter { it.id == id }[0]
+    }
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Runner">
@@ -136,23 +150,21 @@ class RaceDayCache {
     /**
      * Update the selected flag for a single RunnerCacheEntity in the cache. This method also
      * triggers the create of a Summary entry.
-     * @param raceDayDAO: Database access.
+     * @param dao: Database access.
      * @param sr: The Runner data to draw from: meetingId, raceNo and selected flag.
      * @note Method must be called in a coroutine.
      */
-    fun setRunnerSelected(raceDayDAO: IRaceDayDAO, sr: SelectedRunner) {
+    fun setRunnerSelected(dao: IRaceDayDAO, sr: SelectedRunner) {
         // Update the cache.
         val runner = lRunners.filter { runner ->
             runner.raceId == sr.raceId && runner.runnerNo == sr.runnerNo
         }[0]
         .apply { selected = sr.selected }
-//        // Update the database.
-//        raceDayDAO.setRunnerSelected(sr.selected, runner.id!!)
         // Create the Summary entry.
         if(sr.selected)
-            populateSummary(raceDayDAO, runner)
+            populateSummary(dao, runner)
         else
-            removeSummary(raceDayDAO, runner.id!!)
+            removeSummary(dao, runner.id!!)
     }
     //</editor-fold>
 
@@ -175,45 +187,14 @@ class RaceDayCache {
     }
     //</editor-fold>
 
-    fun createSummaryCache(raceDayDAO: IRaceDayDAO) {
-        val mapper = SummaryMapper()
-        val listing = mapper.mapFromEntityList(raceDayDAO.getAllSummaries())
-        if(listing.isNotEmpty()) {
-            listing.forEach { summary ->
-                lSummary.add(summary)
-            }
-        }
-    }
-
-    /**
-     * Get all the Summaries from the cache.
-     */
-    fun getSummariesFromCache() = flow {
-        emit(lSummary)
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * Get Summaries based on the elapsed property.
-     * @param elapsed: Summary elapsed flag.
-     * @return List<SummaryCacheEntity> where the elapsed flag equals the parameter given.
-     */
-    fun getSummariesFromCache(elapsed: Boolean)
-        = lSummary.filter { summary -> summary.elapsed == elapsed }
-
-    fun getSummaryCount(): Int = lSummary.size
-
-    fun setElapsed(summary: SummaryCacheEntity) {
-        lSummary.get(lSummary.indexOf(summary)).elapsed = true
-    }
-
-    //<editor-fold default state="collapsed" desc="Region: Utility">
+    //<editor-fold default state="collapsed" desc="Region: Summary">
     /**
      * Create a Summary entry.
-     * @param raceDayDAO: Database access.
+     * @param dao: Database access.
      * @param runner: The applicable Runner entity.
      * @note Method must be called in a coroutine.
      */
-    private fun populateSummary(raceDayDAO: IRaceDayDAO, runner: RunnerCacheEntity) {
+    private fun populateSummary(dao: IRaceDayDAO, runner: RunnerCacheEntity) {
         val mapper = SummaryMapper()
         val sce = SummaryCacheEntity()
         // Get the Race entity.
@@ -226,35 +207,92 @@ class RaceDayCache {
         sce.runnerId = runner.id
         sce.runnerNo = runner.runnerNo
         sce.runnerName = runner.runnerName
+        // The default race time colour.
+        sce.colour = context.resources.getColor(R.color.defaultRaceTime, null)
         // Add to Summary listing.
         lSummary.add(sce)
         // Write to database.
-        raceDayDAO.insertSummary(mapper.mapToSummaryEntity(sce))
+        dao.insertSummary(mapper.mapToSummaryEntity(sce))
     }
 
     /**
-     * Remove a Summary entry.
-     * @param raceDayDAO: Database access.
+     * Create the Summary cache from database entries.
+     * @param dao: Database access.
+     * @note Method must be called in a coroutine.
+     */
+    fun createSummaryCache(dao: IRaceDayDAO) {
+        val mapper = SummaryMapper()
+        val listing = mapper.mapFromEntityList(dao.getAllSummaries())
+        if(listing.isNotEmpty()) {
+            listing.forEach { summary ->
+                lSummary.add(summary)
+            }
+        }
+    }
+
+    /**
+     * Get all the Summaries from the cache.
+     */
+    fun getSummariesFromCacheAsFlow() = flow {
+        emit(lSummary)
+    }.flowOn(Dispatchers.IO)
+
+    fun getSummariesFromCache() = lSummary
+
+    fun getSummaryCount(): Int = lSummary.size
+
+    /**
+     * Update the Summary entry to indicate that the Race time has elapsed.
+     * @param dao: Database access.
+     * @param sce: The Summary entity.
+     */
+    fun updateSummaryAsElapsed(dao: IRaceDayDAO, sce: SummaryCacheEntity) {
+        val summaryMapper = SummaryMapper()
+        lSummary.get(lSummary.indexOf(sce)).apply {
+            elapsed = true
+            colour = context.resources.getColor(R.color.pastRaceTime, null)
+        }
+        dao.updateSummary(summaryMapper.mapToSummaryEntity(lSummary.get(lSummary.indexOf(sce))))
+    }
+
+    /**
+     * Update the Summary entry to indicate that the Race time is nearing.
+     * @param dao: Database access.
+     * @param sce: The Summary entity.
+     */
+    fun updateSummaryAsWithinWindow(dao: IRaceDayDAO, sce: SummaryCacheEntity) {
+        val summaryMapper = SummaryMapper()
+        lSummary.get(lSummary.indexOf(sce)).apply {
+            notify = true
+            colour = context.resources.getColor(R.color.nearRaceTime, null)
+        }
+        dao.updateSummary(summaryMapper.mapToSummaryEntity(lSummary.get(lSummary.indexOf(sce))))
+    }
+
+    /**
+     * Delete a Summary from the cache and database.
+     * @param dao: Database access.
+     * @param mce: The Meeting to delete.
+     */
+    fun removeSummary(dao: IRaceDayDAO, sce: SummaryCacheEntity) {
+        val summaryMapper = SummaryMapper()
+        lSummary.remove(sce)
+        dao.deleteSummary(summaryMapper.mapToSummaryEntity(sce))
+    }
+
+    /**
+     * Remove a Summary entry when the Runner entry's checkbox is un-ticked.
+     * @param dao: Database access.
      * @param runnerId: The applicable Runner's id.
      * @note Method must be called in a coroutine.
      */
-    private fun removeSummary(raceDayDAO: IRaceDayDAO, runnerId: Long) {
+    private fun removeSummary(dao: IRaceDayDAO, runnerId: Long) {
         val mapper = SummaryMapper()
         val sce = getSummaryByRunnerId(runnerId)
         // Remove from cache.
         lSummary.remove(sce)
         // Remove from database.
-        raceDayDAO.deleteSummary(mapper.mapToSummaryEntity(sce))
-    }
-
-    /**
-     * Get a Race by its id.
-     * @param id: The Race id.
-     * @return A RaceCacheEntity object.
-     * @note 'filter' returns a list but there should only be one entry.
-     */
-    private fun getRaceByRaceId(id: Long): RaceCacheEntity {
-        return lRaces.filter { it.id == id }[0]
+        dao.deleteSummary(mapper.mapToSummaryEntity(sce))
     }
 
     /**
@@ -267,4 +305,5 @@ class RaceDayCache {
         return lSummary.filter { it.runnerId == rId }[0]
     }
     //</editor-fold>
+
 }

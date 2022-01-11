@@ -33,7 +33,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
             createRacesCache()
             createSummaryCache()
         }
-        Thread.sleep(250) // TBA, give time to create caches ?
+        Thread.sleep(100) // TBA, give time to create caches ?
     }
 
     /**
@@ -96,11 +96,8 @@ class RaceDayRepository @Inject constructor(context: Context) {
     }
     //</editor-fold>
 
-    fun getSummariesFromCacheAsFlow()
-        = raceDayCache.getSummariesFromCacheAsFlow()
-
     fun getSummariesFromCache()
-            = raceDayCache.getSummariesFromCache()
+        = raceDayCache.getSummariesFromCache()
 
     fun getSummaryCount(): Int = raceDayCache.getSummaryCount()
 
@@ -126,7 +123,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
 
     /**
      * Remove a Meeting from the cache and database.
-     * @param mce: The Meeting to remove.
+     * @param sce: The Summary to remove.
      */
     fun removeSummary(sce: SummaryCacheEntity) {
         coroutineScope.launch {

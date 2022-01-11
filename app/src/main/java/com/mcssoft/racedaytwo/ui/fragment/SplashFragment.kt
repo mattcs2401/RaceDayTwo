@@ -108,7 +108,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
         // the MeetingsFragment.
         setViews()
         //
-        if (refresh || !downloader.dateCheck(resources.getString(R.string.main_page))) {
+        if (refresh || !downloader.fileDateCheck(resources.getString(R.string.main_page))) {
             cleanStart()
         } else {
             reStart()

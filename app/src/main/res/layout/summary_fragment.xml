@@ -23,7 +23,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         tools:context="com.mcssoft.raceday.ui.activity.MainActivity"
-        tools:listitem="@layout/list_item_summary_header"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/list_item_summary_header">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"

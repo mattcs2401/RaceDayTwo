@@ -8,7 +8,7 @@ import javax.inject.Inject
 class SummaryViewModel @Inject constructor(private val repository: RaceDayRepository) : ViewModel() {
 
     fun getFromCache()
-        = repository.getSummariesFromCacheAsFlow()
+        = repository.getSummariesFromCache()
 
     fun getCount()
         = repository.getSummaryCount()

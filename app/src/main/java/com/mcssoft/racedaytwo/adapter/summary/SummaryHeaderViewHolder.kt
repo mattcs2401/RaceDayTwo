@@ -1,8 +1,6 @@
 package com.mcssoft.racedaytwo.adapter.summary
 
-import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
-import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemSummaryHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.SummaryCacheEntity
 

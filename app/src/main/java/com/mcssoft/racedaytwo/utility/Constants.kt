@@ -35,10 +35,8 @@ object Constants {
     // Notification.
     const val CHANNEL_ID = "99"
     const val NOTIFICATION_ID = 0
+    const val NOTIFICATION = "NOTIFICATION"
 
-    // Race time colours.
-    const val PAST_RACE_TIME = "#F44336"
-    const val NEAR_RACE_TIME = "#FF9800"
-    const val PRIOR_RACE_TIME = "#8BC34A"
+
 
 }

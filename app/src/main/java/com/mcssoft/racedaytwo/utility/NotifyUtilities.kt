@@ -32,7 +32,7 @@ class NotifyUtilities @Inject constructor(private val context: Context)  {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pIntent)
-//            .setAutoCancel(true)
+            .setAutoCancel(true)
             .build()
 
         NotificationManagerCompat.from(context).notify(0, notification)

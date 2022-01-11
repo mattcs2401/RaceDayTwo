@@ -44,6 +44,7 @@ dependencies {
     def ds_ver = '1.0.0'
     def work_ver = '2.7.1'
     def core_ver = '1.7.0'
+    def okhttp_ver = '4.9.3'
 
 //    implementation "androidx.core:core:$core_ver"
     implementation "androidx.core:core-ktx:$core_ver"
@@ -97,6 +98,6 @@ dependencies {
     //implementation 'com.squareup.leakcanary:leakcanary-object-watcher-android:2.7'
 
     /* OkHttp */
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_ver"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
 }

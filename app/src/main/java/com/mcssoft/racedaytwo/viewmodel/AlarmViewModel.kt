@@ -8,14 +8,10 @@ import javax.inject.Inject
 class AlarmViewModel @Inject constructor(private val repository: RaceDayRepository) : ViewModel() {
 
     /**
-     * Get a listing of Summaries from the cache.
-     * @param elapsed: Flag to indicate which Summaries, i.e. those not elapsed, or those that are.
+     * Get a listing of Summaries from the cache (as flow).
      */
-    fun getFromSummariesCacheAsFlow()
-        = repository.getSummariesFromCacheAsFlow()
-
     fun getFromSummariesCache()
-            = repository.getSummariesFromCache()
+        = repository.getSummariesFromCache()
 
     /**
      * Set the Summary item as being elapsed, i.e. the current time is now after the Race time.

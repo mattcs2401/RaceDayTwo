@@ -233,11 +233,9 @@ class RaceDayCache(private val context: Context) {
     /**
      * Get all the Summaries from the cache.
      */
-    fun getSummariesFromCacheAsFlow() = flow {
+    fun getSummariesFromCache() = flow {
         emit(lSummary)
     }.flowOn(Dispatchers.IO)
-
-    fun getSummariesFromCache() = lSummary
 
     fun getSummaryCount(): Int = lSummary.size
 
@@ -272,7 +270,7 @@ class RaceDayCache(private val context: Context) {
     /**
      * Delete a Summary from the cache and database.
      * @param dao: Database access.
-     * @param mce: The Meeting to delete.
+     * @param sce: The Summary to delete.
      */
     fun removeSummary(dao: IRaceDayDAO, sce: SummaryCacheEntity) {
         val summaryMapper = SummaryMapper()

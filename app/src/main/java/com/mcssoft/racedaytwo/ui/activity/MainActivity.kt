@@ -1,13 +1,9 @@
 package com.mcssoft.racedaytwo.ui.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -22,7 +18,6 @@ import com.mcssoft.racedaytwo.ui.dialog.IRefresh
 import com.mcssoft.racedaytwo.ui.dialog.RefreshDialog
 import com.mcssoft.racedaytwo.ui.fragment.MeetingsFragmentDirections
 import com.mcssoft.racedaytwo.utility.Alarm
-import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.utility.NavManager
 import com.mcssoft.racedaytwo.utility.NavManager.NMView
 import com.mcssoft.racedaytwo.utility.NotifyUtilities
@@ -56,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
           SplashFragment and then the navigation moves to MeetingsFragment. We don't want a back
           arrow from the MeetingsFragment. That is also trapped with an on back press callback.
         */
-        val appBarConfig = AppBarConfiguration(setOf(R.id.id_meetings_fragment))
+        val appBarConfig = AppBarConfiguration(setOf(R.id.id_meetings_fragment))//, R.id.id_summary_fragment))
 
         // Navigation.
         navController = Navigation.findNavController(this, R.id.id_nav_host_fragment)
@@ -112,9 +107,10 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 return true
             }
             R.id.id_mnu_bnv_summary -> {
-                val action =
-                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
-                navController.navigate(action)
+//                val action =
+//                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
+//                navController.navigate(action)
+                navigateToSummary()
                 return true
             }
             R.id.id_mnu_bnv_settings -> {
@@ -134,5 +130,12 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         navController.navigate(action)
     }
     //</editor-fold>
+
+    private fun navigateToSummary() {
+        val intent = Intent(this, SummaryActivity::class.java).apply {
+            //putExtra(EXTRA_MESSAGE, message)
+        }
+        startActivity(intent)
+    }
 
 }

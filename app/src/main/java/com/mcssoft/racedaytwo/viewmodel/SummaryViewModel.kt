@@ -7,12 +7,37 @@ import javax.inject.Inject
 
 class SummaryViewModel @Inject constructor(private val repository: RaceDayRepository) : ViewModel() {
 
-    fun getFromCache()
-        = repository.getSummariesFromCache()
+    /**
+     * Get a listing of Summaries from the cache (as flow).
+     */
+    fun getFromSummariesCache()
+            = repository.getSummariesFromCache()
 
+    /**
+     *
+     */
     fun getCount()
         = repository.getSummaryCount()
 
+    /**
+     *
+     */
     fun removeSummary(sce: SummaryCacheEntity)
         = repository.removeSummary(sce)
+
+    /**
+     * Set the Summary item as being elapsed, i.e. the current time is now after the Race time.
+     * @param sce: The Summary entity to update.
+     */
+    fun setElapsed(sce: SummaryCacheEntity) {
+        repository.updateSummaryAsElapsed(sce)
+    }
+
+    /**
+     * Set the Summary item to indicate near Race time.
+     * @param sce: The Summary entity to update.
+     */
+    fun setWithinWindow(sce: SummaryCacheEntity) {
+        repository.updateSummaryAsWithinWindow(sce)
+    }
 }

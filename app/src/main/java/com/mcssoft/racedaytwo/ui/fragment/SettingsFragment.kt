@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SettingsFragmentBinding
+import com.mcssoft.racedaytwo.databinding.SummaryFragmentBinding
 import com.mcssoft.racedaytwo.utility.NavManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,9 +22,8 @@ class SettingsFragment: Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        val binding = SettingsFragmentBinding.inflate(inflater, container, false)
-        fragmentBinding = binding
-        return binding.root
+        _fragmentBinding = SettingsFragmentBinding.inflate(inflater, container, false)
+        return fragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,6 +31,12 @@ class SettingsFragment: Fragment(), View.OnClickListener {
         Log.d("TAG","[SettingsFragment.onViewCreated]")
         // Toolbar title, button listeners, recyclerview etc.
         setUIComponents()
+    }
+
+    override fun onDestroyView() {
+        // Need this explicitly else LeakCanary reports leaks.
+        _fragmentBinding = null
+        super.onDestroyView()
     }
 
     //<editor-fold default state="collapsed" desc="Region: Click Listener">
@@ -52,6 +58,7 @@ class SettingsFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private var fragmentBinding : SettingsFragmentBinding? = null    // for UI components.
-
+    private var _fragmentBinding : SettingsFragmentBinding? = null    // for UI components.
+    private val fragmentBinding : SettingsFragmentBinding
+        get() = _fragmentBinding!!
 }

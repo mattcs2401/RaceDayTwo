@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.adapter.summary.SummaryAdapter
 import com.mcssoft.racedaytwo.databinding.SummaryFragmentBinding
-import com.mcssoft.racedaytwo.utility.NavManager
+import com.mcssoft.racedaytwo.utility.Constants
+import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.viewmodel.SummaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -27,7 +26,7 @@ import javax.inject.Inject
 class SummaryFragment: Fragment(), View.OnClickListener {
 
     @Inject lateinit var summaryViewModel: SummaryViewModel
-    @Inject lateinit var navManager: NavManager
+    @Inject lateinit var dateUtils: DateUtilities
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +45,8 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         if(summaryViewModel.getCount() > 0) {
+            preCollect()
+            Thread.sleep(50) // TBA ?
             collect(true)
         } else {
             fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
@@ -69,7 +70,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
 
     //<editor-fold default state="collapsed" desc="Region: Listener">
     override fun onClick(view: View?) {
-        findNavController().navigate(R.id.action_summaryFragment_to_meetingsFragment)
+        // TBA.
     }
     //</editor-fold>
 
@@ -78,12 +79,6 @@ class SummaryFragment: Fragment(), View.OnClickListener {
      * Initialise UI related components.
      */
     private fun setUIComponents() {
-        // Set title and back nav listener.
-        navManager.apply {
-            tbView.title = resources.getString(R.string.summary_fragment_name)
-            tbView.setNavigationOnClickListener(this@SummaryFragment)
-            disableAllButHome()
-        }
         // Set the adapter.
         summaryAdapter = SummaryAdapter()
         //
@@ -108,23 +103,46 @@ class SummaryFragment: Fragment(), View.OnClickListener {
      * @param collect: True, collect the flow, else, cancel the collect job.
      */
     private fun collect(collect: Boolean) {
-        if(collect) {
-//            if(summaryViewModel.getCount() == 0) {
-//                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
-//            } else {
+        when (collect) {
+            true -> {
                 collectJob = lifecycleScope.launch {
-                    summaryViewModel.getFromCache().collect { summaries ->
-                        summaryAdapter?.submitList(summaries.sortedBy { it.raceTime })
+                    summaryViewModel.getFromSummariesCache().collect { lSummaries ->
+                        summaryAdapter?.submitList(lSummaries.sortedBy { it.raceTime })
                     }
                 }
-//            }
-        } else {
-            if(!(collectJob?.isCancelled!!)) {
-                collectJob?.cancel()
+            }
+            false -> {
+                if(!(collectJob?.isCancelled!!)) {
+                    collectJob?.cancel()
+                }
             }
         }
     }
-    //</editor-fold>
+
+    /**
+     * Update Summaries before they are collected (for display). Basically do the same as the
+     * AlarmReceiver, but this happens when the fragment is displayed. This is an attempt to help
+     * keep the Summaries as up-to-date as possible.
+     */
+    private fun preCollect() {
+        lifecycleScope.launch {
+            summaryViewModel.getFromSummariesCache().collect { lSummary ->
+                lSummary.forEach { summary ->
+                    if(!summary.elapsed) {
+                        val raceTime = dateUtils.timeToMillis(summary.raceTime)
+                        when (dateUtils.compareToTime(raceTime)) {
+                            Constants.CURRENT_TIME_AFTER -> {
+                                summaryViewModel.setElapsed(summary)
+                            }
+                            Constants.CURRENT_TIME_IN_WINDOW -> {
+                                summaryViewModel.setWithinWindow(summary)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // Swipe to delete implementation.
     private val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback
@@ -133,7 +151,7 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         override fun onMove(recyclerView: RecyclerView,
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder ): Boolean { return false }
-        //
+        // Actions on swipe.
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val sce = summaryAdapter?.currentList?.get(viewHolder.absoluteAdapterPosition)
             sce?.let { summary -> summaryViewModel.removeSummary(summary) }
@@ -147,10 +165,13 @@ class SummaryFragment: Fragment(), View.OnClickListener {
             }
         }
     }
+    //</editor-fold>
 
-    private var collectJob: Job? = Job()                         // for collection start/stop etc.
-    private var summaryAdapter: SummaryAdapter? = null            // adapter for the recyclerview.
+    private var collectJob: Job? = Job()                        // for collection start/stop etc.
+    private var summaryAdapter: SummaryAdapter? = null          // adapter for the recyclerview.
+
     private var _fragmentBinding : SummaryFragmentBinding? = null    // for UI components.
+
     private val fragmentBinding : SummaryFragmentBinding
         get() = _fragmentBinding!!
 }

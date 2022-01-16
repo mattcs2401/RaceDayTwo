@@ -29,6 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.SummaryActivity"
+            android:parentActivityName=".ui.activity.MainActivity">
+            <!-- TBA -->
+        </activity>
         <!-- TBA as to whether a manifest declared receiver is the best option ?? -->
         <receiver
             android:name=".utility.AlarmReceiver"

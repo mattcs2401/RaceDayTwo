@@ -59,9 +59,9 @@ class RunnersFragment : Fragment(), View.OnClickListener, IRunnerAdapter {
     }
 
     override fun onStop() {
-        super.onStop()
         Log.d("TAG","[RunnersFragment.onStop]")
         collect(false)
+        super.onStop()
     }
 
     override fun onDestroyView() {

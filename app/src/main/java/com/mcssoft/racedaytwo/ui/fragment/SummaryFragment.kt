@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,7 +22,9 @@ import com.mcssoft.racedaytwo.utility.NavManager
 import com.mcssoft.racedaytwo.viewmodel.SummaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,20 +46,30 @@ class SummaryFragment: Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         // Toolbar title, button listeners, recyclerview etc.
         setUIComponents()
+
+        collectLatestFlow(summaryViewModel.getCountAsFlow()) { count ->
+            if(count > 0) {
+                collect(true)
+            } else {
+                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        if(summaryViewModel.getCount() > 0) {
-            collect(true)
-        } else {
-            fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
-        }
+//        collectFlow(summaryViewModel.getCountAsFlow()) { count ->
+//            if(count > 0) {
+//                collect(true)
+//            } else {
+//                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
+//            }
+//        }
     }
 
     override fun onStop() {
-        super.onStop()
         collect(false)
+        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -109,15 +124,11 @@ class SummaryFragment: Fragment(), View.OnClickListener {
      */
     private fun collect(collect: Boolean) {
         if(collect) {
-//            if(summaryViewModel.getCount() == 0) {
-//                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
-//            } else {
-                collectJob = lifecycleScope.launch {
-                    summaryViewModel.getFromCache().collect { summaries ->
-                        summaryAdapter?.submitList(summaries.sortedBy { it.raceTime })
-                    }
+            collectJob = lifecycleScope.launch {
+                summaryViewModel.getFromCache().collect { summaries ->
+                    summaryAdapter?.submitList(summaries.sortedBy { it.raceTime })
                 }
-//            }
+            }
         } else {
             if(!(collectJob?.isCancelled!!)) {
                 collectJob?.cancel()
@@ -126,27 +137,35 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     }
     //</editor-fold>
 
+    //<editor-fold default state="collapsed" desc="Region: ItemTouchHelper">
     // Swipe to delete implementation.
     private val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback
         = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         // Required but not used ATT.
-        override fun onMove(recyclerView: RecyclerView,
-                            viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder ): Boolean { return false }
+        override fun onMove(rcv: RecyclerView,
+                            vh: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+
         //
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val sce = summaryAdapter?.currentList?.get(viewHolder.absoluteAdapterPosition)
             sce?.let { summary -> summaryViewModel.removeSummary(summary) }
             Thread.sleep(50)     // give time to update cache and database.
-            if(summaryViewModel.getCount() == 0) {
-                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
-            } else {
-                // Re-start the flow collect to update the adapter's current list.
-                collect(false)
-                collect(true)
+
+            collectLatestFlow(summaryViewModel.getCountAsFlow()) { count ->
+                if (count == 0) {
+                    fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
+                } else {
+                    // Re-start the flow collect to update the adapter's current list.
+                    collect(false)
+                    collect(true)
+                }
             }
         }
     }
+    //</editor-fold>
 
     private var collectJob: Job? = Job()                         // for collection start/stop etc.
     private var summaryAdapter: SummaryAdapter? = null            // adapter for the recyclerview.
@@ -154,3 +173,19 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     private val fragmentBinding : SummaryFragmentBinding
         get() = _fragmentBinding!!
 }
+
+fun <T> Fragment.collectLatestFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(STARTED) {
+            flow.collectLatest(collect)
+        }
+    }
+}
+
+//fun <T> Fragment.collectFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
+//    lifecycleScope.launch {
+//        repeatOnLifecycle(STARTED) {
+//            flow.collect(collect)
+//        }
+//    }
+//}

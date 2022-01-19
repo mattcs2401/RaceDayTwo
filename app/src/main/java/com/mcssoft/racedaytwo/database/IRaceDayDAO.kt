@@ -46,8 +46,8 @@ interface IRaceDayDAO {
     fun getRaces(mtgId: Long?): List<RaceDBEntity>
 
     // Note: Used in creating the RunnerDBEntity (the RaceDBEntity already exists).
-    @Query("select _id from race_details where mtgCode = :mtgCode and raceNo = :raceNo")
-    fun getRace(mtgCode: String, raceNo: String): Long
+    @Query("select * from race_details where mtgCode = :mtgCode and raceNo = :raceNo")
+    fun getRace(mtgCode: String, raceNo: String): RaceDBEntity
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: Runner">

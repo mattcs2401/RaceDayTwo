@@ -239,6 +239,10 @@ class RaceDayCache(private val context: Context) {
 
     fun getSummaryCount(): Int = lSummary.size
 
+    fun getSummaryCountAsFlow() = flow {
+        emit(getSummaryCount())
+    }.flowOn(Dispatchers.IO)
+
     /**
      * Update the Summary entry to indicate that the Race time has elapsed.
      * @param dao: Database access.

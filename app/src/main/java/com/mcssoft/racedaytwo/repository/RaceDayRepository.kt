@@ -8,6 +8,7 @@ import com.mcssoft.racedaytwo.entity.cache.SummaryCacheEntity
 import com.mcssoft.racedaytwo.entity.events.SelectedRunner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -96,10 +97,13 @@ class RaceDayRepository @Inject constructor(context: Context) {
     }
     //</editor-fold>
 
+    //<editor-fold default state="collapsed" desc="Region: Summary">
     fun getSummariesFromCache()
         = raceDayCache.getSummariesFromCache()
 
     fun getSummaryCount(): Int = raceDayCache.getSummaryCount()
+
+    fun getSummaryCountAsFlow(): Flow<Int> = raceDayCache.getSummaryCountAsFlow()
 
     /**
      * Update the Summary entry to indicate that the Race time has elapsed.
@@ -130,6 +134,7 @@ class RaceDayRepository @Inject constructor(context: Context) {
             raceDayCache.removeSummary(raceDayDAO, sce)
         }
     }
+    //</editor-fold>
 
     /**
      * Clear the existing caches and backing data.

@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import androidx.work.*
 import com.mcssoft.racedaytwo.database.RaceDay
+import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
 import com.mcssoft.racedaytwo.entity.events.MtgIdAndCode
 import com.mcssoft.racedaytwo.utility.DataResult
@@ -97,20 +98,21 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
     private fun generateRunners(count: Int, meetingCode: String): DataResult<Any> {
         var ndx = 0                                             // master index.
         var eNdx: Int                                           // range end index.
-        var raceId: Long                           // the Race.
+//        var raceId: Long                           // the Race.
         var lRunners: MutableList<MutableMap<String, String>>   // Runners listing.
 
         try {
             while (ndx < count) {
                 val raceNo = lParseResult[ndx]["RaceNo"]
-                raceId = raceDayDAO.getRace(meetingCode, raceNo!!)
+                val race = raceDayDAO.getRace(meetingCode, raceNo!!)
+//                raceId = race.id!!// raceDayDAO.getRace(meetingCode, raceNo!!)
 
                 ndx += 1                                             // increment to first Runner.
                 eNdx = findLastRunner(ndx, count)                    // find the last Runner index.
                 lRunners = lParseResult.subList(ndx, eNdx)           // create Runners list.
 
                 // Write Runners listing.
-                writeRunners(raceId, lRunners)
+                writeRunners(race, lRunners)
                 // Align indexes.
                 ndx = eNdx
             }
@@ -122,18 +124,19 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
 
     /**
      * Write the Runner details to the database.
-     * @param rId: The associated Race's Id.
+     * @param race: The associated Race (for race id and time values).
      * @param runners: The listing of Runner info.
      */
-    private fun writeRunners(rId: Long, runners: List<Map<String,String>>) {
+    private fun writeRunners(race: RaceDBEntity, runners: List<Map<String,String>>) {
         val lRunnerDBEntity = arrayListOf<RunnerDBEntity>()
         for(runner in runners) {
             RunnerDBEntity().apply {
-                raceId = rId
+                raceId = race.id
+                raceTime = race.raceTime
                 runnerNo = runner["RunnerNo"]!!
                 runnerName = runner["RunnerName"]!!
-                barrier = runner["Barrier"] ?: ""    // e.g. if Trots there's no barrier.
-                scratched = runner["Scratched"] ?: ""
+                barrier = runner["Barrier"] ?: ""     // e.g. if Trots there's no barrier.
+                scratched = runner["Scratched"] ?: "" // value may not exist.
                 lRunnerDBEntity.add(this)
             }
         }

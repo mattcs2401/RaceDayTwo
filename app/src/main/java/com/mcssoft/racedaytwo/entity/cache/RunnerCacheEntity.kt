@@ -3,8 +3,8 @@ package com.mcssoft.racedaytwo.entity.cache
 class RunnerCacheEntity {
     var id: Long? = null          // value inserted by Room.
 
-    var raceId: Long? = null       //
-
+    var raceId: Long? = null      //
+    var raceTime: String = ""     //
     var runnerNo: String = ""     //
     var runnerName: String = ""   //
     var barrier: String = ""      //

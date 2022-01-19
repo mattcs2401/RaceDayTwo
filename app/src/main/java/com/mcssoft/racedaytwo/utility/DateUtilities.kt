@@ -104,6 +104,17 @@ class DateUtilities @Inject constructor(private val context: Context) {
         else return 99
     }
 
+    /**
+     * Compare a given time (formatted as HH:MM) to the current time.
+     * @param formattedTime: A time value as HH:MM.
+     * @return True if the current time is greater than the time given, else false.
+     */
+    fun compareToCurrentTime(formattedTime: String): Boolean {
+        val givenTime = timeToMillis(formattedTime)
+        val currentTime = Calendar.getInstance(Locale.getDefault()).timeInMillis
+        return currentTime > givenTime
+    }
+
     fun getTimeInMillis(): Long = Calendar.getInstance(Locale.getDefault()).timeInMillis
 
     /**

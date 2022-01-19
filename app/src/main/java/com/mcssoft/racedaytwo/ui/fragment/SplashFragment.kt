@@ -80,8 +80,8 @@ class SplashFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onStop() {
-        super.onStop()
         requireContext().unregisterReceiver(downloadReceiver)
+        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -125,7 +125,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
             idBtnRetry.visibility = View.INVISIBLE
             idTvMessage.visibility = View.VISIBLE
         }
-        showMessage(resources.getString(R.string.splash_message), "Restarting")
+        showMessage("Restarting", resources.getString(R.string.splash_message))
         // Create all caches.
         viewModel.createCaches()
         // Navigate to MeetingsFragment.
@@ -172,8 +172,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
                 DOWNLOAD_MAIN_SUCCESS -> execMeetingWorker()
                 // Runner page download success.
                 DOWNLOAD_OTHER_SUCCESS ->
-                    showMessage(resources.getString(R.string.splash_message),
-                        "Downloading: ${getIntentMessage(intent, DOWNLOAD_OTHER_SUCCESS)}")
+                    showMessage("Downloading: ${getIntentMessage(intent, DOWNLOAD_OTHER_SUCCESS)}")
                 // Main page download failure.
                 DOWNLOAD_MAIN_FAILED -> downloadMainFailed(intent,DOWNLOAD_MAIN_FAILED)
                 // Runner page download failure.
@@ -191,8 +190,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * values, and the Runner worker is started.
      */
     private fun execMeetingWorker() {
-        showMessage(resources.getString(R.string.splash_message),
-            "Generating Meeting and Race info.")
+        showMessage("Generating Meeting and Race info.")
         val workManager = WorkManager.getInstance(requireContext())
         val key = requireContext().resources.getString(R.string.key_file_name)
         val value = requireContext().resources.getString(R.string.main_page)
@@ -213,7 +211,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * Meeting/Race objects. If it returns successfully, the Runner cache is created.
      */
     private fun execRunnerWorker() {
-        showMessage(resources.getString(R.string.splash_message), "Generating Runner info.")
+        showMessage("Generating Runner info.")
         Log.d("TAG","[SplashFragment.execRunnerWorker]")
         val lMtgTypes = arrayOf("R","T","G")
         val key = resources.getString(R.string.key_meeting_type)
@@ -235,8 +233,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
                 WorkInfo.State.SUCCEEDED -> {
                     workManager.cancelWorkById(id)
                     // Create Meeting and Race caches. Do in background while processing for Runners.
-                    showMessage(resources.getString(R.string.splash_message),
-                        "Creating initial caches.")
+                    showMessage("Creating initial caches.")
                     viewModel.createCaches()
                     // Kickoff download and parse for Runner info.
                     execRunnerWorker()
@@ -327,7 +324,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
             idBtnRetry.visibility = View.VISIBLE
             idTvMessage.visibility = View.VISIBLE
         }
-        showMessage("Main page download failure.", msg)
+        showMessage(msg, "Main page download failure." )
     }
 
     /**
@@ -339,7 +336,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
         // Note: Method is called from the broadcast receiver.
         val msg = getIntentMessage(intent, action)
         Log.e("TAG","[SplashFragment.downloadReceiver.onReceive] Other Failure: $msg")
-        showMessage("Download failed", msg)
+        showMessage(msg, "Download failed")
     }
 
     /**
@@ -359,15 +356,19 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * @param msgTitle: The message title.
      * @param msgText: The text of the message.
      */
-    private fun showMessage(msgTitle: String, msgText: String) {
+    private fun showMessage(msgText: String, msgTitle: String = "") {
         fragmentBinding?.apply {
             if(idTvMessage.visibility != View.VISIBLE) {
                 idTvMessage.visibility = View.VISIBLE
             }
             idTvMessage.text = StringBuilder().apply {
-                append(msgTitle)
-                appendLine()
-                append(msgText)
+                if(msgTitle == "") {
+                    append(msgText)
+                } else {
+                    append(msgTitle)
+                    appendLine()
+                    append(msgText)
+                }
             }.toString()
         }
     }

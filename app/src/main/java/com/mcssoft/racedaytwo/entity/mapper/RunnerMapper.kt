@@ -19,6 +19,7 @@ class RunnerMapper : IRunnerMapper<RunnerDBEntity, RunnerCacheEntity> {
         return RunnerCacheEntity().apply {
             id = entity.id
             raceId = entity.raceId
+            raceTime = entity.raceTime
             runnerNo = entity.runnerNo
             runnerName = entity.runnerName
             barrier = entity.barrier
@@ -36,6 +37,7 @@ class RunnerMapper : IRunnerMapper<RunnerDBEntity, RunnerCacheEntity> {
         return RunnerDBEntity().apply {
             id = domain.id
             raceId = domain.raceId
+            raceTime = domain.raceTime
             runnerNo = domain.runnerNo
             runnerName = domain.runnerName
             barrier = domain.barrier

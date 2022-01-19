@@ -45,6 +45,9 @@ For each item in summary view:
 -------
 Issues:
 -------
+-> Tap on a notification, navigate to SummaryFragment:
+   - multiples of the same item display.
+
 -> Last item in recyclerview doesn't always display properly, navigation overlays bottom.
 
 -> If you swipe to delete a Meeting, then any related Summary values should also be deleted.

@@ -98,14 +98,12 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
     private fun generateRunners(count: Int, meetingCode: String): DataResult<Any> {
         var ndx = 0                                             // master index.
         var eNdx: Int                                           // range end index.
-//        var raceId: Long                           // the Race.
         var lRunners: MutableList<MutableMap<String, String>>   // Runners listing.
 
         try {
             while (ndx < count) {
                 val raceNo = lParseResult[ndx]["RaceNo"]
                 val race = raceDayDAO.getRace(meetingCode, raceNo!!)
-//                raceId = race.id!!// raceDayDAO.getRace(meetingCode, raceNo!!)
 
                 ndx += 1                                             // increment to first Runner.
                 eNdx = findLastRunner(ndx, count)                    // find the last Runner index.

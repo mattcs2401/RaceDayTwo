@@ -1,6 +1,5 @@
 package com.mcssoft.racedaytwo.utility
 
-import android.content.Context
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -16,7 +15,7 @@ import com.mcssoft.racedaytwo.utility.NavManager.NMView.APP_BAR_VIEW
  * Utility class to enable or disable navigation related elements of the UI depending on what
  * fragment is displaying.
  */
-class NavManager @Inject constructor(private val context: Context)  {
+class NavManager @Inject constructor() {
 
     /**
      * Nav manager specific views.
@@ -39,54 +38,24 @@ class NavManager @Inject constructor(private val context: Context)  {
         get() = _tbView
         set(value) { _tbView = value }
 
-//    /**
-//     * Enable or disable the Home icon on the bottom nav view.
-//     */
-//    fun enableHome(enable: Boolean) {
-//        homeMenu.isEnabled = enable
-//    }
-
-//    /**
-//     * Enable or disable the Summary icon on the bottom nav view.
-//     */
-//    fun enableSummary(enable: Boolean) {
-//        summaryMenu.isEnabled = enable
-//    }
-
-//    /**
-//     * Enable or disable the Settings icon on the bottom nav view.
-//     */
-//    fun enableSettings(enable: Boolean) {
-//        settingsMenu.isEnabled = enable
-//    }
-
-//    /**
-//     * Enable or disable the Refresh icon on the bottom nav view.
-//     */
-//    fun enableRefresh(enable: Boolean) {
-//        refreshMenu.isEnabled = enable
-//    }
-
     /**
      * Set the view variables.
      * @param NMView: The name of the view to set.
      * @param view: The view value.
      * @note This method must be called first.
      */
-    fun setView(NMView: NMView, view: View) {
-        when(NMView) {
-            BOTTOM_NAV_VIEW -> {
-                bnView = view as BottomNavigationView
-                refreshMenu = bnView.menu.findItem(R.id.id_mnu_bnv_refresh)
-                settingsMenu = bnView.menu.findItem(R.id.id_mnu_bnv_settings)
-                summaryMenu = bnView.menu.findItem(R.id.id_mnu_bnv_summary)
-                homeMenu = bnView.menu.findItem(R.id.id_mnu_bnv_home)
-            }
-            APP_BAR_VIEW -> {
-                abView = view as AppBarLayout
-                // also set the toolbar.
-                _tbView = abView.findViewById(R.id.id_toolbar)
-            }
+    fun setView(NMView: NMView, view: View) = when(NMView) {
+        BOTTOM_NAV_VIEW -> {
+            bnView = view as BottomNavigationView
+            refreshMenu = bnView.menu.findItem(R.id.id_mnu_bnv_refresh)
+            settingsMenu = bnView.menu.findItem(R.id.id_mnu_bnv_settings)
+            summaryMenu = bnView.menu.findItem(R.id.id_mnu_bnv_summary)
+            homeMenu = bnView.menu.findItem(R.id.id_mnu_bnv_home)
+        }
+        APP_BAR_VIEW -> {
+            abView = view as AppBarLayout
+            // also set the toolbar.
+            _tbView = abView.findViewById(R.id.id_toolbar)
         }
     }
 
@@ -95,14 +64,12 @@ class NavManager @Inject constructor(private val context: Context)  {
      * @param NMView: The name of the view to hide.
      * @param hide: True to make the view invisible, else, visible.
      */
-    fun hideView(NMView: NMView, hide: Boolean) {
-        when(NMView) {
-            BOTTOM_NAV_VIEW -> {
-                if(hide) bnView.visibility = View.INVISIBLE else bnView.visibility = View.VISIBLE
-            }
-            APP_BAR_VIEW -> {
-                if(hide) abView.visibility = View.INVISIBLE else abView.visibility = View.VISIBLE
-            }
+    fun hideView(NMView: NMView, hide: Boolean) = when(NMView) {
+        BOTTOM_NAV_VIEW -> {
+            if(hide) bnView.visibility = View.INVISIBLE else bnView.visibility = View.VISIBLE
+        }
+        APP_BAR_VIEW -> {
+            if(hide) abView.visibility = View.INVISIBLE else abView.visibility = View.VISIBLE
         }
     }
 

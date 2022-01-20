@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SettingsFragmentBinding
-import com.mcssoft.racedaytwo.databinding.SummaryFragmentBinding
 import com.mcssoft.racedaytwo.utility.NavManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

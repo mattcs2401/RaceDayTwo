@@ -31,6 +31,6 @@ private class SummaryDiffCallback : DiffUtil.ItemCallback<SummaryCacheEntity>() 
     }
 
     override fun areContentsTheSame(oldItem: SummaryCacheEntity, newItem: SummaryCacheEntity): Boolean {
-        return oldItem.equals(newItem)
+        return oldItem == newItem
     }
 }

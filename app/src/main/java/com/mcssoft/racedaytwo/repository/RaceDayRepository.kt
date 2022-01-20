@@ -101,8 +101,6 @@ class RaceDayRepository @Inject constructor(context: Context) {
     fun getSummariesFromCache()
         = raceDayCache.getSummariesFromCache()
 
-    fun getSummaryCount(): Int = raceDayCache.getSummaryCount()
-
     fun getSummaryCountAsFlow(): Flow<Int> = raceDayCache.getSummaryCountAsFlow()
 
     /**

@@ -59,7 +59,7 @@ class DateUtilities @Inject constructor(private val context: Context) {
      * @param minute: The minute of the hour.
      * @return The time in milli seconds.
      */
-    fun timeToMillis(hourOfDay: Int, minute: Int) : Long {
+    private fun timeToMillis(hourOfDay: Int, minute: Int) : Long {
         // Set calendar values.
         val calendar = Calendar.getInstance(Locale.getDefault()).apply {
             set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -68,28 +68,14 @@ class DateUtilities @Inject constructor(private val context: Context) {
         return calendar.timeInMillis
     }
 
+    /**
+     * Get the time in millis from a formatted value.
+     * @param formattedTime: The time formatted as HH24:MM.
+     * @return The time in milli seconds.
+     * */
     fun timeToMillis(formattedTime: String): Long {
         val time = formattedTime.split(":")
         return timeToMillis(time[HOUR].toInt(), time[MINUTE].toInt())
-    }
-
-    /**
-     * Get the given time value formatted as HH:MM.
-     * @param givenTime: The time value in mSec.
-     * @return A time value formatted as HH:MM.
-     */
-    fun timeFromMillis(givenTime: Long): String {
-        var hour: String
-        var minute: String
-        Calendar.getInstance(Locale.getDefault()).apply {
-            timeInMillis = givenTime
-            hour = get(Calendar.HOUR_OF_DAY).toString()
-            minute = get(Calendar.MINUTE).toString()
-        }
-        if(hour.length < 2) hour = "0$hour"
-        if(minute.length < 2) minute = "0$minute"
-
-        return "$hour:$minute"
     }
 
     /**
@@ -99,23 +85,10 @@ class DateUtilities @Inject constructor(private val context: Context) {
      *          1: The current time is after the Race time, i.e. current time > Race time.
      */
     fun compareToTime(givenTime: Long) : Int {
-        if(isBeforeInWindow(givenTime)) return CURRENT_TIME_IN_WINDOW     // -1
-        else if (isAfter(givenTime)) return CURRENT_TIME_AFTER            // 1
-        else return 99
+        return if(isBeforeInWindow(givenTime)) CURRENT_TIME_IN_WINDOW     // -1
+        else if (isAfter(givenTime)) CURRENT_TIME_AFTER            // 1
+        else 99
     }
-
-    /**
-     * Compare a given time (formatted as HH:MM) to the current time.
-     * @param formattedTime: A time value as HH:MM.
-     * @return True if the current time is greater than the time given, else false.
-     */
-    fun compareToCurrentTime(formattedTime: String): Boolean {
-        val givenTime = timeToMillis(formattedTime)
-        val currentTime = Calendar.getInstance(Locale.getDefault()).timeInMillis
-        return currentTime > givenTime
-    }
-
-    fun getTimeInMillis(): Long = Calendar.getInstance(Locale.getDefault()).timeInMillis
 
     /**
      * Get today's date in format; (1) "YYYY/MM/DD" or (2) "YYYY-MM-DD"
@@ -153,14 +126,6 @@ class DateUtilities @Inject constructor(private val context: Context) {
         return Calendar.getInstance(Locale.getDefault()).timeInMillis > givenTime
     }
 
-    /**
-     * Is the current time before the (Race time - 3 minutes).
-     * @param givenTime: The time to compare against.
-     */
-    private fun isBefore(givenTime: Long): Boolean {
-        val currentTime = Calendar.getInstance(Locale.getDefault()).timeInMillis
-        return currentTime < (givenTime - THREE_MINUTES)
-    }
     //</editor-fold>
 }
 /*

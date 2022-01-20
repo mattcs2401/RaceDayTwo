@@ -11,13 +11,18 @@ Design:
 
 -> Swipe to delete with Ok/Cancel.
 
--> Notification of those Races nearing race time.
+-> Notification of those Races nearing race time:
+   - Need to be able to do multiple notifications.
 
 -> Summary view:
    - Past race time - red       (> race time).
    - Nearing race time - orange (within race time - 3 min).
    - Before race time - green   (< race time - 3 min) <<-- default, all text is initially green.
 
+-> Do we really need a SummaryActivity ?
+   - or just because . . .
+
+-----------------------
 Notification algorithm:
 -----------------------
 Alarm receiver has access to Summary cache/table via view holder.

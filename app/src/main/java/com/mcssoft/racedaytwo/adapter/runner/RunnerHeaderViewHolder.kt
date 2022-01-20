@@ -7,12 +7,9 @@ import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemRunnerHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.RunnerCacheEntity
 import com.mcssoft.racedaytwo.entity.events.SelectedRunner
-import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.utility.Constants.HOUR
 import com.mcssoft.racedaytwo.utility.Constants.MINUTE
-import com.mcssoft.racedaytwo.utility.DateUtilities
 import java.util.*
-import javax.inject.Inject
 
 class RunnerHeaderViewHolder(private val binding: ListItemRunnerHeaderBinding,
                              private val iViewHolder: IRunnerViewHolder)

@@ -1,19 +1,11 @@
 package com.mcssoft.racedaytwo.ui.activity
 
-import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -27,15 +19,12 @@ import com.mcssoft.racedaytwo.ui.dialog.IRefresh
 import com.mcssoft.racedaytwo.ui.dialog.RefreshDialog
 import com.mcssoft.racedaytwo.ui.fragment.MeetingsFragmentDirections
 import com.mcssoft.racedaytwo.utility.Alarm
-import com.mcssoft.racedaytwo.utility.Constants
 import com.mcssoft.racedaytwo.utility.NavManager
 import com.mcssoft.racedaytwo.utility.NavManager.NMView
 import com.mcssoft.racedaytwo.utility.NotifyUtilities
 import com.mcssoft.racedaytwo.viewmodel.SummaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -125,9 +114,13 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 return true
             }
             R.id.id_mnu_bnv_summary -> {
-                val action =
-                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
-                navController.navigate(action)
+//                val action =
+//                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
+//                navController.navigate(action)
+                val intent = Intent(this, SummaryActivity::class.java).apply {
+                    // TBA putExtra(EXTRA_MESSAGE, message)
+                }
+                startActivity(intent)
                 return true
             }
             R.id.id_mnu_bnv_settings -> {

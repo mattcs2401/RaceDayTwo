@@ -250,11 +250,11 @@ class RaceDayCache(private val context: Context) {
      */
     fun updateSummaryAsElapsed(dao: IRaceDayDAO, sce: SummaryCacheEntity) {
         val summaryMapper = SummaryMapper()
-        lSummary.get(lSummary.indexOf(sce)).apply {
+        lSummary[lSummary.indexOf(sce)].apply {
             elapsed = true
             colour = context.resources.getColor(R.color.pastRaceTime, null)
         }
-        dao.updateSummary(summaryMapper.mapToSummaryEntity(lSummary.get(lSummary.indexOf(sce))))
+        dao.updateSummary(summaryMapper.mapToSummaryEntity(lSummary[lSummary.indexOf(sce)]))
     }
 
     /**
@@ -264,11 +264,11 @@ class RaceDayCache(private val context: Context) {
      */
     fun updateSummaryAsWithinWindow(dao: IRaceDayDAO, sce: SummaryCacheEntity) {
         val summaryMapper = SummaryMapper()
-        lSummary.get(lSummary.indexOf(sce)).apply {
+        lSummary[lSummary.indexOf(sce)].apply {
             notify = true
             colour = context.resources.getColor(R.color.nearRaceTime, null)
         }
-        dao.updateSummary(summaryMapper.mapToSummaryEntity(lSummary.get(lSummary.indexOf(sce))))
+        dao.updateSummary(summaryMapper.mapToSummaryEntity(lSummary[lSummary.indexOf(sce)]))
     }
 
     /**

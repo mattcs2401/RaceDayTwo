@@ -29,7 +29,7 @@ object UtilitiesModule {
     @Singleton
     @Provides
     fun provideMenuManager(@ApplicationContext context: Context): NavManager
-            = NavManager(context)
+            = NavManager()
 
     @Singleton
     @Provides

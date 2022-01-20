@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -54,17 +53,6 @@ class SummaryFragment: Fragment(), View.OnClickListener {
                 fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        collectFlow(summaryViewModel.getCountAsFlow()) { count ->
-//            if(count > 0) {
-//                collect(true)
-//            } else {
-//                fragmentBinding.idTvSummaryMessage.visibility = View.VISIBLE
-//            }
-//        }
     }
 
     override fun onStop() {

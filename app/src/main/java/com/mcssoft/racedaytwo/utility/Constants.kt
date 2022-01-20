@@ -34,9 +34,6 @@ object Constants {
 
     // Notification.
     const val CHANNEL_ID = "99"
-    const val NOTIFICATION_ID = 0
-    const val NOTIFICATION = "NOTIFICATION"
-
 
 
 }

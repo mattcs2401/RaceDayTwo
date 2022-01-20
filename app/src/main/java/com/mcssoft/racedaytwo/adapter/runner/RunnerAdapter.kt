@@ -32,6 +32,7 @@ class RunnerAdapter(private val adapter: IRunnerAdapter) :
         adapter.onRunnerSelected(selectedRunner)
     }
 }
+
 //<editor-fold default state="collapsed" desc="Region: DiffCallback">
 private class RunnerDiffCallback : DiffUtil.ItemCallback<RunnerCacheEntity>() {
 
@@ -40,7 +41,7 @@ private class RunnerDiffCallback : DiffUtil.ItemCallback<RunnerCacheEntity>() {
     }
 
     override fun areContentsTheSame(oldItem: RunnerCacheEntity, newItem: RunnerCacheEntity): Boolean {
-        return oldItem.runnerNo == newItem.runnerNo
-        // TODO - add the rest of the comparison elements.
+        return oldItem.equals(newItem)
     }
 }
+//</editor-fold>

@@ -237,10 +237,8 @@ class RaceDayCache(private val context: Context) {
         emit(lSummary)
     }.flowOn(Dispatchers.IO)
 
-    fun getSummaryCount(): Int = lSummary.size
-
     fun getSummaryCountAsFlow() = flow {
-        emit(getSummaryCount())
+        emit(lSummary.size)
     }.flowOn(Dispatchers.IO)
 
     /**

@@ -82,25 +82,8 @@ private class MeetingDiffCallback : DiffUtil.ItemCallback<MeetingCacheEntity>() 
     }
 
     override fun areContentsTheSame(oldItem: MeetingCacheEntity, newItem: MeetingCacheEntity): Boolean {
-        return oldItem == newItem
+        return oldItem.equals(newItem)
     }
 }
 //</editor-fold>
 
-/*
-  private void animateExpand() {
-    RotateAnimation rotate =
-        new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-    rotate.setDuration(300);
-    rotate.setFillAfter(true);
-    arrow.setAnimation(rotate);
-  }
-
-  private void animateCollapse() {
-    RotateAnimation rotate =
-        new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-    rotate.setDuration(300);
-    rotate.setFillAfter(true);
-    arrow.setAnimation(rotate);
-  }
- */

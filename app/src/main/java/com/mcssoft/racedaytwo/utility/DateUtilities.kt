@@ -84,10 +84,12 @@ class DateUtilities @Inject constructor(private val context: Context) {
      * @return -1: The current time >= (Race time - 3) amd <= (Race time).
      *          1: The current time is after the Race time, i.e. current time > Race time.
      */
-    fun compareToTime(givenTime: Long) : Int {
-        return if(isBeforeInWindow(givenTime)) CURRENT_TIME_IN_WINDOW     // -1
-        else if (isAfter(givenTime)) CURRENT_TIME_AFTER            // 1
-        else 99
+    fun compareToTime(givenTime: Long): Int {
+        return when {
+            isBeforeInWindow(givenTime) -> CURRENT_TIME_IN_WINDOW    // -1
+            isAfter(givenTime) -> CURRENT_TIME_AFTER                 // 1
+            else -> 99
+        }
     }
 
     /**

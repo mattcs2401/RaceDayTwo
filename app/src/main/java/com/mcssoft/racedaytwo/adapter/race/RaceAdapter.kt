@@ -1,3 +1,5 @@
+@file:Suppress("ReplaceCallWithBinaryOperator")
+
 package com.mcssoft.racedaytwo.adapter.race
 
 import android.view.LayoutInflater
@@ -38,8 +40,7 @@ private class RaceDiffCallback : DiffUtil.ItemCallback<RaceCacheEntity>() {
     }
 
     override fun areContentsTheSame(oldItem: RaceCacheEntity, newItem: RaceCacheEntity): Boolean {
-        return oldItem.mtgId == newItem.mtgId
-        // TODO - add the rest of the comparison elements.
+        return oldItem.equals(newItem)
     }
 }
 //</editor-fold>

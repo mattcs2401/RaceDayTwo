@@ -42,7 +42,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
 
     @Inject lateinit var utilities: DateUtilities
     @Inject lateinit var viewModel: SplashViewModel
-    @Inject lateinit var preferences: RaceDayPreferences
+//    @Inject lateinit var preferences: RaceDayPreferences
     @Inject lateinit var downloader: Downloader
     @Inject lateinit var navManager: NavManager         // simply to remove any navigation options.
 

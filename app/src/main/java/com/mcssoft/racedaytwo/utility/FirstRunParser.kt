@@ -9,43 +9,17 @@ import java.io.InputStream
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-/**
- * A utility class to parse the xml within the given file.
- * @param context For access to string resources.
- * @param fName The name of the file to parse.
- */
-class RaceDayParser(private val context: Context, fName: String = "") {
-    /* https://extendsclass.com/xpath-tester.html
-    * https://www.freeformatter.com/xpath-tester.html <-- gives expression examples
-    */
+class FirstRunParser(private val context: Context, fName: String) {
 
-    // The input stream. Basically the Xml based file contents that will be parsed.
     private var inStream: InputStream? = null
 
     init {
-        if(fName != "") {
-            inStream = Downloader(context).getFileAsStream(fName)
-        }
+        inStream = context.resources.assets.open(fName)
     }
 
-    fun parseForMeetingsAndRaces(): DataResult<ArrayList<MutableMap<String, String>>> {
-        val expr = context.resources.getString(R.string.meetings_races_parse_path)
+    fun parseForFirstRun(): DataResult<ArrayList<MutableMap<String, String>>> {
+        val expr = context.resources.getString(R.string.country_path)
         return parse(expr)
-    }
-
-    fun parseForRacesAndRunners(): DataResult<ArrayList<MutableMap<String, String>>> {
-        val expr = context.resources.getString(R.string.races_runners_parse_path)
-        return parse(expr)
-    }
-
-
-
-    /**
-     * The the input stream based on the file name.
-     * @param name: The file name.
-     */
-    fun setStream(name: String) {
-        inStream = Downloader(context).getFileAsStream(name)
     }
 
     fun closeStream() {
@@ -93,7 +67,4 @@ class RaceDayParser(private val context: Context, fName: String = "") {
         }
         return DataResult.Success(lMap)
     }
-
 }
-
-

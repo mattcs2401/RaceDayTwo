@@ -39,7 +39,7 @@ import com.mcssoft.racedaytwo.utility.NavManager.NMView
 class MeetingsFragment : Fragment(), IMeetingAdapter {
 
     @Inject lateinit var meetingsViewModel: MeetingsViewModel
-    @Inject lateinit var preferences: RaceDayPreferences
+//    @Inject lateinit var preferences: RaceDayPreferences
     @Inject lateinit var  navManager: NavManager
 
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">

@@ -1,0 +1,44 @@
+<Countries>
+    <Country MeetingCode="AR" Location="Adelaide" CountryCode="AU" />
+    <Country MeetingCode="AR" Location="Gawler" CountryCode="AU" />
+    <Country MeetingCode="AR" Location="Penola" CountryCode="AU" />
+    <Country MeetingCode="AR" Location="Port Lincoln" CountryCode="AU" />
+    <Country MeetingCode="BR" Location="Brisbane" CountryCode="AU" />
+    <Country MeetingCode="BR" Location="Doomben" CountryCode="AU" />
+    <Country MeetingCode="BR" Location="Rockhampton" CountryCode="AU" />
+    <Country MeetingCode="BR" Location="Sunshine Coast" CountryCode="AU" />
+    <Country MeetingCode="CR" Location="Armidale" CountryCode="AU" />
+    <Country MeetingCode="CR" Location="Grafton" CountryCode="AU" />
+    <Country MeetingCode="CR" Location="Port Maquarie" CountryCode="AU" />
+    <Country MeetingCode="CR" Location="Yarra Valley" CountryCode="AU" />
+    <Country MeetingCode="ER" Location="Canberra" CountryCode="AU" />
+    <Country MeetingCode="ER" Location="Murwillumbah" CountryCode="AU" />
+    <Country MeetingCode="IR" Location="Townsville" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Flemington" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Geelong" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Melbourne" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Moonee Valley" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Packenham" CountryCode="AU" />
+    <Country MeetingCode="NR" Location="Kembla Grange" CountryCode="AU" />
+    <Country MeetingCode="OR" Location="Parkes" CountryCode="AU" />
+    <Country MeetingCode="PR" Location="Ascot" CountryCode="AU" />
+    <Country MeetingCode="PR" Location="Mount Barker" CountryCode="AU" />
+    <Country MeetingCode="PR" Location="Pinjara" CountryCode="AU" />
+    <Country MeetingCode="QR" Location="Dalby" CountryCode="AU" />
+    <Country MeetingCode="QR" Location="Gatton" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Canterbury Park" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Goulburn" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Randwick" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Sydney" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Tamworth" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Wyong" CountryCode="AU" />
+    <Country MeetingCode="TR" Location="Hobart" CountryCode="AU" />
+    <Country MeetingCode="VR" Location="Great Western" CountryCode="AU" />
+    <Country MeetingCode="VR" Location="Warrnambool" CountryCode="AU" />
+    <Country MeetingCode="OS" Location="Sha Tin" CountryCode="HK" />
+    <Country MeetingCode="ZS" Location="Riccarton" CountryCode="NZ" />
+    <Country MeetingCode="ZS" Location="Ellerslie" CountryCode="NZ" />
+</Countries>
+<!--
+Common: AR, BR, CR, ER, IR, MR, NR, OR, PR, QR, SR, TR, VR, OS, ZS
+-->

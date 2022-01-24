@@ -130,11 +130,8 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     private val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback
         = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         // Required but not used ATT.
-        override fun onMove(rcv: RecyclerView,
-                            vh: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder): Boolean {
-            return false
-        }
+        override fun onMove(rcv: RecyclerView, vh: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder): Boolean { return false }
 
         //
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

@@ -22,6 +22,9 @@
     -->
     <string name="races_runners_parse_path">/RaceDay/Meeting/Race|//Runner</string>
 
+    <string name="country_file">database/country.xml</string>
+    <string name="country_path">/Countries/Country</string>
+
     <!-- Toast text -->
     <string name="back_press_text">Press back again to exit.</string>
 

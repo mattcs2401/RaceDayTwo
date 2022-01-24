@@ -12,6 +12,7 @@ import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
 import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 import com.mcssoft.racedaytwo.utility.DataResult
 import com.mcssoft.racedaytwo.utility.RaceDayParser
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -34,6 +35,7 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
     private var listing = arrayListOf<MutableMap<String, String>>()
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        val failureData = workDataOf()
         val failureKey = context.resources.getString(R.string.key_result_failure)
         try {
             val fileName = params.inputData.getString(context.resources.getString(R.string.key_file_name))
@@ -49,22 +51,21 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
                         is DataResult.Success -> { return@withContext Result.success() }
                         is DataResult.Error -> {
                             // Generate listing from main page parse results failure.
-                            val failureData = workDataOf(failureKey to generateDataResult.data.toString())
+                            failureData.apply { failureKey to generateDataResult.data.toString() }
                             return@withContext Result.failure(failureData)
                         }
                     }
                 }
                 is DataResult.Error -> {
                     // Main page parsing failure.
-                    val failureData = workDataOf(failureKey to parseDataResult.data.toString())
+                    failureData.apply { failureKey to parseDataResult.data.toString() }
                     return@withContext Result.failure(failureData)
                 }
             }
         } catch (ex: Exception) {
             val msg = getExceptionMessage(ex)
-            val data = workDataOf(failureKey to msg)
             Log.e("TAG", "[MeetingWorker].doWork: Exception= $msg")
-            return@withContext Result.failure(data)
+            return@withContext Result.failure(workDataOf(failureKey to msg))
         } finally {
             raceDayParser?.closeStream()
         }
@@ -94,8 +95,7 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
                 /* TODO - MeetingType excludes all except "R" (T and G is TBA).
                 *       - MeetingCode excludes those that end in "S" (mainly overseas races).
                 */
-                if(meeting.meetingType == "R" /* &&
-                        !meeting.meetingCode.endsWith("S") */) {
+                if(meeting.meetingType == "R") {
                     // Update Meeting object with track & weather details from the Race detail. Each
                     // element in lRaces will have the same info, so just pick the first.
                     val id = writeMeeting(meeting, lRaces[0])

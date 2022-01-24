@@ -4,24 +4,23 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
-import com.mcssoft.racedaytwo.entity.database.SummaryDBEntity
-import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
-import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.mcssoft.racedaytwo.entity.database.*
+import com.mcssoft.racedaytwo.entity.database.CountryDataDBEntity
+import com.mcssoft.racedaytwo.utility.CountryData
 
 @Database(entities =
    [MeetingDBEntity::class,
     RaceDBEntity::class,
     RunnerDBEntity::class,
-    SummaryDBEntity::class],
+    SummaryDBEntity::class,
+    CountryDataDBEntity::class],
     version = 1,
     exportSchema = false)
 abstract class RaceDay : RoomDatabase() {
-// https://developer.android.com/training/data-storage/room
-// https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1#829a
-// https://proandroiddev.com/sqlite-triggers-android-room-2e7120bb3e3a
 
     internal abstract fun raceDayDao(): IRaceDayDAO
+    internal abstract fun firstRunDao(): IFirstRunDAO
 
     companion object {
         @Volatile
@@ -31,16 +30,23 @@ abstract class RaceDay : RoomDatabase() {
             return instance ?: Room
                 .databaseBuilder(context,
                     RaceDay::class.java, "race_day.db")
-//                .addCallback(db_callback)
+                .addCallback(object: Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        val cd = CountryData(context)
+                        cd.insertCountryData()
+                    }
+                })
                 .build()
                 .also { instance = it }
         }
-
-//        private val db_callback = object : RoomDatabase.Callback() {
-//            override fun onCreate(db: SupportSQLiteDatabase) {
-//                super.onCreate(db)
-//                db.execSQL("TBA")
-//            }
-//        }
     }
+
 }
+
+/* Assorted doco:
+ https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1
+ https://developer.android.com/training/data-storage/room
+ https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1#829a
+ https://proandroiddev.com/sqlite-triggers-android-room-2e7120bb3e3a
+*/

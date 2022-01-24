@@ -33,6 +33,7 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
     private var lIdsAndCodes = listOf<MtgIdAndCode>()
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        val failureData = workDataOf()
         val failureKey = context.resources.getString(R.string.key_result_failure)
         try {
             // Get the input params (a list of meeting types e.g. "R", "T","G").
@@ -51,7 +52,7 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
             // process the Xml.
             when(val genFilesDataResult = generateFiles(lMeetingCodes)) {
                 is DataResult.Error -> {
-                    val failureData = workDataOf(failureKey to genFilesDataResult.data.toString())
+                    failureData.apply { failureKey to genFilesDataResult.data.toString() }
                     return@withContext Result.failure(failureData)
                 }
                 is DataResult.Success -> {
@@ -67,13 +68,13 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
                                 when(val genRunnersDataResult = generateRunners(lParseResult.size, meetingCode)) {
                                     is DataResult.Success -> {}
                                     is DataResult.Error -> {
-                                        val failureData = workDataOf(failureKey to genRunnersDataResult.data.toString())
+                                        failureData.apply { failureKey to genRunnersDataResult.data.toString() }
                                         return@withContext Result.failure(failureData)
                                     }
                                 }
                             }
                             is DataResult.Error -> {
-                                val failureData = workDataOf(failureKey to parserDataResult.data.toString())
+                                failureData.apply { failureKey to parserDataResult.data.toString() }
                                 return@withContext Result.failure(failureData)
                             }
                         }

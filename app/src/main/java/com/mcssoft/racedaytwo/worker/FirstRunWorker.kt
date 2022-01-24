@@ -8,7 +8,7 @@ import androidx.work.workDataOf
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.database.CountryDataDBEntity
-import com.mcssoft.racedaytwo.utility.FirstRunParser
+import com.mcssoft.racedaytwo.utility.parser.FirstRunParser
 import com.mcssoft.racedaytwo.utility.DataResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -53,8 +53,6 @@ class FirstRunWorker(private val context: Context, private val params: WorkerPar
         } catch(ex: Exception) {
             val msg = getExceptionMessage(ex)
             return@withContext Result.failure(workDataOf(failureKey to msg))
-        } finally {
-            raceDayParser?.closeStream()
         }
     }
 

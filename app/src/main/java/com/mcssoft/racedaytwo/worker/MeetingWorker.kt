@@ -11,8 +11,7 @@ import com.mcssoft.racedaytwo.database.RaceDay
 import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
 import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 import com.mcssoft.racedaytwo.utility.DataResult
-import com.mcssoft.racedaytwo.utility.RaceDayParser
-import dagger.hilt.android.AndroidEntryPoint
+import com.mcssoft.racedaytwo.utility.parser.RaceDayParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -66,8 +65,6 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
             val msg = getExceptionMessage(ex)
             Log.e("TAG", "[MeetingWorker].doWork: Exception= $msg")
             return@withContext Result.failure(workDataOf(failureKey to msg))
-        } finally {
-            raceDayParser?.closeStream()
         }
     }
 

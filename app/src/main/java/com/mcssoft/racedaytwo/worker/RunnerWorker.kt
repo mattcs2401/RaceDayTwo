@@ -9,7 +9,7 @@ import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
 import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
 import com.mcssoft.racedaytwo.entity.events.MtgIdAndCode
 import com.mcssoft.racedaytwo.utility.DataResult
-import com.mcssoft.racedaytwo.utility.RaceDayParser
+import com.mcssoft.racedaytwo.utility.parser.RaceDayParser
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.Downloader
 import kotlinx.coroutines.Dispatchers
@@ -85,8 +85,6 @@ class RunnerWorker(private val context: Context, private val params: WorkerParam
         } catch (ex: Exception) {
             val data = workDataOf(failureKey to getExceptionMessage(ex))
             return@withContext Result.failure(data)
-        } finally {
-            raceDayParser?.closeStream()
         }
     }
 

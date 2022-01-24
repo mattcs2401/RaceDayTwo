@@ -1,39 +1,26 @@
-package com.mcssoft.racedaytwo.utility
+package com.mcssoft.racedaytwo.utility.parser
 
-import android.content.Context
-import android.util.Log
-import com.mcssoft.racedaytwo.R
+import com.mcssoft.racedaytwo.utility.DataResult
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.InputStream
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-class FirstRunParser(private val context: Context, fName: String) {
-
-    private var inStream: InputStream? = null
-
-    init {
-        inStream = context.resources.assets.open(fName)
-    }
-
-    fun parseForFirstRun(): DataResult<ArrayList<MutableMap<String, String>>> {
-        val expr = context.resources.getString(R.string.country_path)
-        return parse(expr)
-    }
-
-    fun closeStream() {
-        inStream?.close()
-    }
+/**
+ * Utility class that has the core parse method.
+ */
+open class BaseParser {
 
     /**
      * Generic method to parse using the given XPath expression.
      * @param xpathExpr: The XPath expression to parse on.
+     * @param inStream: The input stream to parse on.
      * @return: An Array of Map<String,String> (Node LocalName and NodeValue).
      * @note: Will throw an exception if the given path cannot be evaluated, or on any other
      *        exception.
      */
-    private fun parse(xpathExpr: String): DataResult<ArrayList<MutableMap<String, String>>> {
+    fun parse(xpathExpr: String, inStream: InputStream): DataResult<ArrayList<MutableMap<String, String>>> {
         val lMap = ArrayList<MutableMap<String, String>>()
 
         try {
@@ -57,14 +44,13 @@ class FirstRunParser(private val context: Context, fName: String) {
                 }
             }
         } catch(ex: Exception) {
-            Log.e("TAG", "[RaceDayParser.parse] Exception: Map size: ${lMap.size} Message: ${ex.message}")
             val lArray = arrayListOf<MutableMap<String,String>>()
-            lArray.add(mutableMapOf("[RaceDayParser.parse] Exception: " to "${ex.message}"))
             return DataResult.Error(lArray)
         }
         finally {
-            closeStream()
+            inStream.close()
         }
         return DataResult.Success(lMap)
     }
+
 }

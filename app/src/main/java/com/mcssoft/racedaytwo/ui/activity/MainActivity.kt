@@ -114,8 +114,9 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 return true
             }
             R.id.id_mnu_bnv_summary -> {
-                val intent = Intent(this, SummaryActivity::class.java)
-                startActivity(intent)
+                val action =
+                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
+                navController.navigate(action)
                 return true
             }
             R.id.id_mnu_bnv_settings -> {

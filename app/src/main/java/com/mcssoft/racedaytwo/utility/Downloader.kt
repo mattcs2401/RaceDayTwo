@@ -29,11 +29,7 @@ class Downloader  @Inject constructor(private val context: Context) {
 // example: URL("https://tatts.com/pagedata/racing/2022/1/11/RaceDay.xml")
 
     // Note: Seem to get good results for the downloads when using this.
-    private val client: OkHttpClient = OkHttpClient().newBuilder()
-//        .addNetworkInterceptor(ErrorInterceptor())  //
-//        .addInterceptor(LogInterceptor())           // testing perhaps ?
-//        .connectTimeout(3, TimeUnit.SECONDS)        // this doesn't seem to work for an async conn.
-        .build()
+    private val client: OkHttpClient = OkHttpClient().newBuilder().build()
 
     private val cachePath
         get() = context.externalCacheDir!!.absolutePath
@@ -99,6 +95,12 @@ class Downloader  @Inject constructor(private val context: Context) {
         return false
     }
 
+    /**
+     * Send a broadcast back to the receiver in the SplashFragment.
+     * @param type: The broadcast type.
+     * @param page: The page (file.xml) that was being downloaded.
+     * @param message: Optional message.
+     */
     private fun sendBroadcast(type: BROADCAST_TYPE, page: String, message: String = "") {
         // TODO - do we care about success ? or only broadcast on failure ?
         intent = Intent()

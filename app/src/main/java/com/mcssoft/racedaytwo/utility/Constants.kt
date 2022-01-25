@@ -5,13 +5,11 @@ object Constants {
     // MeetingsFragment back press interval time (between presses).
     const val BACK_PRESS_TIME: Long = 2000
 
-    // Recyclerview.
-    enum class VIEW_TYPE(i: Int) {
+    // Recyclerview (used for adapter's viewType parameter).
+    enum class VIEW_TYPE(ordinal: Int) {
         HEADER(0),
         DETAIL(1)
     }
-//    const val VIEW_TYPE_HEADER = 0     // show header info for the recyclerview item.
-//    const val VIEW_TYPE_DETAIL = 1     // show detail info for the recyclerview item.
 
     const val REQ_CODE = 0             // used by Alarm intent.
 
@@ -33,14 +31,27 @@ object Constants {
 
     // Downloader() broadcast constants.
     enum class DOWNLOAD_TYPE {
-        SUCCESS_MAIN,
-        SUCCESS_OTHER,
-        FAILURE_MAIN,
-        FAILURE_OTHER
+        SUCCESS_MAIN,        // main page download success (RaceDay.xml).
+        SUCCESS_OTHER,       // other page download success, e.g. BR.xml.
+        FAILURE_MAIN,        // main page download fail.
+        FAILURE_OTHER        // other page download fail.
     }
 
+    // The general type of the download broadcast.
     enum class BROADCAST_TYPE {
-        SUCCESS,
-        ERROR
+        SUCCESS,             // successful.
+        ERROR                // an error occurred.
+    }
+
+    // The general type of a worker failure.
+    enum class WORKER_FAILURE {
+        MEETING,             // Meeting worker.
+        RUNNER               // Runner worker.
+    }
+
+    // The general type of app startup.
+    enum class START_TYPE {
+        RE_START,            // just recreate caches.
+        CLEAN_START          // delete and recreate everything.
     }
 }

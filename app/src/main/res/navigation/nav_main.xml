@@ -44,6 +44,10 @@
             android:id="@+id/action_meetingsFragment_to_settingsFragment"
             app:destination="@+id/id_settings_fragment">
         </action>
+        <action
+            android:id="@+id/action_meetingsFragment_to_summaryFragment"
+            app:destination="@+id/id_summary_fragment">
+        </action>
         <argument
             android:name="mtgFilter"
             app:argType="string[]"
@@ -97,6 +101,17 @@
         tools:layout="@layout/settings_fragment">
         <action
             android:id="@+id/action_settingsFragment_to_meetingsFragment"
+            app:destination="@+id/id_meetings_fragment"/>
+    </fragment>
+
+    <!-- SummaryFragment. -->
+    <fragment
+        android:id="@+id/id_summary_fragment"
+        android:name="com.mcssoft.racedaytwo.ui.fragment.SummaryFragment"
+        android:label="Summary"
+        tools:layout="@layout/summary_fragment">
+        <action
+            android:id="@+id/action_summaryFragment_to_meetingsFragment"
             app:destination="@+id/id_meetings_fragment"/>
     </fragment>
 

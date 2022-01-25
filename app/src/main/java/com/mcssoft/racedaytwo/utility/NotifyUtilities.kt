@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import com.mcssoft.racedaytwo.R
-import com.mcssoft.racedaytwo.ui.activity.SummaryActivity
+import com.mcssoft.racedaytwo.ui.activity.MainActivity
 import com.mcssoft.racedaytwo.utility.Constants.CHANNEL_ID
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class NotifyUtilities @Inject constructor(private val context: Context)  {
 //            .createPendingIntent()
 
         // Create an Intent for the activity you want to start
-        val intent = Intent(context, SummaryActivity::class.java).apply {
+        val intent = Intent(context, MainActivity::class.java).apply {
             putExtras(bundleOf("key" to "fromNotifyTap"))
             // TBA - These required ?
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)

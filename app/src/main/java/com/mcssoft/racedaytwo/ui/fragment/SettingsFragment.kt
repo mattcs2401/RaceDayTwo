@@ -21,8 +21,8 @@ class SettingsFragment: Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        _fragmentBinding = SettingsFragmentBinding.inflate(inflater, container, false)
-        return fragmentBinding.root
+        binding = SettingsFragmentBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class SettingsFragment: Fragment(), View.OnClickListener {
 
     override fun onDestroyView() {
         // Need this explicitly else LeakCanary reports leaks.
-        _fragmentBinding = null
+        binding = null
         super.onDestroyView()
     }
 
@@ -57,7 +57,5 @@ class SettingsFragment: Fragment(), View.OnClickListener {
         }
     }
 
-    private var _fragmentBinding : SettingsFragmentBinding? = null    // for UI components.
-    private val fragmentBinding : SettingsFragmentBinding
-        get() = _fragmentBinding!!
+    private var binding : SettingsFragmentBinding? = null    // for UI components.
 }

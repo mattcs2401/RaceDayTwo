@@ -1,10 +1,7 @@
 package com.mcssoft.racedaytwo.database
 
 import androidx.room.*
-import com.mcssoft.racedaytwo.entity.database.MeetingDBEntity
-import com.mcssoft.racedaytwo.entity.database.SummaryDBEntity
-import com.mcssoft.racedaytwo.entity.database.RaceDBEntity
-import com.mcssoft.racedaytwo.entity.database.RunnerDBEntity
+import com.mcssoft.racedaytwo.entity.database.*
 import com.mcssoft.racedaytwo.entity.events.MtgIdAndCode
 
 @Dao
@@ -80,4 +77,7 @@ interface IRaceDayDAO {
     @Query("delete from summary_details")
     fun deleteAllSummary()
     //</editor-fold>
+
+    @Query("select distinct meetingCode from country_details")
+    fun getMeetingCodes(): List<String>
 }

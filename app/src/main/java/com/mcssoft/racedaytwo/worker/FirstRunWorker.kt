@@ -86,15 +86,15 @@ class FirstRunWorker(private val context: Context, private val params: WorkerPar
 
     /**
      * Create the CountryData entity.
-     * @param cd: The raw data from the Xml.
+     * @param cData: The raw data from the Xml.
      * @return A CountryData entity.
      */
-    private fun collateCountryData(cd: Map<String, String>): CountryDataDBEntity {
+    private fun collateCountryData(cData: Map<String, String>): CountryDataDBEntity {
         return CountryDataDBEntity().apply {
-            meetingCode = cd["MeetingCode"]!!
-            location = cd["Location"]!!
-            countryCode = cd["CountryCode"]!!
-            comment = cd["Comment"] ?: ""
+            meetingCode = cData["MeetingCode"]!!
+            location = cData["Location"]!!
+            countryCode = cData["CountryCode"]!!
+            comment = cData["Comment"] ?: ""
         }
     }
 

@@ -15,11 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.work.*
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
-import com.mcssoft.racedaytwo.repository.RaceDayPreferences
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_MAIN_FAILED
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_MAIN_SUCCESS
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_FAILED
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_SUCCESS
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_OTHER
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.Downloader
 import com.mcssoft.racedaytwo.utility.NavManager
@@ -46,17 +46,23 @@ class SplashFragment : Fragment(), View.OnClickListener {
     @Inject lateinit var downloader: Downloader
     @Inject lateinit var navManager: NavManager         // simply to remove any navigation options.
 
+//    enum class DOWNLOAD_TYPE {
+//        SUCCESS_MAIN,
+//        SUCCES_OTHER,
+//        FAILURE_MAIN,
+//        FAILURE_OTHER
+//    }
+
     //<editor-fold default state="collapsed" desc="Region: Lifecycle">
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // File download intent filters to signify success or failure.
         downloadFilter = IntentFilter().apply {
-            addAction(DOWNLOAD_MAIN_SUCCESS)
-            addAction(DOWNLOAD_MAIN_FAILED)
-            addAction(DOWNLOAD_OTHER_SUCCESS)
-            addAction(DOWNLOAD_OTHER_FAILED)
+            addAction(SUCCESS_MAIN.toString())
+            addAction(FAILURE_MAIN.toString())
+            addAction(SUCCESS_OTHER.toString())
+            addAction(FAILURE_OTHER.toString())
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -124,8 +130,9 @@ class SplashFragment : Fragment(), View.OnClickListener {
             idProgressBar.visibility = View.VISIBLE
             idBtnRetry.visibility = View.INVISIBLE
             idTvMessage.visibility = View.VISIBLE
+            idTvMessage.text = resources.getString(R.string.splash_message)
         }
-        showMessage("Restarting", resources.getString(R.string.splash_message))
+//        showMessage("Restarting", resources.getString(R.string.splash_message))
         // Create all caches.
         viewModel.createCaches()
         // Navigate to MeetingsFragment.
@@ -169,14 +176,13 @@ class SplashFragment : Fragment(), View.OnClickListener {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 // Main page download success. Kick off the background processing.
-                DOWNLOAD_MAIN_SUCCESS -> execMeetingWorker()
+                SUCCESS_MAIN.toString() -> execMeetingWorker()
                 // Runner page download success.
-                DOWNLOAD_OTHER_SUCCESS ->
-                    showMessage("Downloading: ${getIntentMessage(intent, DOWNLOAD_OTHER_SUCCESS)}")
+                SUCCESS_OTHER.toString() -> {}
                 // Main page download failure.
-                DOWNLOAD_MAIN_FAILED -> downloadMainFailed(intent,DOWNLOAD_MAIN_FAILED)
+                FAILURE_MAIN.toString() -> downloadFailure(FAILURE_MAIN, intent)
                 // Runner page download failure.
-                DOWNLOAD_OTHER_FAILED -> downloadOtherFailed(intent, DOWNLOAD_OTHER_FAILED)
+                FAILURE_OTHER.toString() -> downloadFailure(FAILURE_OTHER, intent)
             }
         }
     }
@@ -190,7 +196,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * values, and the Runner worker is started.
      */
     private fun execMeetingWorker() {
-        showMessage("Generating Meeting and Race info.")
+//        showMessage("Generating Meeting and Race info.")
         val workManager = WorkManager.getInstance(requireContext())
         val key = requireContext().resources.getString(R.string.key_file_name)
         val value = requireContext().resources.getString(R.string.main_page)
@@ -211,9 +217,9 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * Meeting/Race objects. If it returns successfully, the Runner cache is created.
      */
     private fun execRunnerWorker() {
-        showMessage("Generating Runner info.")
+//        showMessage("Generating Runner info.")
         Log.d("TAG","[SplashFragment.execRunnerWorker]")
-        val lMtgTypes = arrayOf("R","T","G")
+        val lMtgTypes = arrayOf("R")//,"T","G")
         val key = resources.getString(R.string.key_meeting_type)
         val workManager = WorkManager.getInstance(requireContext())
         val runnerWorker = OneTimeWorkRequestBuilder<RunnerWorker>()
@@ -233,7 +239,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
                 WorkInfo.State.SUCCEEDED -> {
                     workManager.cancelWorkById(id)
                     // Create Meeting and Race caches. Do in background while processing for Runners.
-                    showMessage("Creating initial caches.")
+//                    showMessage("Creating initial caches.")
                     viewModel.createCaches()
                     // Kickoff download and parse for Runner info.
                     execRunnerWorker()
@@ -309,68 +315,41 @@ class SplashFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    /**
-     * Actions if the main page (RaceDay.xml) download fails.
-     * @param intent: The broadcast intent.
-     * @param action: The broadcast action.
-     */
-    private fun downloadMainFailed(intent: Intent, action: String) {
-        // Note: Method is called from the broadcast receiver.
-        val msg = getIntentMessage(intent, action)
-        Log.e("TAG","[SplashFragment.downloadReceiver.onReceive] Main Failure: $msg")
-
+    private fun downloadFailure(type: DOWNLOAD_TYPE, intent: Intent) {
+        val msg = getIntentMessage(intent, type)
         fragmentBinding?.apply {
             idProgressBar.visibility = View.GONE
             idBtnRetry.visibility = View.VISIBLE
             idTvMessage.visibility = View.VISIBLE
+            idTvMessage.text = resources.getString(R.string.splash_main_fail)
         }
-        showMessage(msg, "Main page download failure." )
-    }
-
-    /**
-     * Actions if the other pages respective download fails, e.g. pages "BR.xml" or "SR.xml" etc.
-     * @param intent: The broadcast intent.
-     * @param action: The broadcast action.
-     */
-    private fun downloadOtherFailed(intent: Intent, action: String) {
-        // Note: Method is called from the broadcast receiver.
-        val msg = getIntentMessage(intent, action)
-        Log.e("TAG","[SplashFragment.downloadReceiver.onReceive] Other Failure: $msg")
-        showMessage(msg, "Download failed")
+        when(type) {
+            FAILURE_MAIN -> {
+                Log.e("TAG","[SplashFragment.downloadReceiver.onReceive] Main Failure: $msg")
+                fragmentBinding?.apply {
+                    idTvMessage.text = resources.getString(R.string.splash_main_fail)}
+            }
+            FAILURE_OTHER -> {
+                Log.e("TAG","[SplashFragment.downloadReceiver.onReceive] Other Failure: $msg")
+                fragmentBinding?.apply {
+                    idTvMessage.text = resources.getString(R.string.splash_other_fail)
+                }
+            }
+            else -> {}
+        }
     }
 
     /**
      * Get the message from the broadcast intent.
      * @param intent: The broadcast intent.
+     * @param type: The download type.
      * @return The message from the intent.
      */
-    private fun getIntentMessage(intent: Intent, action: String): String {
+    private fun getIntentMessage(intent: Intent, type: DOWNLOAD_TYPE): String {
         return intent
-            .getBundleExtra(action)
+            .getBundleExtra(type.toString())
             ?.getString(resources.getString(R.string.key_broadcast_message))
             .toString()
-    }
-
-    /**
-     * Display a message.
-     * @param msgTitle: The message title.
-     * @param msgText: The text of the message.
-     */
-    private fun showMessage(msgText: String, msgTitle: String = "") {
-        fragmentBinding?.apply {
-            if(idTvMessage.visibility != View.VISIBLE) {
-                idTvMessage.visibility = View.VISIBLE
-            }
-            idTvMessage.text = StringBuilder().apply {
-                if(msgTitle == "") {
-                    append(msgText)
-                } else {
-                    append(msgTitle)
-                    appendLine()
-                    append(msgText)
-                }
-            }.toString()
-        }
     }
 
     private fun setViews() {

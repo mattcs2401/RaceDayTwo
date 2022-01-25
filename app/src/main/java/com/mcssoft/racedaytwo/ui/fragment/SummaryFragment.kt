@@ -61,7 +61,6 @@ class SummaryFragment: Fragment(), View.OnClickListener {
     }
 
     override fun onDestroyView() {
-        Log.d("TAG","[RunnersFragment.onDestroyView]")
         // Need this explicitly else LeakCanary reports leaks.
         summaryAdapter = null
         _fragmentBinding = null

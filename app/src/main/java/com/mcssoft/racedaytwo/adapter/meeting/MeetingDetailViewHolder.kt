@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
-import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_HEADER
+import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE.HEADER
 
 /**
  * ViewHolder for the RaceMeeting detail.
@@ -40,7 +40,7 @@ class MeetingDetailViewHolder(private val binding: ListItemMeetingDetailBinding,
     override fun onClick(view: View) {
         when(view.id) {
             R.id.id_arrow_up ->
-                iViewHolder.onExpandCollapseSelect(VIEW_TYPE_HEADER, bindingAdapterPosition)
+                iViewHolder.onExpandCollapseSelect(HEADER.ordinal, bindingAdapterPosition)
 
             else -> iViewHolder.onSelect(meetingCacheEntity)
         }

@@ -28,8 +28,10 @@
     <!-- Toast text -->
     <string name="back_press_text">Press back again to exit.</string>
 
-    <!-- Splash message. -->
+    <!-- Splash messages. -->
     <string name="splash_message">Getting things ready.</string>
+    <string name="splash_main_fail">Main page download failure.</string>
+    <string name="splash_other_fail">Race page download failure.</string>
 
     <!-- Retry message. -->
     <string name="parse_retry_message">Parsing failure. Select Retry</string>

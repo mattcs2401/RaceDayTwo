@@ -16,6 +16,7 @@
     <Country MeetingCode="IR" Location="Townsville" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Flemington" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Geelong" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Kilmore" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Melbourne" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Moonee Valley" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Packenham" CountryCode="AU" />
@@ -26,6 +27,7 @@
     <Country MeetingCode="PR" Location="Pinjara" CountryCode="AU" />
     <Country MeetingCode="QR" Location="Dalby" CountryCode="AU" />
     <Country MeetingCode="QR" Location="Gatton" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Bathurst" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Canterbury Park" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Goulburn" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Randwick" CountryCode="AU" />

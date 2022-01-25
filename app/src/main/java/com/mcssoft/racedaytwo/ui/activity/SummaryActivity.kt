@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SummaryActivity : AppCompatActivity() {
 
-    private lateinit var appBarLayout: AppBarLayout
+    private var appBarLayout: AppBarLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +23,13 @@ class SummaryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)     // so displays fragment's title.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)       // back nav.
 
-        appBarLayout.findViewById<Toolbar>(R.id.id_toolbar_summary).apply {
+        appBarLayout?.findViewById<Toolbar>(R.id.id_toolbar_summary).apply {
             title = resources.getString(R.string.summary_fragment_name)
         }
     }
 
+    override fun onDestroy() {
+        appBarLayout = null
+        super.onDestroy()
+    }
 }

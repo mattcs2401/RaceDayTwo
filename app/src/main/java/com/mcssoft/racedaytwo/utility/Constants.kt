@@ -6,14 +6,12 @@ object Constants {
     const val BACK_PRESS_TIME: Long = 2000
 
     // Recyclerview.
-    const val VIEW_TYPE_HEADER = 0     // show header info for the recyclerview item.
-    const val VIEW_TYPE_DETAIL = 1     // show detail info for the recyclerview item.
-
-    // Downloader() broadcast constants.
-    const val DOWNLOAD_MAIN_FAILED = "DOWNLOAD_MAIN_FAILED"     // main page download failure.
-    const val DOWNLOAD_MAIN_SUCCESS = "DOWNLOAD_MAIN_SUCCESS"   // main page download success.
-    const val DOWNLOAD_OTHER_FAILED = "DOWNLOAD_OTHER_FAILED"   // other pages download failure.
-    const val DOWNLOAD_OTHER_SUCCESS = "DOWNLOAD_OTHER_SUCCESS" // other pages download success.
+    enum class VIEW_TYPE(i: Int) {
+        HEADER(0),
+        DETAIL(1)
+    }
+//    const val VIEW_TYPE_HEADER = 0     // show header info for the recyclerview item.
+//    const val VIEW_TYPE_DETAIL = 1     // show detail info for the recyclerview item.
 
     const val REQ_CODE = 0             // used by Alarm intent.
 
@@ -22,8 +20,6 @@ object Constants {
     const val CURRENT_TIME_IN_WINDOW = -1
     // The current time is after the Race time, i.e. current time > Race time.
     const val CURRENT_TIME_AFTER = 1
-//    // The current time is < (Race time - 3).
-//    const val CURRENT_TIME_BEFORE = 0
 
     const val THREE_MINUTES = 180000   // 3 minutes in milli seconds.
 
@@ -35,5 +31,16 @@ object Constants {
     // Notification.
     const val CHANNEL_ID = "99"
 
+    // Downloader() broadcast constants.
+    enum class DOWNLOAD_TYPE {
+        SUCCESS_MAIN,
+        SUCCESS_OTHER,
+        FAILURE_MAIN,
+        FAILURE_OTHER
+    }
 
+    enum class BROADCAST_TYPE {
+        SUCCESS,
+        ERROR
+    }
 }

@@ -45,8 +45,10 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
                 is DataResult.Success -> {
                     // Main page parsing success.
                     listing = parseDataResult.data
+                    // Generate list of Meeting codes.
+                    val lCodes = raceMeetingDao.getMeetingCodes()
                     // Write the Meeting and Race info to the database.
-                    when(val generateDataResult = generateData(listing.size)) {
+                    when(val generateDataResult = generateData(listing.size, lCodes)) {
                         is DataResult.Success -> { return@withContext Result.success() }
                         is DataResult.Error -> {
                             // Generate listing from main page parse results failure.
@@ -72,8 +74,9 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
     /**
      * Create the Meeting and Race objects and write to the database.
      * @param count: The listing count as returned by the parsing.
+     * @param lCodes: A list of meeting codes.
      */
-    private fun generateData(count: Int): DataResult<Any> {
+    private fun generateData(count: Int, lCodes: List<String>): DataResult<Any> {
         var ndx = 0                      // master index var.
         var eNdx: Int                    // end of range index.
         var mtg: Map<String, String>     // raw Meeting details.
@@ -90,9 +93,9 @@ class MeetingWorker(private val context: Context, private val params: WorkerPara
                 lRaces = listing.subList(ndx, eNdx)         // create sublist of Races.
 
                 /* TODO - MeetingType excludes all except "R" (T and G is TBA).
-                *       - MeetingCode excludes those that end in "S" (mainly overseas races).
+                *       - MeetingCode excludes those that aren't in the CountryCodes listing.
                 */
-                if(meeting.meetingType == "R") {
+                if(meeting.meetingType == "R" && lCodes.contains(meeting.meetingCode)) {
                     // Update Meeting object with track & weather details from the Race detail. Each
                     // element in lRaces will have the same info, so just pick the first.
                     val id = writeMeeting(meeting, lRaces[0])

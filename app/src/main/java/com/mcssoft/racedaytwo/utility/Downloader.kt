@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.os.bundleOf
 import com.mcssoft.racedaytwo.R
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_MAIN_FAILED
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_MAIN_SUCCESS
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_FAILED
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_OTHER_SUCCESS
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.BROADCAST_TYPE
+import com.mcssoft.racedaytwo.utility.Constants.BROADCAST_TYPE.ERROR
+import com.mcssoft.racedaytwo.utility.Constants.BROADCAST_TYPE.SUCCESS
 import okhttp3.*
 import okio.BufferedSink
 import okio.buffer
@@ -53,7 +56,7 @@ class Downloader  @Inject constructor(private val context: Context) {
         val request = Request.Builder().url(url).build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                sendErrorBroadcast(urlPage, e.localizedMessage!!)
+                sendBroadcast(ERROR, urlPage, e.localizedMessage!!)
                 Log.e("TAG","Downloader.onFailure(): ${e.localizedMessage}")
             }
 
@@ -63,7 +66,7 @@ class Downloader  @Inject constructor(private val context: Context) {
                 sink.writeAll(response.body!!.source())
                 sink.close()
                 // Broadcast.
-                sendBroadcast(urlPage)
+                sendBroadcast(SUCCESS, urlPage)
             }
         })
     }
@@ -96,42 +99,32 @@ class Downloader  @Inject constructor(private val context: Context) {
         return false
     }
 
-    /**
-     * Send the broadcast.
-     * @param page: The download page name.
-     */
-    private fun sendBroadcast(page: String) {
+    private fun sendBroadcast(type: BROADCAST_TYPE, page: String, message: String = "") {
         // TODO - do we care about success ? or only broadcast on failure ?
         intent = Intent()
         bundle = bundleOf()
-        bundle.putString(msgKey, page)
 
-        if(page == mainPage) intent.apply {
-            action = DOWNLOAD_MAIN_SUCCESS
-            putExtra(DOWNLOAD_MAIN_SUCCESS, bundle)
-        } else if (page != mainPage) intent.apply {
-            action = DOWNLOAD_OTHER_SUCCESS
-            putExtra(DOWNLOAD_OTHER_SUCCESS, bundle)
-        }
-        context.sendBroadcast(intent)
-    }
-
-    /**
-     * Send an "error" broadcast.
-     * @param page: The download page name.
-     * @param message: The error message.
-     */
-    private fun sendErrorBroadcast(page: String, message: String) {
-        intent = Intent()
-        bundle = bundleOf()
-        bundle.putString(msgKey, message)
-
-        if(page == mainPage) intent.apply {
-            action = DOWNLOAD_MAIN_FAILED
-            putExtra(DOWNLOAD_MAIN_FAILED, bundle)
-        } else if(page != mainPage) intent.apply {
-            action = DOWNLOAD_OTHER_FAILED
-            putExtra(DOWNLOAD_OTHER_FAILED, bundle)
+        when(type) {
+            SUCCESS -> {
+                bundle.putString(msgKey, page)
+                if(page == mainPage) intent.apply {
+                    action = SUCCESS_MAIN.toString()
+                    putExtra(action, bundle)
+                } else if (page != mainPage) intent.apply {
+                    action = SUCCESS_OTHER.toString()
+                    putExtra(action, bundle)
+                }
+            }
+            ERROR -> {
+                bundle.putString(msgKey, "Page: $page; Message: $message")
+                if(page == mainPage) intent.apply {
+                    action = FAILURE_MAIN.toString()
+                    putExtra(action, bundle)
+                } else if(page != mainPage) intent.apply {
+                    action = FAILURE_OTHER.toString()
+                    putExtra(action, bundle)
+                }
+            }
         }
         context.sendBroadcast(intent)
     }

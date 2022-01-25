@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
-import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_DETAIL
-import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE_HEADER
+import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE.DETAIL
+import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE.HEADER
 
 /**
  * Class implements the RaceMeeting list adapter.
@@ -22,12 +22,12 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        Log.d("TAG","MeetingAdapter.onCreateViewHolder")
         return when(viewType) {
-            VIEW_TYPE_HEADER -> {
+            HEADER.ordinal -> {
                 MeetingHeaderViewHolder(
                     ListItemMeetingHeaderBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false), this)
             }
-            VIEW_TYPE_DETAIL -> {
+            DETAIL.ordinal -> {
                 MeetingDetailViewHolder(
                     ListItemMeetingDetailBinding.inflate(
                             LayoutInflater.from(parent.context), parent, false), this)
@@ -39,11 +39,11 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 //        Log.d("TAG","[MeetingAdapter.onBindViewHolder]")
         when(getItemViewType(position)) {
-            VIEW_TYPE_HEADER -> {
+            HEADER.ordinal -> {
                 holder as MeetingHeaderViewHolder
                 holder.bind(getItem(position))
             }
-            VIEW_TYPE_DETAIL -> {
+            DETAIL.ordinal -> {
                 holder as MeetingDetailViewHolder
                 holder.bind(getItem(position))
             }
@@ -52,8 +52,8 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position).isExpanded) {
-            true -> VIEW_TYPE_DETAIL
-            false -> VIEW_TYPE_HEADER
+            true -> DETAIL.ordinal
+            false -> HEADER.ordinal
         }
         //return super.getItemViewType(position)
     }
@@ -61,8 +61,8 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
     //<editor-fold default state="collapsed" desc="Region: IMeetingViewHolder">
     override fun onExpandCollapseSelect(vhType: Int, position: Int) {
         when(vhType) {
-            VIEW_TYPE_HEADER -> getItem(position).isExpanded = false
-            VIEW_TYPE_DETAIL -> getItem(position).isExpanded = true
+            HEADER.ordinal -> getItem(position).isExpanded = false
+            DETAIL.ordinal -> getItem(position).isExpanded = true
         }
         notifyItemChanged(position)
     }

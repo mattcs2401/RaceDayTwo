@@ -23,12 +23,14 @@
     <Country MeetingCode="NR" Location="Kembla Grange" CountryCode="AU" />
     <Country MeetingCode="OR" Location="Parkes" CountryCode="AU" />
     <Country MeetingCode="PR" Location="Ascot" CountryCode="AU" />
+    <Country MeetingCode="PR" Location="Geraldton" CountryCode="AU" />
     <Country MeetingCode="PR" Location="Mount Barker" CountryCode="AU" />
     <Country MeetingCode="PR" Location="Pinjara" CountryCode="AU" />
     <Country MeetingCode="QR" Location="Dalby" CountryCode="AU" />
     <Country MeetingCode="QR" Location="Gatton" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Bathurst" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Canterbury Park" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Gosford" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Goulburn" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Randwick" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Sydney" CountryCode="AU" />
@@ -38,6 +40,7 @@
     <Country MeetingCode="VR" Location="Great Western" CountryCode="AU" />
     <Country MeetingCode="VR" Location="Warrnambool" CountryCode="AU" />
     <Country MeetingCode="OS" Location="Sha Tin" CountryCode="HK" />
+    <Country MeetingCode="ZS" Location="Hastings" CountryCode="NZ" />
     <Country MeetingCode="ZS" Location="Riccarton" CountryCode="NZ" />
     <Country MeetingCode="ZS" Location="Ellerslie" CountryCode="NZ" />
 </Countries>

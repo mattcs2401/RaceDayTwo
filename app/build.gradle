@@ -36,15 +36,15 @@ android {
 
 dependencies {
     def lifecycle_ver = '2.4.0'
-    def coroutine_ver = '1.5.2'
-    def nav_ver = '2.3.5'
+    def coroutine_ver = '1.6.0-native-mt'
+    def nav_ver = '2.3.5'                   // 2.4.0 throwing nav directions errors on compile.
     def room_ver = '2.4.1'
     def hilt_models_ver = '1.0.0-alpha03'
-    def pref_ver = '1.1.1'
+    def pref_ver = '1.2.0'
     def ds_ver = '1.0.0'
     def work_ver = '2.7.1'
     def core_ver = '1.7.0'
-    def okhttp_ver = '4.9.3'
+    def okhttp_ver = '5.0.0-alpha.3'
 
     implementation "androidx.core:core-ktx:$core_ver"
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -93,10 +93,14 @@ dependencies {
 
     /* Leak Canary. */
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
     //implementation 'com.squareup.leakcanary:leakcanary-object-watcher-android:2.7'
 
     /* OkHttp */
     implementation "com.squareup.okhttp3:okhttp:$okhttp_ver"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
+
+    /* KTOR - TBA ? */
+    implementation "io.ktor:ktor-client-core:1.0.0"
+    implementation "io.ktor:ktor-client-okhttp:1.0.0"
 }

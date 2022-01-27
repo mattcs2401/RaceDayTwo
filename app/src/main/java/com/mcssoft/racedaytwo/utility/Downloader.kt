@@ -18,6 +18,8 @@ import okio.BufferedSink
 import okio.buffer
 import okio.sink
 import java.io.*
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -29,7 +31,11 @@ class Downloader  @Inject constructor(private val context: Context) {
 // example: URL("https://tatts.com/pagedata/racing/2022/1/11/RaceDay.xml")
 
     // Note: Seem to get good results for the downloads when using this.
-    private val client: OkHttpClient = OkHttpClient().newBuilder().build()
+    private val client: OkHttpClient = OkHttpClient().newBuilder()
+//        .retryOnConnectionFailure(true)             // none of this seems to work ?
+//        .readTimeout(Duration.ofMillis(3000))       // "    "  "    "     "  "
+//        .connectTimeout(Duration.ofMillis(3000))    // "    "  "    "     "  "
+        .build()
 
     private val cachePath
         get() = context.externalCacheDir!!.absolutePath

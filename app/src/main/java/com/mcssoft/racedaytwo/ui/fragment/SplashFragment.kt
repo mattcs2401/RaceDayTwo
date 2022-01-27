@@ -119,19 +119,25 @@ class SplashFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    /**
+     * Where it all begins.
+     * @param type: The "startup" type.
+     */
     private fun start(type: START_TYPE) {
         updateUIForStart()
         when(type) {
+            // Just recreate the caches.
             RE_START -> {
                 viewModel.createCaches()
                 navigateToMeetings()
             }
+            // Delete everything, re-download and create caches.
             CLEAN_START -> {
                 binding?.apply {
                     idBtnRetry.setOnClickListener(this@SplashFragment)
                 }
-                downloader.clearFileCache()                // delete whatever files are there.
-                viewModel.clearCachesAndData()             // clear all caches and underlying data.
+                downloader.clearFileCache()
+                viewModel.clearCachesAndData()
                 // Get the network (path) url.
                 val mainPage = resources.getString(R.string.main_page)
                 val url = utilities.createPageUrl(mainPage)

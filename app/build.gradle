@@ -99,8 +99,4 @@ dependencies {
     /* OkHttp */
     implementation "com.squareup.okhttp3:okhttp:$okhttp_ver"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
-
-    /* KTOR - TBA ? */
-    implementation "io.ktor:ktor-client-core:1.0.0"
-    implementation "io.ktor:ktor-client-okhttp:1.0.0"
 }

@@ -1,6 +1,5 @@
 package com.mcssoft.racedaytwo.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -114,8 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 return true
             }
             R.id.id_mnu_bnv_summary -> {
-                val action =
-                    MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
+                val action = MeetingsFragmentDirections.actionMeetingsFragmentToSummaryFragment()
                 navController.navigate(action)
                 return true
             }

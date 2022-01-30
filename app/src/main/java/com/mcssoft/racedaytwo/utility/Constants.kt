@@ -6,9 +6,9 @@ object Constants {
     const val BACK_PRESS_TIME: Long = 2000
 
     // Recyclerview (used for adapter's viewType parameter).
-    enum class VIEW_TYPE(ordinal: Int) {
-        HEADER(0),
-        DETAIL(1)
+    enum class VIEW_TYPE { //(type: Int) {
+        HEADER,//(0),
+        DETAIL//(1)
     }
 
     const val REQ_CODE = 0             // used by Alarm intent.

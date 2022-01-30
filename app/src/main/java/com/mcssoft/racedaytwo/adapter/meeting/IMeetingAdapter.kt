@@ -14,4 +14,10 @@ interface IMeetingAdapter {
      * @param meeting: The Meeting.
      */
     fun onSelected(meeting: MeetingCacheEntity)
+
+//    /**
+//     * Indicate that the recyclerview item expand was selected.
+//     * @param meeting: The Meeting.
+//     */
+//    fun onExpandSelected(meeting: MeetingCacheEntity)
 }

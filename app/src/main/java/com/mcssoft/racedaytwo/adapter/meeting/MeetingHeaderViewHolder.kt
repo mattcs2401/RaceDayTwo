@@ -39,4 +39,6 @@ class MeetingHeaderViewHolder(private val binding: ListItemMeetingHeaderBinding,
     }
 
     private lateinit var meetingCacheEntity: MeetingCacheEntity
+
 }
+

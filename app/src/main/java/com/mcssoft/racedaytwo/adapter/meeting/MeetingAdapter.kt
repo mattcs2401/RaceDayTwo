@@ -19,6 +19,9 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
 
     //https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
 
+    // TODO - try this one WRT getItemViewType:
+    //  https://www.simplifiedcoding.net/recyclerview-with-multiple-view-types/
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        Log.d("TAG","MeetingAdapter.onCreateViewHolder")
         return when(viewType) {

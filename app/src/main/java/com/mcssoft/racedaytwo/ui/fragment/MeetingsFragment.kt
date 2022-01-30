@@ -96,6 +96,7 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
         fragmentBinding = null
         super.onDestroyView()
     }
+
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: IMeetingAdapter">
@@ -148,7 +149,8 @@ class MeetingsFragment : Fragment(), IMeetingAdapter {
             collectJob = lifecycleScope.launch {
                 meetingsViewModel.getMeetingsFromCache().collect { meetings ->
                     // If meeting was previously expanded, then set for collapse by view holder.
-                    meetings?.forEach { if(it.isExpanded) it.isExpanded = false }
+                    meetings?.forEach { meeting ->
+                        if(meeting.isExpanded) meeting.isExpanded = false }
                     // Submit the listing.
                     meetingAdapter?.submitList(meetings?.sortedBy { it.meetingTime })
                 }

@@ -7,8 +7,8 @@ import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemRunnerHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.RunnerCacheEntity
 import com.mcssoft.racedaytwo.entity.events.SelectedRunner
-import com.mcssoft.racedaytwo.utility.Constants.HOUR
-import com.mcssoft.racedaytwo.utility.Constants.MINUTE
+import com.mcssoft.racedaytwo.utility.Constants.TimeUnit.HOUR
+import com.mcssoft.racedaytwo.utility.Constants.TimeUnit.MINUTE
 import java.util.*
 
 class RunnerHeaderViewHolder(private val binding: ListItemRunnerHeaderBinding,
@@ -65,8 +65,8 @@ class RunnerHeaderViewHolder(private val binding: ListItemRunnerHeaderBinding,
     private fun compareToCurrentTime(formattedTime: String): Boolean {
         val time = formattedTime.split(":")
         val givenTime = Calendar.getInstance(Locale.getDefault()).apply {
-            set(Calendar.HOUR_OF_DAY, time[HOUR].toInt())
-            set(Calendar.MINUTE, time[MINUTE].toInt())
+            set(Calendar.HOUR_OF_DAY, time[HOUR.ordinal].toInt())
+            set(Calendar.MINUTE, time[MINUTE.ordinal].toInt())
         }
         return Calendar.getInstance(Locale.getDefault()).timeInMillis > givenTime.timeInMillis
     }

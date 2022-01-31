@@ -4,8 +4,8 @@ import android.content.Context
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_AFTER
 import com.mcssoft.racedaytwo.utility.Constants.CURRENT_TIME_IN_WINDOW
-import com.mcssoft.racedaytwo.utility.Constants.HOUR
-import com.mcssoft.racedaytwo.utility.Constants.MINUTE
+import com.mcssoft.racedaytwo.utility.Constants.TimeUnit.HOUR
+import com.mcssoft.racedaytwo.utility.Constants.TimeUnit.MINUTE
 import com.mcssoft.racedaytwo.utility.Constants.THREE_MINUTES
 import java.util.*
 import javax.inject.Inject
@@ -75,7 +75,7 @@ class DateUtilities @Inject constructor(private val context: Context) {
      * */
     fun timeToMillis(formattedTime: String): Long {
         val time = formattedTime.split(":")
-        return timeToMillis(time[HOUR].toInt(), time[MINUTE].toInt())
+        return timeToMillis(time[HOUR.ordinal].toInt(), time[MINUTE.ordinal].toInt())
     }
 
     /**

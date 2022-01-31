@@ -18,14 +18,14 @@ import com.mcssoft.racedaytwo.databinding.SplashFragmentBinding
 import com.mcssoft.racedaytwo.utility.Constants.START_TYPE
 import com.mcssoft.racedaytwo.utility.Constants.START_TYPE.CLEAN_START
 import com.mcssoft.racedaytwo.utility.Constants.START_TYPE.RE_START
-import com.mcssoft.racedaytwo.utility.Constants.WORKER_FAILURE
-import com.mcssoft.racedaytwo.utility.Constants.WORKER_FAILURE.MEETING
-import com.mcssoft.racedaytwo.utility.Constants.WORKER_FAILURE.RUNNER
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_MAIN
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_MAIN
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_OTHER
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.WorkerFailure
+import com.mcssoft.racedaytwo.utility.Constants.WorkerFailure.MEETING
+import com.mcssoft.racedaytwo.utility.Constants.WorkerFailure.RUNNER
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.FAILURE_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.SUCCESS_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.FAILURE_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.SUCCESS_OTHER
 import com.mcssoft.racedaytwo.utility.DateUtilities
 import com.mcssoft.racedaytwo.utility.Downloader
 import com.mcssoft.racedaytwo.utility.NavManager
@@ -250,7 +250,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
     //</editor-fold>
 
     //<editor-fold default state="collapsed" desc="Region: After processing actions">
-    private fun workerFailure(type: WORKER_FAILURE, data: Data) {
+    private fun workerFailure(type: WorkerFailure, data: Data) {
         val message = data.getString(resources.getString(R.string.key_result_failure))
 
         when(type) {
@@ -284,7 +284,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
         findNavController().navigate(action)
     }
 
-    private fun downloadFailure(type: DOWNLOAD_TYPE, intent: Intent) {
+    private fun downloadFailure(type: DownloadType, intent: Intent) {
         val msg = getIntentMessage(intent, type)
 
         updateUIOnFailure()
@@ -328,7 +328,7 @@ class SplashFragment : Fragment(), View.OnClickListener {
      * @param type: The download type.
      * @return The message from the intent.
      */
-    private fun getIntentMessage(intent: Intent, type: DOWNLOAD_TYPE): String {
+    private fun getIntentMessage(intent: Intent, type: DownloadType): String {
         return intent
             .getBundleExtra(type.toString())
             ?.getString(resources.getString(R.string.key_broadcast_message))

@@ -9,6 +9,7 @@
     <Country MeetingCode="BR" Location="Sunshine Coast" CountryCode="AU" />
     <Country MeetingCode="CR" Location="Armidale" CountryCode="AU" />
     <Country MeetingCode="CR" Location="Grafton" CountryCode="AU" />
+    <Country MeetingCode="CR" Location="Newcastle" CountryCode="AU" />
     <Country MeetingCode="CR" Location="Port Maquarie" CountryCode="AU" />
     <Country MeetingCode="CR" Location="Yarra Valley" CountryCode="AU" />
     <Country MeetingCode="ER" Location="Canberra" CountryCode="AU" />
@@ -20,6 +21,7 @@
     <Country MeetingCode="MR" Location="Melbourne" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Moonee Valley" CountryCode="AU" />
     <Country MeetingCode="MR" Location="Packenham" CountryCode="AU" />
+    <Country MeetingCode="MR" Location="Sale" CountryCode="AU" />
     <Country MeetingCode="NR" Location="Kembla Grange" CountryCode="AU" />
     <Country MeetingCode="OR" Location="Parkes" CountryCode="AU" />
     <Country MeetingCode="PR" Location="Ascot" CountryCode="AU" />
@@ -30,6 +32,7 @@
     <Country MeetingCode="QR" Location="Gatton" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Bathurst" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Canterbury Park" CountryCode="AU" />
+    <Country MeetingCode="SR" Location="Dubbo" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Gosford" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Goulburn" CountryCode="AU" />
     <Country MeetingCode="SR" Location="Randwick" CountryCode="AU" />

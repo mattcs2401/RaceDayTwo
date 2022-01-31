@@ -33,8 +33,7 @@ abstract class RaceDay : RoomDatabase() {
                 .addCallback(object: Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-                        val cd = CountryData(context)
-                        cd.insertCountryData()
+                        CountryData.insertCountryData(context)
                     }
                 })
                 .build()

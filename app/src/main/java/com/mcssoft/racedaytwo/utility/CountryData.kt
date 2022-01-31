@@ -12,11 +12,10 @@ import java.util.*
 /**
  * Utility class to populate "reference value" country details in the database when the database is
  * first created.
- * @param context: For resources.
  */
-class CountryData(private val context: Context) {
+object CountryData {
 
-    fun insertCountryData() {
+    fun insertCountryData(context: Context) {
         val workManager = WorkManager.getInstance(context)
         val key = context.resources.getString(R.string.key_file_name)
         val value = context.resources.getString(R.string.country_file)

@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingDetailBinding
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
-import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE.DETAIL
-import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE.HEADER
+import com.mcssoft.racedaytwo.utility.Constants.ViewType.DETAIL
+import com.mcssoft.racedaytwo.utility.Constants.ViewType.HEADER
 
 /**
  * Class implements the RaceMeeting list adapter.
@@ -19,11 +19,7 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
 
     //https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter
 
-    // TODO - try this one WRT getItemViewType:
-    //  https://www.simplifiedcoding.net/recyclerview-with-multiple-view-types/
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        Log.d("TAG","MeetingAdapter.onCreateViewHolder")
         return when(viewType) {
             HEADER.ordinal -> {
                 MeetingHeaderViewHolder(
@@ -40,7 +36,6 @@ class MeetingAdapter(private val iMeetingAdapter: IMeetingAdapter)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        Log.d("TAG","[MeetingAdapter.onBindViewHolder]")
         when(getItemViewType(position)) {
             HEADER.ordinal -> {
                 holder as MeetingHeaderViewHolder

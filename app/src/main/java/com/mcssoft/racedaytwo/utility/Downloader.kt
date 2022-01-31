@@ -6,20 +6,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.os.bundleOf
 import com.mcssoft.racedaytwo.R
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_MAIN
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.SUCCESS_OTHER
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_MAIN
-import com.mcssoft.racedaytwo.utility.Constants.DOWNLOAD_TYPE.FAILURE_OTHER
-import com.mcssoft.racedaytwo.utility.Constants.BROADCAST_TYPE
-import com.mcssoft.racedaytwo.utility.Constants.BROADCAST_TYPE.ERROR
-import com.mcssoft.racedaytwo.utility.Constants.BROADCAST_TYPE.SUCCESS
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.SUCCESS_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.SUCCESS_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.FAILURE_MAIN
+import com.mcssoft.racedaytwo.utility.Constants.DownloadType.FAILURE_OTHER
+import com.mcssoft.racedaytwo.utility.Constants.BroadcastType
+import com.mcssoft.racedaytwo.utility.Constants.BroadcastType.ERROR
+import com.mcssoft.racedaytwo.utility.Constants.BroadcastType.SUCCESS
 import okhttp3.*
 import okio.BufferedSink
 import okio.buffer
 import okio.sink
 import java.io.*
-import java.time.Duration
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -107,7 +105,7 @@ class Downloader  @Inject constructor(private val context: Context) {
      * @param page: The page (file.xml) that was being downloaded.
      * @param message: Optional message.
      */
-    private fun sendBroadcast(type: BROADCAST_TYPE, page: String, message: String = "") {
+    private fun sendBroadcast(type: BroadcastType, page: String, message: String = "") {
         // TODO - do we care about success ? or only broadcast on failure ?
         intent = Intent()
         bundle = bundleOf()

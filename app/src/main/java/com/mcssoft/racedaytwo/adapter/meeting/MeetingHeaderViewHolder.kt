@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcssoft.racedaytwo.R
 import com.mcssoft.racedaytwo.databinding.ListItemMeetingHeaderBinding
 import com.mcssoft.racedaytwo.entity.cache.MeetingCacheEntity
-import com.mcssoft.racedaytwo.utility.Constants.VIEW_TYPE.DETAIL
+import com.mcssoft.racedaytwo.utility.Constants.ViewType.DETAIL
 
 /**
  * ViewHolder for the RaceMeeting header.
